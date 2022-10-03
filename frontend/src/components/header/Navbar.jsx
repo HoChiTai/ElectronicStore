@@ -27,14 +27,12 @@ const Navbar = () => {
 								<Link to="/cate">Category</Link>
 							</li>
 							<li>
-								<Link to="/user">User Account</Link>
+								<Link to="/cart">Cart</Link>
 							</li>
 							<li>
-								<Link to="/vendor">Vendor Account</Link>
+								<Link to="/vendor">User Account</Link>
 							</li>
-							<li>
-								<Link to="/track">Track My Order</Link>
-							</li>
+
 							<li>
 								<Link to="/contact">Contact</Link>
 							</li>

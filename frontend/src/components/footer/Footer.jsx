@@ -4,7 +4,7 @@ import './Footer.css';
 const Footer = () => {
 	return (
 		<>
-			<footer>
+			<footer className="mtop">
 				<div className="container grid2">
 					<div className="box">
 						<h1>Electronic Store</h1>

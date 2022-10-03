@@ -75,7 +75,7 @@ button {
 	background-color: none;
 }
 
-.row {
+.rowHead {
 	width: 50%;
 }
 
@@ -159,10 +159,12 @@ button {
 	margin-top: 40px;
 }
 
-.ltop {
-	margin-top: 20px;
+.mright {
+	margin-right: 20px;
 }
-
+.cart .mPadding {
+	padding: 40px;
+}
 .heading i {
 	color: #e94560;
 	margin: 10px;
