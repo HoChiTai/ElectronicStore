@@ -1,16 +1,16 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Header from './components/header/Header';
+
 import CateScreen from './screens/CateScreen';
 import HomeScreen from './screens/HomeScreen';
-import shopData from './components/cate/shopData';
+
 import { useState } from 'react';
-import Footer from './components/footer/Footer';
+
 import CartScreen from './screens/CartScreen';
 import { Container } from 'react-bootstrap';
+import Header from './components/Header';
+import Footer from './components/Footer';
 
 function App() {
-	const { shopItems } = shopData;
-
 	return (
 		<BrowserRouter>
 			<Header />
@@ -18,10 +18,7 @@ function App() {
 				<Container>
 					<Routes>
 						<Route path="/" element={<HomeScreen />}></Route>
-						<Route
-							path="/cate"
-							element={<CateScreen shopItems={shopItems} />}
-						></Route>
+						<Route path="/cate" element={<CateScreen />}></Route>
 						<Route path="/cart" element={<CartScreen />}></Route>
 					</Routes>
 				</Container>

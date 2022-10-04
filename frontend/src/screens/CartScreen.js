@@ -13,8 +13,8 @@ import { Link } from 'react-router-dom';
 const CartScreen = () => {
 	const cartItems = data.products;
 	return (
-		<div className="cart">
-			<div className="mtop">
+		<div className="cart mt-5">
+			<div>
 				<h2>Shopping Cart</h2>
 			</div>
 
@@ -25,7 +25,7 @@ const CartScreen = () => {
 							Cart is empty. <Link to="/">Go Shopping</Link>
 						</MessageBox>
 					) : (
-						<ListGroup className="mtop">
+						<ListGroup className="mt-3">
 							{cartItems.map((item) => (
 								<ListGroup.Item key={item._id} className="mPadding">
 									<Row className="align-items-center">
