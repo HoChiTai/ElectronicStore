@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 26, 2022 at 09:45 AM
+-- Generation Time: Oct 02, 2022 at 03:39 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.10
 
@@ -30,6 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `brand` (
   `BrandID` int(11) NOT NULL,
   `BrandName` varchar(100) NOT NULL,
+  `Image` varchar(200) DEFAULT NULL,
   `Description` text DEFAULT NULL,
   `CateID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -38,13 +39,13 @@ CREATE TABLE `brand` (
 -- Dumping data for table `brand`
 --
 
-INSERT INTO `brand` (`BrandID`, `BrandName`, `Description`, `CateID`) VALUES
-(3, 'iPhone', NULL, 1),
-(4, 'Samsung', NULL, 1),
-(7, 'MacBook', NULL, 2),
-(8, 'Asus', NULL, 2),
-(9, 'iPad', NULL, 3),
-(10, 'Samsung', NULL, 3);
+INSERT INTO `brand` (`BrandID`, `BrandName`, `Image`, `Description`, `CateID`) VALUES
+(3, 'iPhone', NULL, NULL, 1),
+(4, 'Samsung', NULL, NULL, 1),
+(7, 'MacBook', NULL, NULL, 2),
+(8, 'Asus', NULL, NULL, 2),
+(9, 'iPad', NULL, NULL, 3),
+(10, 'Samsung', NULL, NULL, 3);
 
 -- --------------------------------------------------------
 
@@ -55,6 +56,7 @@ INSERT INTO `brand` (`BrandID`, `BrandName`, `Description`, `CateID`) VALUES
 CREATE TABLE `category` (
   `CategoryID` int(11) NOT NULL,
   `CategoryName` varchar(100) NOT NULL,
+  `Image` varchar(200) DEFAULT NULL,
   `Description` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -62,10 +64,10 @@ CREATE TABLE `category` (
 -- Dumping data for table `category`
 --
 
-INSERT INTO `category` (`CategoryID`, `CategoryName`, `Description`) VALUES
-(1, 'Smartphone', NULL),
-(2, 'Laptop', NULL),
-(3, 'Tablet', NULL);
+INSERT INTO `category` (`CategoryID`, `CategoryName`, `Image`, `Description`) VALUES
+(1, 'Smartphone', NULL, NULL),
+(2, 'Laptop', NULL, NULL),
+(3, 'Tablet', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -172,7 +174,7 @@ CREATE TABLE `order` (
   `DateOrder` date NOT NULL,
   `Address` text NOT NULL,
   `City` varchar(100) NOT NULL,
-  `PaymentMethod` int(11) NOT NULL,
+  `PaymentMethod` varchar(100) NOT NULL,
   `IsPaid` tinyint(1) NOT NULL DEFAULT 0,
   `PaidAt` date NOT NULL,
   `IsDelivered` tinyint(1) NOT NULL DEFAULT 0,
@@ -250,6 +252,17 @@ CREATE TABLE `product` (
   `Description` text NOT NULL,
   `CateID` int(11) NOT NULL,
   `BrandID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `productimage`
+--
+
+CREATE TABLE `productimage` (
+  `ProductID` int(11) NOT NULL,
+  `Image` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -437,6 +450,13 @@ ALTER TABLE `product`
   ADD PRIMARY KEY (`ProductID`),
   ADD KEY `CateID` (`CateID`),
   ADD KEY `BrandID` (`BrandID`);
+
+--
+-- Indexes for table `productimage`
+--
+ALTER TABLE `productimage`
+  ADD PRIMARY KEY (`ProductID`),
+  ADD KEY `ProductID` (`ProductID`);
 
 --
 -- Indexes for table `rank`
