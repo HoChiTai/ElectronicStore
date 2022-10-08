@@ -15,13 +15,11 @@ function App() {
 		<BrowserRouter>
 			<Header />
 			<main>
-				<Container>
-					<Routes>
-						<Route path="/" element={<HomeScreen />}></Route>
-						<Route path="/cate" element={<CateScreen />}></Route>
-						<Route path="/cart" element={<CartScreen />}></Route>
-					</Routes>
-				</Container>
+				<Routes>
+					<Route path="/" element={<HomeScreen />}></Route>
+					<Route path="/cate" element={<CateScreen />}></Route>
+					<Route path="/cart" element={<CartScreen />}></Route>
+				</Routes>
 			</main>
 			<Footer />
 		</BrowserRouter>
