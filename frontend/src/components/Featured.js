@@ -8,7 +8,7 @@ import ProductCard from "./ProductCard";
 
 const Featured = () => {
     const { products } = data;
-    var settings = {
+    const settings = {
         dots: false,
         infinite: true,
         speed: 500,

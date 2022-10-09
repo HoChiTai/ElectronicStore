@@ -86,7 +86,7 @@ const HomeScreen = () => {
 				<Row>
 					{
 						products.map(product => 
-							<Col xs={4}>
+							<Col xs={4} key={product.name}>
 								<SingleProduct  product={product}/>
 							</Col>
 						)
