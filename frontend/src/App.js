@@ -15,7 +15,7 @@ function App() {
 		<BrowserRouter>
 			<Header />
 			<main>
-				<Container>
+				<Container fluid>
 					<Routes>
 						<Route path="/" element={<HomeScreen />}></Route>
 						<Route path="/cate" element={<CateScreen />}></Route>

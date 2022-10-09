@@ -1,7 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { Store } from '../Store';
+import MessageBox from './MessageBox';
 
 const Header = () => {
+	const { state, dispatch: ctxDispatch } = useContext(Store);
+	const {
+		cart: { cartItems },
+	} = state;
+	const removeItemHandler = async (item) => {
+		ctxDispatch({ type: 'CART_REMOVE_ITEM', payload: item });
+	};
 	return (
 		<div>
 			<div class="header blue-bg">
@@ -53,7 +62,9 @@ const Header = () => {
 							<li>
 								<label class="cart" for="cart-detail-btn">
 									<i class="fa-sharp fa-solid fa-bag-shopping">
-										<div class="badge-cart">1</div>
+										<div class="badge-cart">
+											{cartItems.length > 0 ? cartItems.length : '0'}
+										</div>
 									</i>
 								</label>
 								<input type="checkbox" name="" id="cart-detail-btn" />
@@ -66,55 +77,65 @@ const Header = () => {
 										</label>
 									</div>
 
-									{/* <div class="products-list">
-										<div class="product-item">
-											<img src="./logo.png" alt="" />
-											<div class="content">
-												<div class="name">Aspire Dron Model</div>
-												<div class="price">
-													<p>
-														1 x <span>$60.00</span>
-													</p>
-												</div>
-											</div>
-											<div class="delete-product">
-												<i class="fa-regular fa-xmark"></i>
-											</div>
-										</div>
-										<div class="product-item">
-											<img src="./logo.png" alt="" />
-											<div class="content">
-												<div class="name">Aspire Dron Model</div>
-												<div class="price">
-													<p>
-														1 x <span>$60.00</span>
-													</p>
-												</div>
-											</div>
-											<div class="delete-product">
-												<i class="fa-regular fa-xmark"></i>
-											</div>
-										</div>
-									</div>
+									<div class="products-list">
+										{cartItems.length === 0 ? (
+											<MessageBox>Cart is empty</MessageBox>
+										) : (
+											<div>
+												{cartItems.map((item) => (
+													<div class="product-item">
+														<img src={item.image} alt={item.name} />
+														<div class="content">
+															<div class="name">{item.name}</div>
+															<div class="price">
+																<p>
+																	{item.quantity} x <span>{item.price}</span>
+																</p>
+															</div>
+														</div>
+														<div class="delete-product">
+															<i
+																class="fa-regular fa-xmark"
+																onClick={() => removeItemHandler(item)}
+															></i>
+														</div>
+													</div>
+												))}
+												<div class="checkout">
+													<div class="price">
+														<h5>Total Quantity</h5>
+														<h5>
+															{cartItems.reduce((a, c) => a + c.quantity, 0)}
+														</h5>
+													</div>
+													<div class="price">
+														<h5>Total Price</h5>
+														<h5>
+															{cartItems.reduce(
+																(a, c) => a + c.price * c.quantity,
+																0
+															)}
+														</h5>
+													</div>
+													<Link to="/cart">
+														<div class="btn-view-cart">
+															<div class="icon">
+																<i class="fa-solid fa-cart-shopping"></i>
+															</div>
+															VIEW CART
+														</div>
+													</Link>
 
-									<div class="checkout">
-										<div class="price">
-											<h5>Total</h5>
-											<h5>$120.00</h5>
-										</div>
-										<div class="btn-view-cart">
-											<div class="icon">
-												<i class="fa-solid fa-cart-shopping"></i>
+													<div class="btn-checkout">
+														<div class="icon">
+															<i class="fa-regular fa-arrow-right-from-bracket"></i>
+														</div>
+														CHECKOUT
+													</div>
+												</div>
 											</div>
-											VIEW CART
-										</div>
-										<div class="btn-checkout">
-											<div class="icon">
-												<i class="fa-regular fa-arrow-right-from-bracket"></i>
-											</div>
-											CHECKOUT
-										</div>
-									</div> */}
+										)}
+									</div>
 								</div>
 							</li>
 						</ul>

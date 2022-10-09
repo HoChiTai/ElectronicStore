@@ -1,14 +1,31 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import { Store } from '../Store';
+import Rating from './Rating';
 
 const ProductCard = (props) => {
 	const { product } = props;
+	const { state, dispatch: ctxDispatch } = useContext(Store);
+	const {
+		cart: { cartItems },
+	} = state;
+
+	const addToCartHandler = async (item) => {
+		const existItem = cartItems.find((x) => x._id === product._id);
+		const quantity = existItem ? existItem.quantity + 1 : 1;
+		ctxDispatch({ type: 'CART_ADD_ITEM', payload: { ...item, quantity } });
+	};
+
 	return (
 		<div>
 			<div class="product">
 				<div class="image">
 					<div className="box">
-						<img src={product.image} alt={product.name} class="main-img " />
-						<img src="./images/p5.jpg" alt={product.name} class="sub-img" />
+						<Link to={`/product/${product._id}`}>
+							<img src={product.image} alt={product.name} class="main-img " />
+							<img src="./images/p5.jpg" alt={product.name} class="sub-img" />
+						</Link>
 					</div>
 
 					<div class="product-tag">
@@ -29,17 +46,28 @@ const ProductCard = (props) => {
 					</div>
 				</div>
 				<div class="content">
-					<h4>{product.name}</h4>
+					<Link to={`/product/${product._id}`}>
+						<h4>{product.name}</h4>
+					</Link>
 					<h5>$ {product.price}</h5>
 					<div class="review-star">
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-solid fa-star"></i>
-						<i class="fa-light fa-star"></i>
-						<i class="fa-light fa-star"></i>
-						<div class="count">({product.numReviews}&#43;)</div>
+						<Rating
+							rating={product.rating}
+							numReviews={product.numReviews}
+						></Rating>
 					</div>
-					<div class="btn-add-product">ADD TO CART</div>
+					{product.countInStock === 0 ? (
+						<Button className="btn-add-product" disabled>
+							OUT OF STOCK
+						</Button>
+					) : (
+						<Button
+							className="btn-add-product"
+							onClick={() => addToCartHandler(product)}
+						>
+							ADD TO CART
+						</Button>
+					)}
 				</div>
 			</div>
 		</div>
