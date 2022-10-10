@@ -45,107 +45,114 @@ const Header = () => {
 								</div>
 							</div>
 
-						<ul class="header-settings">
-							<li class="user">
-								<i class="fa-solid fa-user"></i>
-								<ul class="user-settings">
-									<li class="heading">
-										<a href="#">My account</a>
-									</li>
-									<li>
-										<a href="#">Login</a>
-									</li>
-									<li>
-										<a href="#">Register</a>
-									</li>
-								</ul>
-							</li>
-							<li>
-								<label class="cart" for="cart-detail-btn">
-									<i class="fa-sharp fa-solid fa-bag-shopping">
-										<div class="badge-cart">
-											{cartItems.length > 0 ? cartItems.length : '0'}
+							<ul class="header-settings">
+								<li class="user">
+									<i class="fa-solid fa-user"></i>
+									<ul class="user-settings">
+										<li class="heading">
+											<a href="#">My account</a>
+										</li>
+										<li>
+											<a href="#">Login</a>
+										</li>
+										<li>
+											<a href="#">Register</a>
+										</li>
+									</ul>
+								</li>
+								<li>
+									<label class="cart" for="cart-detail-btn">
+										<i class="fa-sharp fa-solid fa-bag-shopping">
+											<div class="badge-cart">
+												{cartItems.length > 0 ? cartItems.length : '0'}
+											</div>
+										</i>
+									</label>
+									<input type="checkbox" name="" id="cart-detail-btn" />
+									<label class="overlay" for="cart-detail-btn"></label>
+									<div class="cart-detail">
+										<div class="heading">
+											<h5>Cart</h5>
+											<label for="cart-detail-btn">
+												<i class="fa-regular fa-xmark"></i>
+											</label>
 										</div>
-									</i>
-								</label>
-								<input type="checkbox" name="" id="cart-detail-btn" />
-								<label class="overlay" for="cart-detail-btn"></label>
-								<div class="cart-detail">
-									<div class="heading">
-										<h5>Cart</h5>
-										<label for="cart-detail-btn">
-											<i class="fa-regular fa-xmark"></i>
-										</label>
-									</div>
 
-									<div class="products-list">
-										{cartItems.length === 0 ? (
-											<MessageBox>Cart is empty</MessageBox>
-										) : (
-											<div>
-												{cartItems.map((item) => (
-													<div class="product-item">
-														<img src={item.image} alt={item.name} />
-														<div class="content">
-															<div class="name">{item.name}</div>
-															<div class="price">
-																<p>
-																	{item.quantity} x <span>{item.price}</span>
-																</p>
+										<div class="products-list">
+											{cartItems.length === 0 ? (
+												<MessageBox>Cart is empty</MessageBox>
+											) : (
+												<div>
+													{cartItems.map((item) => (
+														<div class="product-item">
+															<div class="cart_box_img">
+																<img
+																	src={item.image}
+																	alt={item.name}
+																	className="mg-fluid img-thumbnail rounded"
+																/>
+															</div>
+
+															<div class="content">
+																<div class="name">{item.name}</div>
+																<div class="price">
+																	<p>
+																		{item.quantity} x <span>${item.price}</span>
+																	</p>
+																</div>
+															</div>
+															<div class="delete-product">
+																<i
+																	class="fa-regular fa-xmark"
+																	onClick={() => removeItemHandler(item)}
+																></i>
 															</div>
 														</div>
-														<div class="delete-product">
-															<i
-																class="fa-regular fa-xmark"
-																onClick={() => removeItemHandler(item)}
-															></i>
+													))}
+													<div class="checkout">
+														<div class="price">
+															<h5>Quantity</h5>
+															<h5>
+																{cartItems.reduce((a, c) => a + c.quantity, 0)}
+															</h5>
 														</div>
-													</div>
-												))}
-												<div class="checkout">
-													<div class="price">
-														<h5>Total Quantity</h5>
-														<h5>
-															{cartItems.reduce((a, c) => a + c.quantity, 0)}
-														</h5>
-													</div>
-													<div class="price">
-														<h5>Total Price</h5>
-														<h5>
-															{cartItems.reduce(
-																(a, c) => a + c.price * c.quantity,
-																0
-															)}
-														</h5>
-													</div>
-													<Link to="/cart">
-														<div class="btn-view-cart">
+														<div class="price">
+															<h5>Total Price</h5>
+															<h5>
+																$
+																{cartItems.reduce(
+																	(a, c) => a + c.price * c.quantity,
+																	0
+																)}
+															</h5>
+														</div>
+														<Link to="/cart">
+															<div class="btn-view-cart">
+																<div class="icon">
+																	<i class="fa-solid fa-cart-shopping"></i>
+																</div>
+																VIEW CART
+															</div>
+														</Link>
+
+														<div class="btn-checkout">
 															<div class="icon">
-																<i class="fa-solid fa-cart-shopping"></i>
+																<i class="fa-regular fa-arrow-right-from-bracket"></i>
 															</div>
-															VIEW CART
+															CHECKOUT
 														</div>
-													</Link>
-
-													<div class="btn-checkout">
-														<div class="icon">
-															<i class="fa-regular fa-arrow-right-from-bracket"></i>
-														</div>
-														CHECKOUT
 													</div>
 												</div>
-											</div>
-										)}
+											)}
+										</div>
 									</div>
-								</div>
-							</li>
-						</ul>
-
-
+								</li>
+							</ul>
+						</div>
 					</div>
 				</div>
+				<div style={{ marginTop: 80 }}></div>
 			</div>
-			<div style={{marginTop: 67}}></div>								
 		</React.Fragment>
 	);
 };
