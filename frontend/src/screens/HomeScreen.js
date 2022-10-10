@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Row, Col} from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Carousel from '../components/Carousel';
 import { CarouselStyle } from '../components/CarouselStyle';
@@ -12,16 +12,16 @@ import data from '../data';
 const HomeScreen = () => {
 	const { products } = data;
 	return (
-		<>		
+		<>
 			<CarouselStyle>
-				<Carousel/>		
+				<Carousel />
 			</CarouselStyle>
-			<Container style={{marginTop: 40}}>
+			<div style={{ marginTop: 40 }}>
 				<Row>
 					<Col xs={9}>
 						<div
 							className="hot-deal"
-							style={{backgroundImage: `url("./images/carousel/c1.jpg")`}}
+							style={{ backgroundImage: `url("./images/carousel/c1.jpg")` }}
 						>
 							<div className="content">
 								<h2>HOT DEAL</h2>
@@ -36,7 +36,7 @@ const HomeScreen = () => {
 						</div>
 					</Col>
 					<Col xs={3}>
-						<ProductCard product={products[0]}/>
+						<ProductCard product={products[0]} />
 					</Col>
 				</Row>
 
@@ -50,7 +50,7 @@ const HomeScreen = () => {
 							</ul>
 						</div>
 						<FeaturedStyle>
-							<Featured/>	
+							<Featured />
 						</FeaturedStyle>
 					</Col>
 				</Row>
@@ -84,13 +84,11 @@ const HomeScreen = () => {
 				</Row>
 
 				<Row>
-					{
-						products.map(product => 
-							<Col xs={4} key={product.name}>
-								<SingleProduct  product={product}/>
-							</Col>
-						)
-					}
+					{products.map((product) => (
+						<Col xs={4} key={product.name}>
+							<SingleProduct product={product} />
+						</Col>
+					))}
 				</Row>
 
 				<Row>
@@ -100,8 +98,7 @@ const HomeScreen = () => {
 						</div>
 					</Col>
 				</Row>
-			</Container>
-			
+			</div>
 		</>
 	);
 };
