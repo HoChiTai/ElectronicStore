@@ -16,12 +16,14 @@ function App() {
 		<BrowserRouter>
 			<Header />
 			<main>
+
 				<Routes>
 					<Route path="/" element={<HomeScreen />}></Route>
 					<Route path="/cate" element={<CateScreen />}></Route>
 					<Route path="/cart" element={<CartScreen />}></Route>
 					<Route path="/detail" element={<ProductDetailScreen />}></Route>
 				</Routes>
+
 			</main>
 			<Footer />
 		</BrowserRouter>

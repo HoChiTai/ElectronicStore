@@ -15,8 +15,63 @@ const data = {
 	// 		isAdmin: false,
 	// 	},
 	// ],
+	categories: [
+		{
+			_id: '01',
+			name: 'Laptop',
+			description: '...',
+		},
+		{
+			_id: '02',
+			name: 'Smart Phone',
+			description: '...',
+		},
+		{
+			_id: '02',
+			name: 'Tablet',
+			description: '...',
+		},
+		{
+			_id: '02',
+			name: 'Smart Watch',
+			description: '...',
+		},
+	],
+	brands: [
+		{
+			_id: '01',
+			CateID: '01',
+			name: 'Asus',
+			description: '...',
+		},
+		{
+			_id: '02',
+			CateID: '01',
+			name: 'Dell',
+			description: '...',
+		},
+		{
+			_id: '03',
+			CateID: '02',
+			name: 'iPhone',
+			description: '...',
+		},
+		{
+			_id: '04',
+			CateID: '02',
+			name: 'SamSung',
+			description: '...',
+		},
+		{
+			_id: '05',
+			CateID: '02',
+			name: 'Xiaomi',
+			description: '...',
+		},
+	],
 	products: [
 		{
+			_id: '01',
 			name: 'SAMSUNG Galaxy S20 FE',
 			slug: 'SAMSUNG-Galaxy-S20-FE',
 			category: 'Smart Phone',
@@ -37,6 +92,7 @@ const data = {
 				'Pro-Grade Camera: The New Samsung Galaxy S20 Fe Mobile Phone Features High-Powered Pro Lenses For Beautiful Portraits, Stunning Landscapes And Crisp Close-Ups In Any Light With Its 3X Optical Zoom',
 		},
 		{
+			_id: '02',
 			name: 'OnePlus 9 Winter Mist',
 			slug: 'OnePlus-9-Winter-Mist',
 			category: 'Smart Phone',
@@ -57,6 +113,7 @@ const data = {
 				'Hasselblad Camera for Mobile- Take your best shot with the OnePlus 9 5G’s Triple Camera system co-developed by Hasselblad, featuring a 48MP main camera, 50MP Ultra-Wide camera, and 2MP monochrome lens',
 		},
 		{
+			_id: '03',
 			name: '2022 Acer 15inch HD IPS Chromebook',
 			slug: '2022-Acer-15inch-HD-IPS-Chromebook',
 			category: 'Laptop',
@@ -78,6 +135,7 @@ const data = {
 		},
 
 		{
+			_id: '04',
 			name: 'ASUS ROG Strix Scar 15',
 			slug: 'ASUS-ROG-Strix-Scar-15',
 			category: 'Laptop',
