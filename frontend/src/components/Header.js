@@ -12,37 +12,38 @@ const Header = () => {
 		ctxDispatch({ type: 'CART_REMOVE_ITEM', payload: item });
 	};
 	return (
-		<div>
-			<div class="header blue-bg">
-				<div class="container">
-					<div class="header-content">
-						<ul class="header-navbar">
-							<li>
-								<img src="./logo.png" alt="" />
-							</li>
-							<li>
-								<Link to="/">Home</Link>
-							</li>
-							<li>
-								<Link to="/">Product</Link>
-							</li>
-							<li>
-								<Link to="/cate">Browser</Link>
-							</li>
-							<li>
-								<Link to="/cart">Cart</Link>
-							</li>
-						</ul>
-						<div class="header-search">
-							<input
-								type="text"
-								name="headerSearch"
-								placeholder="Search your keyword"
-							/>
-							<div class="icon">
-								<i class="fa-light fa-magnifying-glass"></i>
+		<React.Fragment>
+			<div>
+				<div className="header blue-bg">
+					<div className="container">
+						<div className="header-content">
+							<ul className="header-navbar">
+								<li>
+									<img src="./logo.png" alt="" />
+								</li>
+								<li>
+									<Link to="/">Home</Link>
+								</li>
+								<li>
+									<Link to="/">Product</Link>
+								</li>
+								<li>
+									<Link to="/cate">Browser</Link>
+								</li>
+								<li>
+									<Link to="/cart">Cart</Link>
+								</li>
+							</ul>
+							<div className="header-search">
+								<input
+									type="text"
+									name="headerSearch"
+									placeholder="Search your keyword"
+								/>
+								<div className="icon">
+									<i className="fa-light fa-magnifying-glass"></i>
+								</div>
 							</div>
-						</div>
 
 						<ul class="header-settings">
 							<li class="user">
@@ -139,11 +140,13 @@ const Header = () => {
 								</div>
 							</li>
 						</ul>
+
+
 					</div>
 				</div>
 			</div>
-			;
-		</div>
+			<div style={{marginTop: 67}}></div>								
+		</React.Fragment>
 	);
 };
 
