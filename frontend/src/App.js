@@ -10,11 +10,12 @@ import { Container } from 'react-bootstrap';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ProductDetailScreen from './screens/ProductDetailScreen';
+import LoginScreen from './screens/LoginScreen';
 
 function App() {
 	return (
 		<BrowserRouter>
-			<Header />
+			{/* <Header /> */}
 			<main>
 
 				<Routes>
@@ -22,10 +23,11 @@ function App() {
 					<Route path="/cate" element={<CateScreen />}></Route>
 					<Route path="/cart" element={<CartScreen />}></Route>
 					<Route path="/detail" element={<ProductDetailScreen />}></Route>
+					<Route path="/login" element={<LoginScreen />}></Route>
 				</Routes>
 
 			</main>
-			<Footer />
+			{/* <Footer /> */}
 		</BrowserRouter>
 	);
 }
