@@ -9,19 +9,19 @@ import CartScreen from './screens/CartScreen';
 import { Container } from 'react-bootstrap';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import ProductDetailScreen from './screens/ProductDetailScreen';
 
 function App() {
 	return (
 		<BrowserRouter>
 			<Header />
 			<main>
-				<Container>
-					<Routes>
-						<Route path="/" element={<HomeScreen />}></Route>
-						<Route path="/cate" element={<CateScreen />}></Route>
-						<Route path="/cart" element={<CartScreen />}></Route>
-					</Routes>
-				</Container>
+				<Routes>
+					<Route path="/" element={<HomeScreen />}></Route>
+					<Route path="/cate" element={<CateScreen />}></Route>
+					<Route path="/cart" element={<CartScreen />}></Route>
+					<Route path="/detail" element={<ProductDetailScreen />}></Route>
+				</Routes>
 			</main>
 			<Footer />
 		</BrowserRouter>
