@@ -860,9 +860,6 @@ input#cart-detail-btn:checked ~ .cart-detail {
 	overflow: hidden;
 }
 
-.row.cart_table_head {
-}
-
 .cart_table_head {
 	padding: 20px;
 	background-color: #112436;
