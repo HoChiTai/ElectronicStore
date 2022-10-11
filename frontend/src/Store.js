@@ -5,11 +5,11 @@ export const Store = createContext();
 const inititalState = {
 	useInfo: localStorage.getItem('userInfo')
 		? JSON.parse(localStorage.getItem('userInfo'))
-		: '',
+		: null,
 	cart: {
 		shippingAddress: localStorage.getItem('shippingAddress')
 			? JSON.parse(localStorage.getItem('shippingAddress'))
-			: '',
+			: {},
 		paymentMethod: localStorage.getItem('paymentMethod')
 			? JSON.parse(localStorage.getItem('paymentMethod'))
 			: '',
