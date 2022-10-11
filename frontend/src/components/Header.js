@@ -85,6 +85,7 @@ const Header = () => {
 												<div>
 													{cartItems.map((item) => (
 														<div class="product-item">
+
 															<div class="cart_box_img">
 																<img
 																	src={item.image}
@@ -111,7 +112,9 @@ const Header = () => {
 													))}
 													<div class="checkout">
 														<div class="price">
+
 															<h5>Quantity</h5>
+
 															<h5>
 																{cartItems.reduce((a, c) => a + c.quantity, 0)}
 															</h5>
@@ -119,6 +122,7 @@ const Header = () => {
 														<div class="price">
 															<h5>Total Price</h5>
 															<h5>
+
 																$
 																{cartItems.reduce(
 																	(a, c) => a + c.price * c.quantity,
