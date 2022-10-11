@@ -85,12 +85,20 @@ const Header = () => {
 												<div>
 													{cartItems.map((item) => (
 														<div class="product-item">
-															<img src={item.image} alt={item.name} />
+
+															<div class="cart_box_img">
+																<img
+																	src={item.image}
+																	alt={item.name}
+																	className="mg-fluid img-thumbnail rounded"
+																/>
+															</div>
+
 															<div class="content">
 																<div class="name">{item.name}</div>
 																<div class="price">
 																	<p>
-																		{item.quantity} x <span>{item.price}</span>
+																		{item.quantity} x <span>${item.price}</span>
 																	</p>
 																</div>
 															</div>
@@ -104,7 +112,9 @@ const Header = () => {
 													))}
 													<div class="checkout">
 														<div class="price">
-															<h5>Total Quantity</h5>
+
+															<h5>Quantity</h5>
+
 															<h5>
 																{cartItems.reduce((a, c) => a + c.quantity, 0)}
 															</h5>
@@ -112,6 +122,8 @@ const Header = () => {
 														<div class="price">
 															<h5>Total Price</h5>
 															<h5>
+
+																$
 																{cartItems.reduce(
 																	(a, c) => a + c.price * c.quantity,
 																	0
@@ -143,8 +155,8 @@ const Header = () => {
 						</div>
 					</div>
 				</div>
-				<div style={{marginTop: 67}}></div>		
-			</div>						
+				<div style={{ marginTop: 80 }}></div>
+			</div>
 		</React.Fragment>
 	);
 };
