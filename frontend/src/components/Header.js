@@ -85,9 +85,6 @@ const Header = () => {
 												<div>
 													{cartItems.map((item) => (
 														<div class="product-item">
-<<<<<<< HEAD
-															<img src={item.image} alt={item.name} />
-=======
 															<div class="cart_box_img">
 																<img
 																	src={item.image}
@@ -96,16 +93,12 @@ const Header = () => {
 																/>
 															</div>
 
->>>>>>> 6de1ba4be392d5cdccc9a154cccfa9f61fef4d3f
 															<div class="content">
 																<div class="name">{item.name}</div>
 																<div class="price">
 																	<p>
-<<<<<<< HEAD
-																		{item.quantity} x <span>{item.price}</span>
-=======
+
 																		{item.quantity} x <span>${item.price}</span>
->>>>>>> 6de1ba4be392d5cdccc9a154cccfa9f61fef4d3f
 																	</p>
 																</div>
 															</div>
@@ -119,11 +112,7 @@ const Header = () => {
 													))}
 													<div class="checkout">
 														<div class="price">
-<<<<<<< HEAD
-															<h5>Total Quantity</h5>
-=======
 															<h5>Quantity</h5>
->>>>>>> 6de1ba4be392d5cdccc9a154cccfa9f61fef4d3f
 															<h5>
 																{cartItems.reduce((a, c) => a + c.quantity, 0)}
 															</h5>
@@ -131,10 +120,8 @@ const Header = () => {
 														<div class="price">
 															<h5>Total Price</h5>
 															<h5>
-<<<<<<< HEAD
-=======
+
 																$
->>>>>>> 6de1ba4be392d5cdccc9a154cccfa9f61fef4d3f
 																{cartItems.reduce(
 																	(a, c) => a + c.price * c.quantity,
 																	0
@@ -166,13 +153,8 @@ const Header = () => {
 						</div>
 					</div>
 				</div>
-<<<<<<< HEAD
-				<div style={{marginTop: 67}}></div>		
-			</div>						
-=======
 				<div style={{ marginTop: 80 }}></div>
 			</div>
->>>>>>> 6de1ba4be392d5cdccc9a154cccfa9f61fef4d3f
 		</React.Fragment>
 	);
 };
