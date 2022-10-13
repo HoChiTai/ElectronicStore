@@ -35,7 +35,7 @@ function App() {
 						<Route path="/shipping" element={<ShippingAddressScreen />}></Route>
 						<Route path="/payment" element={<PaymentMethodScreen />}></Route>
 						<Route path="/placeorder" element={<PlaceOrderScreen />}></Route>
-						<Route path="/order" element={<OrderScreen />}></Route>
+						{/* <Route path="/order" element={<OrderScreen />}></Route> */}
 						<Route path="/login" element={<LoginScreen />}></Route>
 					</Routes>
 				</Container>
