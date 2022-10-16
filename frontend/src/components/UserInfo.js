@@ -10,6 +10,7 @@ const UserInfo = () => {
         lastName: "abc",
         email: "abc@123.com",
         phone: "090808108",
+        address: "abc phường d quận e",
         image: "/images/p5.jpg",
     });
 
@@ -56,6 +57,17 @@ const UserInfo = () => {
             errorMessage:
                 "Phone number should be 10 numbers and shouldn't include any special character!",
             pattern: "(0[3|5|7|8|9])+([0-9]{8})",
+            required: true,
+        },
+        {
+            id: 5,
+            name: "address",
+            type: "text",
+            label: "Address",
+            iconShow: false,
+            errorMessage: "Address shouldn't include any special character!",
+            pattern:
+                "^[0-9a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\\s/]+$",
             required: true,
         },
     ];

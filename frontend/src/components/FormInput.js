@@ -15,12 +15,15 @@ const FormInput = (props) => {
         <div className="txt-field">
             <input
                 {...inputProps}
+                id={id}
                 onChange={onChange}
                 type={iconShow ? (tgPassword ? "password" : "text") : type}
                 onBlur={handleFocused}
                 focused={focused.toString()}
             />
-            <label className={inputProps.value ? "active" : ""}>{label}</label>
+            <label className={inputProps.value ? "active" : ""} htmlFor={id}>
+                {label}
+            </label>
             <span>{errorMessage}</span>
 
             {type === "password" && (

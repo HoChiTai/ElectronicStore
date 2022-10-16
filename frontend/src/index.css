@@ -2092,10 +2092,302 @@ input#cart-detail-btn:checked ~ .cart-detail {
     border: none;
     outline: none;
     border-radius: 12px;
-    margin-top: 60px;
+    margin-top: 40px;
 }
 
 .btn-update-form:hover {
     opacity: 0.9;
 }
 /*--------------------User-info---------------------*/
+
+/*--------------------User-cart---------------------*/
+
+.user-cart {
+    margin-top: 80px;
+    padding-left: 100px;
+}
+
+.user-cart__tab {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.user-cart__tab li {
+    padding: 8px 40px;
+    border: 1px solid #cccccc;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 2px;
+    color: var(--primary-bg);
+    cursor: pointer;
+    transition: all 0.2s linear;
+}
+
+.user-cart__tab li:hover {
+    background-color: var(--primary-bg);
+    color: white;
+}
+
+.user-cart__tab li + li {
+    margin-left: 10px;
+}
+
+.user-cart__tab li.active {
+    background-color: var(--primary-bg);
+    color: white;
+}
+
+/*--------------------User-cart---------------------*/
+
+/*--------------------User-cart-item---------------------*/
+
+.user-cart__item {
+    padding-left: 100px;
+    margin-top: 20px;
+}
+
+.user-cart__item .cart-info {
+    border: 1px solid #cccccc;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.2s linear;
+    display: block;
+}
+
+.user-cart__item .cart-info:hover {
+    box-shadow: 3px 0px var(--primary-bg);
+    transform: translateY(-1px);
+}
+
+.user-cart__item .cart-info .cart-id {
+    color: var(--primary-bg);
+}
+
+.user-cart__item .cart-info .cart-date {
+}
+.user-cart__item .cart-info .cart-confirm {
+    text-align: right;
+    color: orange;
+}
+
+.user-cart__item .cart-info .cart-total {
+    text-align: right;
+}
+
+.user-cart__item .cart-info .cart-icon {
+    text-align: center;
+    transition: all 0.4s linear;
+}
+
+.user-cart__item input[type="checkbox"] {
+    display: none;
+}
+
+.user-cart__item .cart-content {
+    max-height: 0;
+    overflow: hidden;
+    background-color: #f7f7f7;
+    transition: all 0.6s linear;
+}
+
+.user-cart__item input[type="checkbox"]:checked + .cart-info + .cart-content {
+    max-height: 600px;
+}
+
+.user-cart__item input[type="checkbox"]:checked + .cart-info {
+    box-shadow: 3px 0px var(--primary-bg);
+}
+
+.user-cart__item input[type="checkbox"]:checked + .cart-info .cart-icon {
+    transform: rotate(90deg);
+    color: var(--primary-bg);
+}
+
+.user-cart__item .cart-content__item {
+    padding: 10px 20px;
+    align-items: center;
+}
+
+.user-cart__item .cart-content__item img {
+    width: 100%;
+    border: 1px solid var(--second-color);
+}
+
+.user-cart__item .cart-content__item .name {
+    font-size: 18px;
+}
+
+.user-cart__item .cart-content__item .quantity {
+}
+
+.user-cart__item .cart-content__information {
+    margin: 40px 30px;
+    border-top: 1px solid #999;
+    padding-top: 40px;
+}
+
+.user-cart__item .cart-content__address {
+    margin-left: 20px;
+}
+
+.user-cart__item .cart-content__address p {
+    margin-bottom: 4px;
+    color: #888888;
+}
+
+.user-cart__item .cart-content__address h5 {
+    margin-bottom: 20px;
+}
+
+.user-cart__item .cart-content__order {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.user-cart__item .cart-content__order li {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: relative;
+}
+
+.user-cart__item .cart-content__order li + li::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #999;
+    width: 200px;
+    height: 1px;
+}
+
+.user-cart__item .cart-content__order li > .heading {
+    color: #888888;
+    padding: 20px 0;
+}
+
+.user-cart__item .cart-content__order li > .price {
+    width: 200px;
+    text-align: right;
+}
+
+.user-cart__item .btn-cancel {
+    width: 100px;
+    text-align: center;
+    padding: 6px;
+    background-color: #de1a0c;
+    color: white;
+    float: right;
+    margin-right: 40px;
+    margin-bottom: 40px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s linear;
+}
+
+.user-cart__item .btn-cancel:hover {
+    opacity: 0.8;
+}
+/*--------------------User-cart-item---------------------*/
+
+/*--------------------User-change-password---------------------*/
+
+.user-change-password {
+    margin-top: 110px;
+    padding-left: 100px;
+}
+
+.user-change-password__item {
+    display: flex;
+    align-items: center;
+}
+
+.user-change-password__item h6 {
+    margin-right: 10px;
+    min-width: 200px;
+}
+
+.user-change-password__item a {
+    text-decoration: underline;
+    font-style: italic;
+    margin-left: 30px;
+}
+
+.user-change-password__btn {
+    width: 100px;
+    padding: 6px 20px;
+    background-color: #85da06;
+    color: white;
+    border: none;
+    outline: none;
+    border-radius: 6px;
+    margin-top: 40px;
+    margin-left: 20px;
+    transition: all 0.2s linear;
+}
+
+.user-change-password__btn:hover {
+    opacity: 0.8;
+}
+
+.user-change-password .txt-field {
+    width: 300px;
+}
+
+/*--------------------User-change-password---------------------*/
+
+/*--------------------User-coupon---------------------*/
+
+.user-coupon-list {
+    margin-left: 100px;
+    padding-top: 30px;
+}
+
+.user-coupon {
+    display: flex;
+    align-items: center;
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 1px solid var(--second-color);
+    position: relative;
+    margin-bottom: 30px;
+    transition: all 0.2s linear;
+}
+
+.user-coupon:hover {
+    transform: translateY(-2px);
+}
+
+.user-coupon__img {
+    width: 100px;
+    height: 100px;
+    background-color: var(--primary-bg);
+    color: white;
+    font-size: 30px;
+    line-height: 100px;
+    text-align: center;
+}
+
+.user-coupon__name {
+    margin-left: 10px;
+    padding: 0px 60px 0px 10px;
+    font-style: italic;
+}
+
+.user-coupon a {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    text-decoration: underline;
+    color: var(--primary-bg);
+    font-style: italic;
+}
+
+/*--------------------User-coupon---------------------*/

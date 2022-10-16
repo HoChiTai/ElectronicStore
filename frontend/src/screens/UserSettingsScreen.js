@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import UserInfo from "../components/UserInfo";
+import UserCart from "../components/UserCart";
+import UserChangePassword from "../components/UserChangePassword";
+import UserCoupon from "../components/UserCoupon";
 
 const UserSettingsScreen = () => {
     const Component = {
@@ -8,19 +11,19 @@ const UserSettingsScreen = () => {
             return <UserInfo />;
         },
         Cart() {
-            return <h1>Cart</h1>;
+            return <UserCart />;
         },
         Wishlist() {
             return <h1>Wishlist</h1>;
         },
-        Address() {
-            return <h1>Address</h1>;
-        },
+        // Address() {
+        //     return <h1>Address</h1>;
+        // },
         ChangePassword() {
-            return <h1>ChangePassword</h1>;
+            return <UserChangePassword />;
         },
         Coupon() {
-            return <h1>Coupon</h1>;
+            return <UserCoupon />;
         },
     };
 
@@ -57,14 +60,14 @@ const UserSettingsScreen = () => {
                                 <i className="fa-light fa-heart"></i>
                                 <span>Wishlist</span>
                             </li>
-                            <li
+                            {/* <li
                                 onClick={() => setSetting("Address")}
                                 className={
                                     setting === "Address" ? "active" : ""
                                 }>
                                 <i className="fa-light fa-address-book"></i>
                                 <span>Address</span>
-                            </li>
+                            </li> */}
                             <li
                                 onClick={() => setSetting("ChangePassword")}
                                 className={
