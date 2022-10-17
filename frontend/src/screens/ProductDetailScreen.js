@@ -44,16 +44,16 @@ const ProductDetailScreen = () => {
 								<FeaturedStyle>
 									<Slider {...settings}>
 										<div>
-											<img src="./images/p5.jpg" alt="" />
+											<img src="/images/p5.jpg" alt="" />
 										</div>
 										<div>
-											<img src="./images/p5.jpg" alt="" />
+											<img src="/images/p5.jpg" alt="" />
 										</div>
 										<div>
-											<img src="./images/p5.jpg" alt="" />
+											<img src="/images/p5.jpg" alt="" />
 										</div>
 										<div>
-											<img src="./images/p5.jpg" alt="" />
+											<img src="/images/p5.jpg" alt="" />
 										</div>
 									</Slider>
 								</FeaturedStyle>
@@ -105,7 +105,7 @@ const ProductDetailScreen = () => {
 									<h6>{product.releasedDate}</h6>
 								</li>
 							</ul>
-							<input type="number" value={0} />
+							<input type="number"/>
 							<div className="btn-add">ADD TO CART</div>
 						</div>
 					</Col>
