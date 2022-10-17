@@ -1199,6 +1199,8 @@ input#cart-detail-btn:checked ~ .cart-detail {
 
 .order_screen .order_info {
 	margin-top: 20px;
+	font-size: 16px;
+	font-weight: 600;
 }
 
 .order_screen .cart_table .cart_table_box_name {
