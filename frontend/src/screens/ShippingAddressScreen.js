@@ -53,6 +53,7 @@ const ShippingAddressScreen = () => {
 											type="text"
 											value={fullName}
 											onChange={(e) => setFullName(e.target.value)}
+											required
 										></Form.Control>
 									</Form.Group>
 									<Form.Group as={Col} controlId="phone">
@@ -61,6 +62,7 @@ const ShippingAddressScreen = () => {
 											type="text"
 											value={phone}
 											onChange={(e) => setPhone(e.target.value)}
+											required
 										></Form.Control>
 									</Form.Group>{' '}
 								</Row>
@@ -71,6 +73,7 @@ const ShippingAddressScreen = () => {
 											type="text"
 											value={address}
 											onChange={(e) => setAddress(e.target.value)}
+											required
 										></Form.Control>
 									</Form.Group>
 									<Form.Group as={Col} controlId="city">
@@ -79,6 +82,7 @@ const ShippingAddressScreen = () => {
 											type="text"
 											value={city}
 											onChange={(e) => setCity(e.target.value)}
+											required
 										></Form.Control>
 									</Form.Group>
 								</Row>
