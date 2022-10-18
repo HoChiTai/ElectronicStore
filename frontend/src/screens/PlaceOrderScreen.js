@@ -1,10 +1,12 @@
 import React, { useContext } from 'react';
 import { Button, Card, Col, ListGroup, Row } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import CheckoutSteps from '../components/CheckoutSteps';
 import { Store } from '../Store';
 
 const PlaceOrderScreen = () => {
+	const navigate = useNavigate();
+
 	const { state, dispatch: ctxDispatch } = useContext(Store);
 
 	const { cart, userInfo } = state;
@@ -19,7 +21,9 @@ const PlaceOrderScreen = () => {
 	cart.taxPrice = round(0.1 * cart.itemsPrice);
 	cart.totalPrice = cart.itemsPrice + cart.shippingPrice + cart.taxPrice;
 
-	const placeOrderHandler = async () => {};
+	const placeOrderHandler = async () => {
+		navigate(`/order/${cart.cartItems[0]._id}`);
+	};
 
 	return (
 		<div>
@@ -103,29 +107,21 @@ const PlaceOrderScreen = () => {
 								<Card.Body>
 									<ListGroup>
 										<ListGroup.Item>
-											<span>
-												<h5>Items</h5>
-											</span>
+											<span>Items</span>
 
 											<span>${cart.itemsPrice.toFixed(2)}</span>
 										</ListGroup.Item>
 										<ListGroup.Item>
-											<span>
-												<h5>Shipping Price</h5>
-											</span>
+											<span>Shipping Price</span>
 											<span>${cart.shippingPrice.toFixed(2)}</span>
 										</ListGroup.Item>
 										<ListGroup.Item>
-											<span>
-												<h5>Tax Price</h5>
-											</span>
+											<span>Tax Price</span>
 											<span>${cart.taxPrice.toFixed(2)}</span>
 										</ListGroup.Item>
 										<ListGroup.Item>
 											<span>
-												<h5>
-													<strong>Order Total</strong>
-												</h5>
+												<strong>Order Total</strong>
 											</span>
 											<span>
 												<strong>${cart.totalPrice.toFixed(2)}</strong>
@@ -136,7 +132,7 @@ const PlaceOrderScreen = () => {
 												<Button
 													variant="primary"
 													className="btn_checkout"
-													onClick={() => placeOrderHandler}
+													onClick={placeOrderHandler}
 													disabled={cart.cartItems.length === 0}
 												>
 													Place Order
