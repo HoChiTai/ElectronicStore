@@ -12,7 +12,7 @@ const ProductCard = (props) => {
 	} = state;
 
 	const addToCartHandler = async (item) => {
-		const existItem = cartItems.find((x) => x._id === product._id);
+		const existItem = cartItems.find((x) => x.id === product.id);
 		const quantity = existItem ? existItem.quantity + 1 : 1;
 		ctxDispatch({ type: 'CART_ADD_ITEM', payload: { ...item, quantity } });
 	};
@@ -22,12 +22,10 @@ const ProductCard = (props) => {
 			<div className="product">
 				<div className="image">
 					<div className="box">
-
-						<Link to={`/product/${product._id}`}>
+						<Link to={`/product/${product.id}`}>
 							<img src={product.image} alt={product.name} class="main-img " />
 							<img src="./images/p5.jpg" alt={product.name} class="sub-img" />
 						</Link>
-
 					</div>
 
 					<div className="product-tag">
@@ -49,7 +47,7 @@ const ProductCard = (props) => {
 				</div>
 
 				<div class="content">
-					<Link to={`/product/${product._id}`}>
+					<Link to={`/product/${product.id}`}>
 						<h4>{product.name}</h4>
 					</Link>
 					<h5>$ {product.price}</h5>
@@ -59,7 +57,7 @@ const ProductCard = (props) => {
 							numReviews={product.numReviews}
 						></Rating>
 					</div>
-					{product.countInStock === 0 ? (
+					{product.stock === 0 ? (
 						<Button className="btn-add-product" disabled>
 							OUT OF STOCK
 						</Button>
@@ -71,7 +69,6 @@ const ProductCard = (props) => {
 							ADD TO CART
 						</Button>
 					)}
-
 				</div>
 			</div>
 		</div>

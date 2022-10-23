@@ -6,8 +6,9 @@ import Slider from 'react-slick';
 import data from '../data';
 import ProductCard from './ProductCard';
 
-const Featured = () => {
-	const { products } = data;
+const Featured = (props) => {
+	//const { products } = data;
+	const { products } = props;
 	const settings = {
 		dots: false,
 		infinite: true,

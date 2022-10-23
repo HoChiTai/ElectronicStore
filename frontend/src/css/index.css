@@ -849,6 +849,7 @@ input#cart-detail-btn:checked ~ .cart-detail {
 .cate_box_result {
 	background-color: #005aba;
 	padding: 10px;
+	border-radius: 5px;
 	color: white;
 }
 .cate_box_sort {
