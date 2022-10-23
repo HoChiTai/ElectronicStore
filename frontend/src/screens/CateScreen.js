@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
+import axios from 'axios';
+import { getError } from '../utils';
 import {
 	Button,
 	Col,
@@ -18,26 +20,26 @@ import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import LinkContainer from 'react-router-bootstrap/LinkContainer';
 
-/*
-export const prices = [
-	{
-		name: '$1 to $200',
-		value: '1-200',
-	},
-	{
-		name: '$201 to $500',
-		value: '201-500',
-	},
-	{
-		name: '$501 to $1000',
-		value: '501-1000',
-	},
-	{
-		name: '$1001 to $3000',
-		value: '1001-3000',
-	},
-];
-*/
+const reducer = (state, action) => {
+	switch (action.type) {
+		case 'FETCH_REQUEST':
+			return { ...state, loading: true };
+		case 'FETCH_SUCCESS':
+			return {
+				...state,
+				loading: false,
+				products: action.payload.products.data,
+				page: action.payload.products.current_page,
+				pages: action.payload.products.last_page,
+				countProducts: action.payload.products.total,
+			};
+		case 'FETCH_FAIL':
+			return { ...state, loading: false, error: action.payload };
+		default:
+			return state;
+	}
+};
+
 export const ratings = [
 	{
 		name: '1 star and up',
@@ -55,46 +57,120 @@ export const ratings = [
 		name: '4 star and up',
 		rating: 4,
 	},
-
-	// {
-	// 	name: '0 star and up',
-	// 	rating: 0,
-	// },
 ];
 
 const CateScreen = () => {
-	const { products } = data;
-	const { categories } = data;
-	const { brands } = data;
+	//const { products } = data;
+	//const { categories } = data;
+	//const { brands } = data;
 
-	const [pages, setPages] = useState([]);
+	//const [pages, setPages] = useState([]);
+
+	const [{ loading, error, products, countProducts, pages }, dispatch] =
+		useReducer(reducer, {
+			products: [],
+			loading: true,
+			error: '',
+			countProducts: 0,
+			pages: 0,
+		});
 
 	const navigate = useNavigate();
 	const { search } = useLocation();
 	const sp = new URLSearchParams(search);
 
-	const [loading, setLoading] = useState('');
-	const countProducts = '';
+	const [selectCate, setSelectCate] = useState([]);
+	const [selectBrand, setSelectBrand] = useState([]);
+	const checkCate = (e) => {
+		if (e.target.checked) {
+			setSelectCate([...selectCate, e.target.id]);
+		} else {
+			const cates = selectCate.filter((item) => item !== e.target.id);
+			setSelectCate(cates);
+		}
+	};
+	const chenckBrand = (e) => {
+		if (e.target.checked) {
+			setSelectBrand([...selectBrand, e.target.id]);
+		} else {
+			const brands = selectBrand.filter((item) => item !== e.target.id);
+			setSelectBrand(brands);
+		}
+	};
 
-	const category = sp.get('category') || 'all';
-	const brand = sp.get('brand') || 'all';
+	// const category = sp.get('category') || 'all';
+	// const brand = sp.get('brand') || 'all';
 	const priceMin = sp.get('priceMin') || 'all';
 	const priceMax = sp.get('priceMax') || 'all';
 	const query = sp.get('query') || 'all';
 	const rating = sp.get('rating') || 'all';
-	const order = sp.get('order') || 'newest';
+	const order = sp.get('order') || 'released';
 	const page = sp.get('page') || 1;
+
+	useEffect(() => {
+		const fetchData = async () => {
+			dispatch({ type: 'FETCH_REQUEST' });
+			try {
+				// const { data } = await axios.get(
+				// 	`/api/products/search?page=${page}&query=${query}&category=${category}&priceMax=${priceMax}&priceMin=${priceMin}&rating=${rating}&order=${order}`
+				// );
+
+				const { data } = await axios.post('/api/products/search', {
+					query,
+					priceMax,
+					priceMin,
+					rating,
+					selectCate,
+					selectBrand,
+					page,
+					order,
+				});
+
+				dispatch({ type: 'FETCH_SUCCESS', payload: data });
+			} catch (error) {
+				dispatch({ type: 'FETCH_FAIL', payload: getError(error) });
+			}
+		};
+		fetchData();
+	}, [order, page, priceMax, priceMin, query, rating, selectBrand, selectCate]);
+
+	const [categories, setCategories] = useState([]);
+
+	useEffect(() => {
+		const fetchCategories = async () => {
+			try {
+				const { data } = await axios.get('/api/categories');
+				setCategories(data.categories);
+			} catch (error) {
+				alert(getError(error));
+			}
+		};
+		fetchCategories();
+	}, []);
+
+	const [brands, setBrands] = useState([]);
+
+	useEffect(() => {
+		const fetchBrands = async () => {
+			try {
+				const { data } = await axios.get('/api/brands');
+				setBrands(data.brands);
+			} catch (error) {
+				alert(getError(error));
+			}
+		};
+		fetchBrands();
+	}, []);
 
 	const getFilterUrl = (filter) => {
 		const filterPage = filter.page || page;
-		const filterCategory = filter.category || category;
-		const filterBrand = filter.brand || brand;
 		const filterPriceMin = filter.priceMin || priceMin;
 		const filterPriceMax = filter.priceMax || priceMax;
 		const filterQuery = filter.query || query;
 		const filterRating = filter.rating || rating;
 		const sortOrder = filter.order || order;
-		return `/search?category=${filterCategory}&brand=${filterBrand}}&priceMin=${filterPriceMin}&priceMax=${filterPriceMax}&query=${filterQuery}&rating=${filterRating}&order=${sortOrder}&page=${filterPage}`;
+		//return `/cate?category=${filterCategory}&brand=${filterBrand}}&priceMin=${filterPriceMin}&priceMax=${filterPriceMax}&query=${filterQuery}&rating=${filterRating}&order=${sortOrder}&page=${filterPage}`;
+		return `/cate?&priceMin=${filterPriceMin}&priceMax=${filterPriceMax}&query=${filterQuery}&rating=${filterRating}&order=${sortOrder}&page=${filterPage}`;
 	};
 
 	return (
@@ -115,7 +191,12 @@ const CateScreen = () => {
 												value="all"
 												label="Any"
 												onChange={(e) => {
-													navigate(getFilterUrl({ category: e.target.value }));
+													// navigate(getFilterUrl({ category: e.target.value }));
+													// checkCate();
+													if (e.target.checked) {
+														const selectCate = [];
+														setSelectCate(selectCate);
+													}
 												}}
 											></Form.Check>
 										</ListGroup.Item>
@@ -123,13 +204,12 @@ const CateScreen = () => {
 											<ListGroup.Item className="list_filters_item">
 												<Form.Check
 													type="checkbox"
-													id={cate._id}
+													id={cate.id}
 													value={cate.name}
 													label={cate.name}
 													onChange={(e) => {
-														navigate(
-															getFilterUrl({ category: e.target.value })
-														);
+														checkCate(e);
+														console.log(selectCate);
 													}}
 												></Form.Check>
 											</ListGroup.Item>
@@ -147,7 +227,11 @@ const CateScreen = () => {
 												value="all"
 												label="Any"
 												onChange={(e) => {
-													navigate(getFilterUrl({ brand: e.target.value }));
+													//navigate(getFilterUrl({ brand: e.target.value }));
+													if (e.target.checked) {
+														const selectBrand = [];
+														setSelectBrand(selectBrand);
+													}
 												}}
 											></Form.Check>
 										</ListGroup.Item>
@@ -155,11 +239,12 @@ const CateScreen = () => {
 											<ListGroup.Item className="list_filters_item">
 												<Form.Check
 													type="checkbox"
-													id={brand._id}
+													id={brand.id}
 													value={brand.name}
 													label={brand.name}
 													onChange={(e) => {
-														navigate(getFilterUrl({ brand: e.target.value }));
+														//navigate(getFilterUrl({ brand: e.target.value }));
+														chenckBrand(e);
 													}}
 												></Form.Check>
 											</ListGroup.Item>
@@ -186,7 +271,7 @@ const CateScreen = () => {
 											>
 												<Link
 													className={
-														'${r.rating}' === `${rating}` ? 'text-bold' : ''
+														`${r.rating}` === `${rating}` ? 'text-bold' : ''
 													}
 													to={getFilterUrl({ rating: r.rating })}
 												>
@@ -237,29 +322,20 @@ const CateScreen = () => {
 				<Col md={9}>
 					{loading ? (
 						<LoadingBox></LoadingBox>
+					) : products.length === 0 ? (
+						<MessageBox variant="danger">No Product Found</MessageBox>
 					) : (
 						<div>
 							<Row className="cate_box_top">
 								<Col md={7} className="cate_box_result">
 									<div className="box_amount">
-										{countProducts === 0 ? 'No' : countProducts} Results
-										{query !== 'all' && 'Query: ' + query}
-										{category !== 'all' && 'Category: ' + category}
-										{priceMin !== 'all' && 'PriceMin: ' + priceMin}
-										{priceMax !== 'all' && 'PriceMax: ' + priceMax}
-										{rating !== 'all' && 'Rating: ' + rating + ' & up'}
-										{query !== 'all' ||
-										category !== 'all' ||
-										rating !== 'all' ||
-										priceMin !== 'all' ||
-										priceMax !== 'all' ? (
-											<Button
-												variant="light"
-												onClick={() => navigate('/search')}
-											>
-												<i className="fas fa-time-circle"></i>
-											</Button>
-										) : null}
+										{countProducts === 0 ? 'No' : countProducts} Results:{' '}
+										{query !== 'all' && 'Query: ' + query}{' '}
+										{/* {selectCate.length > 0 && 'Category: ' + selectCate}{' '}
+										{selectBrand.length > 0 && 'Category: ' + selectBrand}{' '} */}
+										{priceMin !== 'all' && 'Price Min: ' + priceMin}{' '}
+										{priceMax !== 'all' && 'Price Max: ' + priceMax}{' '}
+										{rating !== 'all' && 'Rating: ' + rating + ' & up'}{' '}
 									</div>
 								</Col>
 								<Col md={4} className="cate_box_sort">
@@ -273,30 +349,26 @@ const CateScreen = () => {
 													}}
 													aria-label="floadingSelect"
 												>
-													<option value="newest">Newest Arrivals</option>
-													<option value="lowest">Price: Low to High</option>
-													<option value="highest">Price: High to low</option>
-													<option value="toprated">Customer Reviews</option>
+													<option value="released">Newest Arrivals</option>
+													<option value="price">Price: Low to High</option>
+													<option value="price">Price: High to low</option>
+													<option value="numReviews">Customer Reviews</option>
 												</Form.Select>
 											</FloatingLabel>
 										</Col>
 									</Row>
 								</Col>
-								{products.length === 0 && (
-									<MessageBox>No Product Found</MessageBox>
-								)}
 							</Row>
 
 							<Row className="mt-3">
 								{products.map((product) => (
-									<Col sm={6} lg={4} key={product._id} className="mb-3">
+									<Col sm={6} lg={4} key={product.id} className="mb-3">
 										<ProductCard product={product} />
 									</Col>
 								))}
 							</Row>
-							{/*
 							<div>
-								{[...Array(pages).key()].map((x) => (
+								{[...Array(pages).keys()].map((x) => (
 									<LinkContainer
 										key={x + 1}
 										className="mx-1"
@@ -305,11 +377,12 @@ const CateScreen = () => {
 										<Button
 											className={Number(page) === x + 1 ? 'text-bold' : ''}
 											variant="light"
-										></Button>
+										>
+											{x + 1}
+										</Button>
 									</LinkContainer>
 								))}
 							</div>
-								*/}
 						</div>
 					)}
 				</Col>
