@@ -22,7 +22,7 @@ const PlaceOrderScreen = () => {
 	cart.totalPrice = cart.itemsPrice + cart.shippingPrice + cart.taxPrice;
 
 	const placeOrderHandler = async () => {
-		navigate(`/order/${cart.cartItems[0]._id}`);
+		navigate(`/order/${cart.cartItems[0].id}`);
 	};
 
 	return (

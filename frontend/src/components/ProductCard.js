@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useContext } from 'react';
 import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
@@ -14,6 +15,13 @@ const ProductCard = (props) => {
 	const addToCartHandler = async (item) => {
 		const existItem = cartItems.find((x) => x.id === product.id);
 		const quantity = existItem ? existItem.quantity + 1 : 1;
+
+		// const { data } = await axios.get(`/api/produts/${product.id}`);
+
+		// if (data.product[0].stock < quantity) {
+		// 	window.alert('Product is out of stock!');
+		// 	return;
+		// }
 		ctxDispatch({ type: 'CART_ADD_ITEM', payload: { ...item, quantity } });
 	};
 
@@ -22,7 +30,7 @@ const ProductCard = (props) => {
 			<div className="product">
 				<div className="image">
 					<div className="box">
-						<Link to={`/product/${product.id}`}>
+						<Link to={`/product/${product.slug}`}>
 							<img src={product.image} alt={product.name} class="main-img " />
 							<img src="./images/p5.jpg" alt={product.name} class="sub-img" />
 						</Link>
@@ -47,7 +55,7 @@ const ProductCard = (props) => {
 				</div>
 
 				<div class="content">
-					<Link to={`/product/${product.id}`}>
+					<Link to={`/product/${product.slug}`}>
 						<h4>{product.name}</h4>
 					</Link>
 					<h5>$ {product.price}</h5>

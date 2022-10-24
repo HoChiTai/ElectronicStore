@@ -18,7 +18,7 @@ class ProductController extends Controller
     public function index()
     {
 
-        $products = Product::select('id', 'name', 'price', 'stock', 'rating', 'numReviews', 'image', 'cate_id', 'brand_id')->get();
+        $products = Product::select('id', 'name', 'slug', 'price', 'stock', 'rating', 'numReviews', 'image', 'cate_id', 'brand_id')->get();
         return response()->json([
             'status' => 200,
             'products' => $products,
@@ -65,7 +65,7 @@ class ProductController extends Controller
 
         $product->load(['categories', 'brands']);
 
-        return response()->json(['product' => $product]);
+        return response()->json(['status' => 200, 'product' => $product]);
     }
 
     /**
@@ -154,5 +154,16 @@ class ProductController extends Controller
             'message' => 'Search successfully',
             'products' => $products,
         ]);
+    }
+
+    public function findSlug($slug)
+    {
+        $product = Product::where('slug', $slug)->get();
+        if (!$product)
+            return response()->json(['status' => 404, 'message' => 'Product not found']);
+
+        $product->load(['categories', 'brands']);
+
+        return response()->json(['status' => 200, 'product' => $product]);
     }
 }

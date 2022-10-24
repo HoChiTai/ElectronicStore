@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Route;
 
 route::apiResource('/products', ProductController::class);
 route::post('/products/search', [ProductController::class, 'search']);
+route::get('/products/slug/{slug}', [ProductController::class, 'findSlug']);
 
 route::apiResource("/categories", CategoryController::class);
 route::apiResource("/brands", BrandController::class);

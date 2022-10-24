@@ -71,7 +71,7 @@ const CartScreen = () => {
 												></img>
 											</div>
 											<div class="cart_table_box_name">
-												<Link to="/">{item.name}</Link>
+												<Link to={`/product/${item.slug}`}>{item.name}</Link>
 											</div>
 											<div class="cart_table_box_qty">
 												<Button
