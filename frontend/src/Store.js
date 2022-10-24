@@ -3,7 +3,7 @@ import { createContext, useReducer } from 'react';
 export const Store = createContext();
 
 const inititalState = {
-	useInfo: localStorage.getItem('userInfo')
+	userInfo: localStorage.getItem('userInfo')
 		? JSON.parse(localStorage.getItem('userInfo'))
 		: null,
 	cart: {

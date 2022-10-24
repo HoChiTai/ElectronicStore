@@ -35,7 +35,7 @@ function User() {
                                 path="/cart"
                                 element={<CartScreen />}></Route>
                             <Route
-                                path="/product/:id"
+                                path="/product/:slug"
                                 element={<ProductDetailScreen />}></Route>
                             <Route
                                 path="/shipping"

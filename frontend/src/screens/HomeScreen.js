@@ -43,23 +43,11 @@ const HomeScreen = () => {
 			} catch (error) {
 				dispatch({ type: 'FETCH_FAIL', payload: getError(error) });
 			}
-			//setProducts(result.data);
+			
 		};
 		fetchData();
 	}, []);
 
-	// useEffect(() => {
-	// 	const fetchData = async () => {
-	// 		dispatch({ type: 'FETCH_REQUEST' });
-	// 		try {
-	// 			const { data } = await axios.get('/api/products/');
-	// 			dispatch({ type: 'FETCH_SUCCESS', payload: data.products });
-	// 		} catch (error) {
-	// 			dispatch({ type: 'FETCH_FAIL', payload: getError(error) });
-	// 		}
-	// 	};
-	// 	fetchData();
-	// }, []);
 
 	return (
 		<>

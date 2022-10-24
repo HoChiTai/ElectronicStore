@@ -5,12 +5,19 @@ import MessageBox from './MessageBox';
 
 const Header = () => {
 	const { state, dispatch: ctxDispatch } = useContext(Store);
-	const {
-		cart: { cartItems },
-	} = state;
+	const { cart, userInfo } = state;
 	const removeItemHandler = async (item) => {
 		ctxDispatch({ type: 'CART_REMOVE_ITEM', payload: item });
 	};
+
+	const signoutHandler = () => {
+		ctxDispatch({ type: 'USER_SIGNOUT' });
+		localStorage.removeItem('userInfo');
+		localStorage.removeItem('cartItems');
+		localStorage.removeItem('shippingAddress');
+		localStorage.removeItem('paymentMethod');
+	};
+
 	return (
 		<React.Fragment>
 			<div>
@@ -44,36 +51,50 @@ const Header = () => {
 							</div>
 
 							<ul className="header-settings">
-								{/* <Link to="/login">
-                                    <div className="header__btn">Log in</div>
-                                </Link> */}
-								<li className="user">
-									{/* <i className="fa-solid fa-user"></i> */}
-									<div className="user__tag">
-										<img className="avatar" src="/images/p5.jpg" alt="avatar" />
-										<div className="name">Tèo</div>
-										<i className="fa-regular fa-angle-down"></i>
-									</div>
-									<ul className="user-settings">
-										<li className="heading">
-											<a href="#">My account</a>
-										</li>
-										<li>
-											<a href="#">User profile</a>
-										</li>
-										<li>
-											<a href="#">Cart</a>
-										</li>
-										<li className="">
-											<a href="#">Log out</a>
-										</li>
-									</ul>
-								</li>
+								{userInfo ? (
+									<li className="user">
+										{/* <i className="fa-solid fa-user"></i> */}
+										<div className="user__tag">
+											<img
+												className="avatar"
+												src="/images/p5.jpg"
+												alt="avatar"
+											/>
+											<div className="name">
+												{userInfo.user.fname} {userInfo.user.lname}
+											</div>
+											<i className="fa-regular fa-angle-down"></i>
+										</div>
+										<ul className="user-settings">
+											<li className="heading">
+												<Link to="/user">My account</Link>
+											</li>
+											<li>
+												<Link to="/user">User profile</Link>
+											</li>
+											<li>
+												<Link to="">Order History</Link>
+											</li>
+											<li>
+												<Link to="#" onClick={signoutHandler}>
+													Log out
+												</Link>
+											</li>
+										</ul>
+									</li>
+								) : (
+									<Link to="/login">
+										<div className="header__btn">Log in</div>
+									</Link>
+								)}
+
 								<li>
 									<label className="cart" htmlFor="cart-detail-btn">
 										<i className="fa-sharp fa-solid fa-bag-shopping">
 											<div className="badge-cart">
-												{cartItems.length > 0 ? cartItems.length : '0'}
+												{cart.cartItems.length > 0
+													? cart.cartItems.length
+													: '0'}
 											</div>
 										</i>
 									</label>
@@ -88,11 +109,11 @@ const Header = () => {
 										</div>
 
 										<div className="products-list">
-											{cartItems.length === 0 ? (
+											{cart.cartItems.length === 0 ? (
 												<MessageBox>Cart is empty</MessageBox>
 											) : (
 												<div>
-													{cartItems.map((item) => (
+													{cart.cartItems.map((item) => (
 														<div className="product-item">
 															<div className="cart_box_img">
 																<img
@@ -122,14 +143,17 @@ const Header = () => {
 														<div className="price">
 															<h5>Quantity</h5>
 															<h5>
-																{cartItems.reduce((a, c) => a + c.quantity, 0)}
+																{cart.cartItems.reduce(
+																	(a, c) => a + c.quantity,
+																	0
+																)}
 															</h5>
 														</div>
 														<div className="price">
 															<h5>Total Price</h5>
 															<h5>
 																$
-																{cartItems.reduce(
+																{cart.cartItems.reduce(
 																	(a, c) => a + c.price * c.quantity,
 																	0
 																)}

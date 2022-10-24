@@ -126,7 +126,7 @@ const OrderScreen = () => {
 												></img>
 											</div>
 											<div class="cart_table_box_name">
-												<Link to="/">{item.name}</Link>
+												<Link to={`/product/${item.slug}`}>{item.name}</Link>
 											</div>
 											<div className="cart_table_box_price">
 												{item.quantity}

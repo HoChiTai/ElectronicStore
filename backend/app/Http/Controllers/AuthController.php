@@ -20,7 +20,7 @@ class AuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|string|email|max:255',
-            'password' => 'required|string|min:4',
+            'password' => 'required|string|min:3',
         ]);
 
         if ($validator->fails()) {
@@ -33,7 +33,7 @@ class AuthController extends Controller
         if (!$token) {
             return response()->json([
                 'status' => 401,
-                'message' => 'Unauthorized',
+                'errors' => "Unauthorized",
             ]);
         }
 
@@ -49,7 +49,7 @@ class AuthController extends Controller
             'lname' => 'required|String|max:255',
             'phone' => 'required|String|max:12',
             'email' => 'required|String|email|max:255|unique:users',
-            'password' => 'required|String|min:4|confirmed',
+            'password' => 'required|String|min:3|confirmed',
 
         ]);
 
@@ -96,7 +96,8 @@ class AuthController extends Controller
     public function respondWithToken($token)
     {
         return response()->json([
-            'status' => 'success',
+            'status' => '200',
+            'message' => 'success',
             'user' => Auth::user(),
             'authorisation' => [
                 'token' => $token,

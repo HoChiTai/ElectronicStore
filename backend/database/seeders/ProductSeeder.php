@@ -23,6 +23,7 @@ class ProductSeeder extends Seeder
             Product::query()->updateOrCreate([
 
                 "name" => $product['name'],
+                "slug" => $product['slug'],
                 "stock" => $product['countInStock'],
                 "price" => $product['price'],
                 "image" => $product['image'],
