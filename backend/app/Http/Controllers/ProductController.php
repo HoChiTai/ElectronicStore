@@ -166,4 +166,13 @@ class ProductController extends Controller
 
         return response()->json(['status' => 200, 'product' => $product]);
     }
+
+    public function relativeProduct($brand_id)
+    {
+        $product = Product::where('brand_id', $brand_id)->get();
+        if (!$product) {
+            return response()->json(['status' => 404, 'message' => 'Product not found']);
+        }
+        return response()->json(['status' => 200, 'product' => $product]);
+    }
 }

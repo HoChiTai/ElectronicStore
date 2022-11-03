@@ -27,7 +27,10 @@ class UserSeeder extends Seeder
                 'lname' => $user['lname'],
                 'email' => $user['email'],
                 'password' => Hash::make($user['password']),
-                'phone' => $user['phone']
+                'phone' => $user['phone'],
+                'image' => $user['image'],
+                'phone' => $user['phone'],
+                'role_id' => $user['role_id'],
             ]);
         }
     }

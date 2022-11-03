@@ -8,6 +8,12 @@ use App\Http\Requests\UpdateCategoryRequest;
 
 class CategoryController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +21,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
+        $categories = Category::all()->with("products");
         return response()->json([
             'status' => 200,
             'categories' => $categories,
@@ -52,7 +58,7 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        $category = Category::find($id);
+        $category = Category::find($id)->load("products");
         if (!$category)
             return response()->json(['status' => 404, 'message' => 'Category not found']);
 

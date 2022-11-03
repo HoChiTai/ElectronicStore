@@ -99,7 +99,7 @@ class AuthController extends Controller
             'status' => '200',
             'message' => 'success',
             'user' => Auth::user(),
-            'authorisation' => [
+            'authorization' => [
                 'token' => $token,
                 'type' => 'bearer',
                 'expires_in' => Auth::factory()->getTTL() * 60,
