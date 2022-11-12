@@ -44,3 +44,6 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/refresh', 'refresh');
     Route::get('/me', 'me');
 });
+
+Route::get('/upload', [FileUploadController::class, 'showUpLoadForm'])->name('show_upload');
+Route::post('/upload', [FileUploadController::class, 'storeUploads']);
