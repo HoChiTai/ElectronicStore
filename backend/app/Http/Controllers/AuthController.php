@@ -49,7 +49,7 @@ class AuthController extends Controller
             'lname' => 'required|String|max:255',
             'phone' => 'required|String|max:12',
             'email' => 'required|String|email|max:255|unique:users',
-            'password' => 'required|String|min:3|confirmed',
+            'password' => 'required|String|min:3',
 
         ]);
 

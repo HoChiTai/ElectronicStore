@@ -6,6 +6,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\StatusController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -31,11 +32,21 @@ route::get('/products/brand/{brand}', [ProductController::class, 'relativeProduc
 
 route::apiResource("/categories", CategoryController::class);
 
-route::apiResource("/brands", BrandController::class);
+route::apiResource('/brands', BrandController::class);
 
 route::apiResource('/reviews', ReviewController::class);
 
 route::apiResource('/orders', OrderController::class);
+
+route::apiResource('/statuses', StatusController::class);
+// route::put('/orders/{id}/status', [OrderController::class, 'updateStatus']);
+// route::put('/orders/{id}/pay', [OrderController::class, 'isPaid']);
+// route::get('/orders/user/{id}', [OrderController::class, 'getOrdersUser']);
+Route::controller(OrderController::class)->group(function () {
+    route::put('/orders/{id}/status/{status_id}', 'updateStatus');
+    route::put('/orders/{id}/pay', 'isPaid');
+    route::get('/orders/user/{id}/status/{status_id}', 'getOrdersUser');
+});
 
 Route::controller(AuthController::class)->group(function () {
     Route::post('/login', 'login')->name('login');
