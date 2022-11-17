@@ -4,7 +4,7 @@ import UserCartProduct from "../components/UserCartProduct";
 
 const UserCartItem = () => {
     return (
-        <Row>
+        <Row className="g-0">
             <Col xs={12}>
                 <div className="user-cart__item">
                     <input type="checkbox" id="44567" />

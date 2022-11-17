@@ -54,11 +54,12 @@ body a {
 /*--------------------Dashboard--------------------*/
 .dashboard {
     position: relative;
+    padding: 0 !important;
 }
 
 .dashboard .navigation {
     position: fixed;
-    width: 300px;
+    width: 260px;
     height: 100%;
     background-color: var(--primary-bg);
     display: flex;
@@ -161,7 +162,6 @@ body a {
 
 .dashboard .content {
     width: 100%;
-    padding-left: 300px;
     background-color: var(--bg-dashboard);
     height: 100vh;
 }
@@ -464,3 +464,115 @@ body a {
 }
 
 /*--------------------Admin-home--------------------*/
+/*--------------------Admin-orders--------------------*/
+
+.dashboard .content .admin-orders .user-cart {
+    margin-top: 30px;
+    padding-left: 40px;
+}
+
+.dashboard .content .admin-orders .user-cart__item,
+.dashboard .content .admin-orders .orders-header-table {
+    padding: 0 40px;
+}
+
+.dashboard .content .admin-orders .orders-header-table > .orders-header {
+    background-color: var(--second-color);
+    padding: 10px 20px;
+    margin-top: 10px;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+.dashboard .content .admin-orders .orders-header-table .id,
+.dashboard .content .admin-orders .orders-header-table .date,
+.dashboard .content .admin-orders .orders-header-table .status,
+.dashboard .content .admin-orders .orders-header-table .price,
+.dashboard .content .admin-orders .orders-header-table .icon {
+    padding: 6px;
+}
+
+.dashboard .content .admin-orders .orders-header-table .status,
+.dashboard .content .admin-orders .orders-header-table .price {
+    text-align: right;
+}
+
+/*--------------------Admin-orders--------------------*/
+
+/*--------------------Admin-products--------------------*/
+
+.dashboard .content .admin-product-item {
+    width: 100px;
+    height: 100px;
+}
+.dashboard .content .action-icon {
+    display: flex;
+    align-items: center;
+}
+
+.dashboard .content .action-icon .btn-update {
+    margin-right: 20px;
+    padding: 6px 10px;
+    border-radius: 10px;
+    background-color: green;
+    color: white;
+    transition: all linear 0.4s;
+}
+
+.dashboard .content .action-icon .btn-block {
+    width: 80px;
+    height: 40px;
+    border-radius: 20px;
+    position: relative;
+    cursor: pointer;
+}
+
+.dashboard .content .action-icon .btn-block > .bot {
+    position: absolute;
+    top: 50%;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: white;
+    box-shadow: 2px 0px 4px rgba(0, 0, 0, 0.2);
+    transition: all linear 0.4s;
+}
+.dashboard .content .action-icon .btn-block.bot-unblocked {
+    background-color: green;
+}
+
+.dashboard .content .action-icon .btn-block.bot-blocked {
+    background-color: red;
+}
+
+.dashboard .content .action-icon .btn-block.bot-unblocked > .bot {
+    transform: translate(6px, -50%);
+}
+
+.dashboard .content .action-icon .btn-block.bot-blocked > .bot {
+    transform: translateX(calc(100%)) translateX(12px) translateY(-50%);
+}
+
+.dashboard .content .products-search {
+    display: flex;
+    align-items: center;
+}
+
+.dashboard .content .products-search .search-input {
+    border: 1px solid var(--second-color);
+    border-radius: 30px;
+    width: 40%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 20px;
+}
+
+.dashboard .content .products-search .search-input > input[type="text"] {
+    outline: none;
+    border: none;
+    padding: 4px;
+    width: 100%;
+}
+
+/*--------------------Admin-products--------------------*/
