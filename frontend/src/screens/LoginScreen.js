@@ -1,7 +1,7 @@
 import axios from 'axios';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import FormInput from '../components/FormInput';
 import { Store } from '../Store';
 import { getError } from '../utils';
@@ -9,9 +9,15 @@ import { getError } from '../utils';
 const LoginScreen = () => {
 	const { state, dispatch: ctxDispatch } = useContext(Store);
 
+	const { userInfo } = state;
+
 	const [isLogin, setIsLogin] = useState(true);
 	const [loginMessage, setLoginMessage] = useState('');
 	const navigate = useNavigate();
+
+	const { search } = useLocation();
+	const redirectInUrl = new URLSearchParams(search).get('redirect');
+	const redirect = redirectInUrl ? redirectInUrl : '/';
 
 	const [values, setValues] = useState({
 		email: '',
@@ -113,6 +119,12 @@ const LoginScreen = () => {
 		setValues({ ...values, [e.target.name]: e.target.value });
 	};
 
+	useEffect(() => {
+		if (userInfo) {
+			navigate(redirect);
+		}
+	}, [navigate, redirect, userInfo]);
+
 	const handleSubmitLogin = async (e) => {
 		const email = values.email;
 		const password = values.password;
@@ -124,9 +136,8 @@ const LoginScreen = () => {
 			});
 			if (data.status === '200') {
 				ctxDispatch({ type: 'USER_SIGNIN', payload: data });
-				console.log(data);
 				localStorage.setItem('userInfo', JSON.stringify(data));
-				navigate('/');
+				navigate(redirect || '/');
 			} else {
 				setLoginMessage('Login failed, please check your email and password');
 			}
@@ -135,8 +146,31 @@ const LoginScreen = () => {
 		}
 	};
 
-	const handleSubmitRegister = (e) => {
+	const handleSubmitRegister = async (e) => {
 		e.preventDefault();
+		const fname = values.firstName;
+		const lname = values.lastName;
+		const email = values.regEmail;
+		const password = values.reRegPassword;
+		const phone = values.phone;
+		try {
+			const { data } = await axios.post('/api/register', {
+				fname,
+				lname,
+				email,
+				password,
+				phone,
+			});
+			if (data.status === '200') {
+				ctxDispatch({ type: 'USER_SIGNIN', payload: data });
+				localStorage.setItem('userInfo', JSON.stringify(data));
+				navigate(redirect || '/');
+			} else {
+				setLoginMessage('Register failed, please check your input again');
+			}
+		} catch (error) {
+			alert(getError(error));
+		}
 	};
 
 	return (

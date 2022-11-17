@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('phone');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('image');
+            $table->string('image')->default(null);
             $table->foreignId('role_id')->index()->constrained()->on('roles')->cascadeOnDelete()->cascadeOnUpdate()->default(1);
             $table->rememberToken();
             $table->timestamps();

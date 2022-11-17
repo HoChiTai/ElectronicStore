@@ -6,11 +6,20 @@ use App\Models\Order;
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
 use App\Models\OrderDetail;
+use App\Models\Product;
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth', ['except' => ['index', 'show', 'getOrdersUser']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -18,11 +27,14 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::all()->load("order_details");
+        $orders = Order::all()->load("order_details.product");
+
+
+        // $orders = DB::table('orders')->join('order_details', 'order_details.order_id', '=', 'orders.id')->get();
 
         return response()->json([
             'status' => 200,
-            'categories' => $orders,
+            'orders' => $orders,
         ]);
     }
 
@@ -44,40 +56,44 @@ class OrderController extends Controller
      */
     public function store(StoreOrderRequest $request)
     {
-        DB::beginTransaction();
-        try {
+        $order = Order::create([
+            'name' => $request->input('name'),
+            'phone' => $request->input('phone'),
+            'address' => $request->input('address'),
+            'city' => $request->input('city'),
+            'payment_method' => $request->input('payment_method'),
+            'items_price' => $request->input('items_price'),
+            'shipping_price' => $request->input('shipping_price'),
+            'tax_price' => $request->input('tax_price'),
+            'total_price' => $request->input('total_price'),
+            'cus_id' => $request->input('cus_id'),
+            // 'cus_id' => 1,
+            // 'emp_id' => 1,
+            // 'status_id' => 1,
+        ]);
 
-            $order = Order::create([
-                'name' => $request->input('name'),
-                'phone' => $request->input('phone'),
-                'address' => $request->input('address'),
-                'city' => $request->input('city'),
-                'date' => $request->input('date'),
-                'items_price' => $request->input('items_price'),
-                'shipping_price' => $request->input('shipping_price'),
-                'tax_price' => $request->input('tax_price'),
-                'total_price' => $request->input('total_price'),
-                'cus_id' => $request->input('cus_id'),
-                'emp_id' => $request->input('emp_id'),
-                'status_id' => $request->input('status_idstatus_id'),
+        // $items = json_decode($request->input('orderItems'), true);
+
+        foreach ($request->input('items') as $item) {
+            $orderDetals = OrderDetail::create([
+                'order_id' => $order->id,
+                'product_id' => $item['id'],
+                'quantity' => $item['quantity'],
+                'price' => $item['price'],
+                'subtotal' => $item['quantity'] * $item['price'],
             ]);
 
+            $product = Product::find($item['id']);
 
-            $items = json_decode($request->input('orderItems'), true);
-
-            foreach ($items as $item) {
-                $orderDetals = OrderDetail::create([
-                    'order_id' => $order->id,
-                    'product_id' => $item['product_id'],
-                    'quantity' => $item['quantity'],
-                    'price' => $item['price'],
-                    'subtotal' => $item['subtotal'],
-                ]);
+            if (!$product) {
+                return response()->json(['status' => 404, 'message' => 'Product of this order_detail not found']);
+            } else {
+                $product->stock = $product->stock - $item['quantity'];
+                $product->update();
             }
-            DB::commit();
-        } catch (\Exception $e) {
-            DB::rollBack();
         }
+
+        return response()->json(['status' => 200, 'message' => "Add order successfully", 'order_id' => $order->id]);
     }
 
     /**
@@ -88,7 +104,7 @@ class OrderController extends Controller
      */
     public function show($id)
     {
-        $order = Order::find($id)->load("order_detail");
+        $order = Order::find($id)->load("order_details.product");
         if (!$order)
             return response()->json(['status' => 404, 'message' => 'Order not found']);
 
@@ -139,6 +155,71 @@ class OrderController extends Controller
         $order->delete();
         return response()->json([
             'status' => 200, 'message' => 'Deleted successfully'
+        ]);
+    }
+
+    public function updateStatus($id, $status_id)
+    {
+        $order = Order::find($id);
+        if (!$order) {
+            return response()->json(['status' => 404, 'message' => 'Order not found']);
+        }
+        $order->status_id = $status_id;
+        $order->save();
+
+        if ($status_id == 6) {
+            $order_details = OrderDetail::where('order_id', '=', $order->id)->get();
+            foreach ($order_details as $item) {
+
+                $product = Product::find($item['product_id']);
+
+                if (!$product) {
+                    return response()->json(['status' => 404, 'message' => 'Product of this order_detail not found']);
+                } else {
+                    $product->stock = $product->stock + $item['quantity'];
+                    $product->update();
+                }
+            }
+        }
+
+
+        return response()->json([
+            'status' => 200, 'order_details' => $order_details, 'message' => 'Updated successfully'
+        ]);
+    }
+
+    public function isPaid($id)
+    {
+        $order = Order::find($id);
+        if (!$order) {
+            return response()->json(['status' => 404, 'message' => 'Order not found']);
+        }
+
+        $order->is_paid = true;
+        $order->paid_at = Carbon::now();
+
+        $order->save();
+        return response()->json([
+            'status' => 200, 'message' => 'Updated paid successfully'
+        ]);
+    }
+
+    public function getOrdersUser($id, $status_id)
+    {
+        // $orders = Order::where(['cus_id', '=', $id],['status_id','=',$status_id])->with("order_details.product")->get();
+
+        $orders = Order::where('cus_id', '=', $id)->where('status_id', '=', $status_id)->with("order_details.product")->get();
+
+        if (!$orders) {
+            return response()->json(['status' => 404, 'message' => 'Order user not found']);
+        }
+
+        // $orders = DB::table('orders')->join('order_details', 'order_details.order_id', '=', 'orders.id')->get();
+
+        return response()->json([
+            'status' => 200,
+            'orders' => $orders,
+            'status_id' => $status_id,
         ]);
     }
 }

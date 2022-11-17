@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Button, Card, Col, Form, ListGroup, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
@@ -19,6 +19,12 @@ const ShippingAddressScreen = () => {
 	const [phone, setPhone] = useState(shippingAddress.phone || '');
 	const [address, setAddress] = useState(shippingAddress.address || '');
 	const [city, setCity] = useState(shippingAddress.city || '');
+
+	useEffect(() => {
+		if (!userInfo) {
+			navigate('/signin?redirect=/shipping');
+		}
+	}, [userInfo, navigate]);
 
 	const submitHandler = (e) => {
 		e.preventDefault();
