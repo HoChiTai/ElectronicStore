@@ -41,10 +41,24 @@ const DashBoard = ({ children }) => {
                                     <div>Product</div>
                                 </Link>
                             </li>
-                            <li>
-                                <Link to="/admin/home">
+                            <li
+                                className={
+                                    content === "account" ? "active" : ""
+                                }
+                                onClick={() => setContent("account")}>
+                                <Link to="/admin/account">
                                     <i className="fa-light fa-house"></i>
-                                    <div>Home</div>
+                                    <div>Account</div>
+                                </Link>
+                            </li>
+                            <li
+                                className={
+                                    content === "receive" ? "active" : ""
+                                }
+                                onClick={() => setContent("receive")}>
+                                <Link to="/admin/receive">
+                                    <i className="fa-light fa-house"></i>
+                                    <div>Receive</div>
                                 </Link>
                             </li>
                         </ul>

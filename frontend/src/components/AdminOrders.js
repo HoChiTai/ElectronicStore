@@ -1,6 +1,6 @@
 import React from "react";
 import { Row, Col } from "react-bootstrap";
-import UserCartItem from "./UserCartItem";
+import AdminOrderItem from "./AdminOrderItem";
 
 const AdminOrder = () => {
     return (
@@ -19,10 +19,13 @@ const AdminOrder = () => {
                     <Col className="id" xs={2}>
                         ID
                     </Col>
-                    <Col className="date" xs={2}>
+                    <Col className="id" xs={2}>
+                        CustomerID
+                    </Col>
+                    <Col className="date" xs={1}>
                         Date
                     </Col>
-                    <Col className="status" xs={5}>
+                    <Col className="status" xs={4}>
                         Status
                     </Col>
                     <Col className="price" xs={2}>
@@ -31,7 +34,7 @@ const AdminOrder = () => {
                     <Col className="icon" xs={1}></Col>
                 </Row>
             </div>
-            <UserCartItem />
+            <AdminOrderItem />
         </div>
     );
 };

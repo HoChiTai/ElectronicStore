@@ -488,7 +488,8 @@ body a {
 .dashboard .content .admin-orders .orders-header-table .date,
 .dashboard .content .admin-orders .orders-header-table .status,
 .dashboard .content .admin-orders .orders-header-table .price,
-.dashboard .content .admin-orders .orders-header-table .icon {
+.dashboard .content .admin-orders .orders-header-table .icon,
+.dashboard .content .admin-orders .orders-header-table .total {
     padding: 6px;
 }
 
@@ -609,3 +610,14 @@ body a {
 }
 
 /*--------------------Admin-product-create--------------------*/
+
+/*--------------------Admin-receive-note-create--------------------*/
+.dashboard .content .option-products {
+    width: 90%;
+    height: 40px;
+}
+
+.dashboard .content .option-products option {
+    border-radius: none;
+}
+/*--------------------Admin-receive-note-create--------------------*/
