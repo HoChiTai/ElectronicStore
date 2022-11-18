@@ -3,6 +3,7 @@ import DashBoard from "../screens/DashBoard";
 import AdminHome from "../components/AdminHome";
 import AdminOrder from "../components/AdminOrders";
 import AdminProducts from "../components/AdminProducts";
+import AdminProductForm from "../components/AdminProductForm";
 
 function Admin() {
     return (
@@ -19,7 +20,7 @@ function Admin() {
                         element={<AdminProducts />}></Route>
                     <Route
                         path="/admin/products/create"
-                        element="eeeee"></Route>
+                        element={<AdminProductForm />}></Route>
                     <Route
                         path="/admin/products/update/:id"
                         element="abc"></Route>

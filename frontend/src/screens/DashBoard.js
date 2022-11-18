@@ -17,7 +17,7 @@ const DashBoard = ({ children }) => {
                             </li>
                             <li
                                 className={content === "home" ? "active" : ""}
-                                onClick={() => setContent("Home")}>
+                                onClick={() => setContent("home")}>
                                 <Link to="/admin/home">
                                     <i className="fa-light fa-house"></i>
                                     <div>Home</div>

@@ -22,12 +22,12 @@ const AdminProducts = () => {
             <Table striped bordered hover>
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Image</th>
-                        <th>Name</th>
-                        <th>Quantity</th>
-                        <th>Price</th>
-                        <th>Action</th>
+                        <th style={{ width: "6%" }}>#</th>
+                        <th style={{ width: "10%" }}>Image</th>
+                        <th style={{ width: "50%" }}>Name</th>
+                        <th style={{ width: "10%" }}>Quantity</th>
+                        <th style={{ width: "10%" }}>Price</th>
+                        <th style={{ width: "14%" }}>Action</th>
                     </tr>
                 </thead>
                 <tbody>

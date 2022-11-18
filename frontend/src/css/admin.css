@@ -576,3 +576,36 @@ body a {
 }
 
 /*--------------------Admin-products--------------------*/
+
+/*--------------------Admin-product-create--------------------*/
+
+.dashboard .content .product-img {
+    width: 200px;
+    height: 200px;
+    border: 1px dashed var(--second-color);
+    position: relative;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.dashboard .content .product-img > label {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    padding: 10px;
+    border-radius: 50%;
+    color: white;
+    background-color: green;
+    cursor: pointer;
+}
+
+.dashboard .content .product-img #change-avatar {
+    display: none;
+}
+
+.dashboard .content .product-img + .row .txt-field > span {
+    font-size: 14px;
+}
+
+/*--------------------Admin-product-create--------------------*/
