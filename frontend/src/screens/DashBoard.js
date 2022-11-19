@@ -43,12 +43,22 @@ const DashBoard = ({ children }) => {
                             </li>
                             <li
                                 className={
-                                    content === "account" ? "active" : ""
+                                    content === "customer" ? "active" : ""
                                 }
-                                onClick={() => setContent("account")}>
-                                <Link to="/admin/account">
+                                onClick={() => setContent("customer")}>
+                                <Link to="/admin/customer">
                                     <i className="fa-light fa-house"></i>
-                                    <div>Account</div>
+                                    <div>Customer</div>
+                                </Link>
+                            </li>
+                            <li
+                                className={
+                                    content === "employee" ? "active" : ""
+                                }
+                                onClick={() => setContent("employee")}>
+                                <Link to="/admin/employee">
+                                    <i className="fa-light fa-house"></i>
+                                    <div>Employee</div>
                                 </Link>
                             </li>
                             <li

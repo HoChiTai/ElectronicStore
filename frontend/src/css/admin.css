@@ -605,7 +605,7 @@ body a {
     display: none;
 }
 
-.dashboard .content .product-img + .row .txt-field > span {
+.dashboard .content .row .txt-field > span {
     font-size: 14px;
 }
 
