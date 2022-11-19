@@ -8,6 +8,12 @@ use App\Http\Requests\UpdateBrandRequest;
 
 class BrandController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth', ['except' => ['index', 'show']]);
+    }
+
     /**
      * Display a listing of the resource.
      *

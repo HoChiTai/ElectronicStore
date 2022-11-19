@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 
@@ -11,7 +12,7 @@ class CategoryController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:api');
+        $this->middleware('auth', ['except' => ['index', 'show']]);
     }
 
     /**
@@ -47,6 +48,13 @@ class CategoryController extends Controller
     public function store(StoreCategoryRequest $request)
     {
         $category = Category::create($request->all());
+
+        // $category = Category::create([
+        //     'name' => $request->name,
+        //     'image' => $request->image,
+        //     'description' => $request->description,
+        // ]);
+
         return response()->json(['status' => 200, "message" => "Inserted successfully", "category" => $category]);
     }
 
