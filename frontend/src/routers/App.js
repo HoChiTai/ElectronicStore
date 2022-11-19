@@ -1,9 +1,13 @@
-import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
-import User from "./User";
-import Admin from "./Admin";
+import User from './User';
+import Admin from './Admin';
+import { useContext } from 'react';
+import { Store } from '../Store';
 
 function App() {
-    return <>{true ? <User /> : <Admin />}</>;
+	const { state, dispatch: ctxDispatch } = useContext(Store);
+	const { cart, userInfo } = state;
+	// return <>{true ? <User /> : <Admin />}</>;
+	return <>{userInfo.user.role_id !== 2 ? <User></User> : <Admin></Admin>}</>;
 }
 
 export default App;

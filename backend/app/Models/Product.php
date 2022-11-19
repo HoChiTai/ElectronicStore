@@ -21,13 +21,13 @@ class Product extends Model
         return $this->belongsTo('App\Models\Brand', 'brand_id');
     }
 
-    public function reivews()
+    public function reviews()
     {
-        return $this->hasMany('App\Models\Review', 'id');
+        return $this->hasMany('App\Models\Review', 'product_id', 'id');
     }
 
     public function order_details()
     {
-        return $this->hasMany('App\Models\OrderDetail', 'id');
+        return $this->hasMany('App\Models\OrderDetail', 'product_id', 'id');
     }
 }
