@@ -3,17 +3,6 @@ import React from "react";
 const AdminHome = () => {
     return (
         <>
-            <div className="admin-header">
-                <div className="icon">
-                    <i className="fa-regular fa-bars"></i>
-                </div>
-                <div className="avatar">
-                    <div className="img">
-                        <img src="/images/p5.jpg" alt="" />
-                    </div>
-                    <div className="name">Tèo</div>
-                </div>
-            </div>
             <div className="statistic mt-4">
                 <div className="col-3">
                     <div className="statistic-item">
