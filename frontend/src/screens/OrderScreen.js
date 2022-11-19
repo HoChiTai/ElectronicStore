@@ -1,36 +1,93 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useReducer } from 'react';
 import { Button, Card, Col, ListGroup, Row } from 'react-bootstrap';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Store } from '../Store';
 import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
 
 import env from 'react-dotenv';
 import MessageBox from '../components/MessageBox';
+import axios from 'axios';
+import { getError } from '../utils';
+import LoadingBox from '../components/LoadingBox';
+import { getOverlayDirection } from 'react-bootstrap/esm/helpers';
+
+const reducer = (state, action) => {
+	switch (action.type) {
+		case 'FETCH_REQUEST':
+			return { ...state, loading: true, error: '' };
+		case 'FETCH_SUCCESS':
+			return { ...state, loading: false, order: action.payload, error: '' };
+		case 'FETCH_FAIL':
+			return { ...state, loading: false, error: action.payload };
+
+		case 'PAY_REQUEST':
+			return { ...state, loadingPay: true };
+		case 'PAY_SUCCESS':
+			return { ...state, loadingPay: false, successPay: true };
+		case 'PAY_FAIL':
+			return { ...state, loadingPay: false };
+		case 'PAY_RESET':
+			return { ...state, loadingPay: false, successPay: false };
+
+		case 'DELIVER_REQUEST':
+			return { ...state, loadingDeliver: true };
+		case 'DELIVER_SUCCESS':
+			return { ...state, loadingDeliver: false, successDeliver: true };
+		case 'DELIVER_FAIL':
+			return { ...state, loadingDeliver: false };
+		case 'DELIVER_RESET':
+			return { ...state, loadingDeliver: false, successDeliver: false };
+
+		default:
+			return state;
+	}
+};
 
 const OrderScreen = () => {
 	const params = useParams();
-	const { id: orderId } = params;
+	const { id: order_id } = params;
 
 	const { state, dispatch: ctxDispatch } = useContext(Store);
-	const { cart, userInfo } = state;
+	const { userInfo } = state;
 
-	const round = (num) => Math.round(num * 100 + Number.EPSILON) / 100;
+	const [
+		{
+			loading,
+			error,
+			order,
+			successPay,
+			loadingPay,
+			loadingDeliver,
+			successDeliver,
+		},
+		dispatch,
+	] = useReducer(reducer, {
+		loading: true,
+		order: {},
+		error: '',
+		successPay: false,
+		loadingPay: false,
+	});
 
-	cart.itemsPrice = round(
-		cart.cartItems.reduce((a, c) => a + c.quantity * c.price, 0)
-	);
-	cart.shippingPrice = cart.itemsPrice > 500 ? round(0) : round(10);
-	cart.taxPrice = round(0.1 * cart.itemsPrice);
-	cart.totalPrice = cart.itemsPrice + cart.shippingPrice + cart.taxPrice;
+	// const round = (num) => Math.round(num * 100 + Number.EPSILON) / 100;
+
+	// cart.itemsPrice = round(
+	// 	cart.cartItems.reduce((a, c) => a + c.quantity * c.price, 0)
+	// );
+	// cart.shippingPrice = cart.itemsPrice > 500 ? round(0) : round(10);
+	// cart.taxPrice = round(0.1 * cart.itemsPrice);
+	// cart.totalPrice = cart.itemsPrice + cart.shippingPrice + cart.taxPrice;
 
 	const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
+
+	const navigate = useNavigate();
 
 	function createOrder(data, actions) {
 		return actions.order
 			.create({
 				purchase_units: [
 					{
-						amount: { value: cart.totalPrice },
+						amount: { value: order.total_price },
 					},
 				],
 			})
@@ -40,7 +97,19 @@ const OrderScreen = () => {
 	}
 	function onApprove(data, actions) {
 		return actions.order.capture().then(async function (details) {
-			alert('Paid successfully');
+			try {
+				dispatch({ type: 'PAY_REQUEST' });
+				const { data } = await axios.put(`/api/orders/${order.id}/pay`, {
+					headers: {
+						authorization: `Bearer ${userInfo.authorization.token}`,
+					},
+				});
+				dispatch({ type: 'PAY_SUCCESS', payload: data });
+				alert('Order is paid');
+			} catch (error) {
+				dispatch({ type: 'PAY_FAIL', payload: getError(error) });
+				alert(getError(error));
+			}
 		});
 	}
 
@@ -49,23 +118,60 @@ const OrderScreen = () => {
 	}
 
 	useEffect(() => {
-		const loadPaypalScript = async () => {
-			// const { data: clientId } =
-			// 	'AVKGfcUIR5di9eQ9MUM1ocXMHIHgqU-uNzAAm0AzQISvPko9nnk9o8EAtuXcjEF9bJiQOCUAM-BpWE0m';
-			paypalDispatch({
-				type: 'resetOptions',
-				value: {
-					'client-id':
-						'AVjDowY_2Clu_plbPacA6fvxbHNgCZdB81fblm7GEMN00V2noU2lw9l511zY_aYwylos1f5-ujiIpPsB',
-					currency: 'USD',
-				},
-			});
-			paypalDispatch({ type: 'setLoadingStatus', value: 'pending' });
+		const fetchOrder = async () => {
+			try {
+				dispatch({ type: 'FETCH_REQUEST' });
+				const { data } = await axios.get(`/api/orders/${order_id}`, {
+					headers: { authorization: `Bearer ${userInfo.authorization.token}` },
+				});
+				dispatch({ type: 'FETCH_SUCCESS', payload: data.order });
+			} catch (error) {
+				dispatch({ type: 'FETCH_FAIL', payload: getError(error) });
+				alert(getError(error));
+			}
 		};
-		loadPaypalScript();
-	}, [paypalDispatch]);
+		if (!userInfo) {
+			return navigate('/login');
+		}
+		if (!order.id || successPay || successDeliver) {
+			fetchOrder();
+			if (successPay) {
+				dispatch({ type: 'PAY_RESET' });
+			}
+			if (successDeliver) {
+				dispatch({ type: 'DELIVER_RESET' });
+			}
+		} else {
+			const loadPaypalScript = async () => {
+				paypalDispatch({
+					type: 'resetOptions',
+					value: {
+						'client-id':
+							'AVjDowY_2Clu_plbPacA6fvxbHNgCZdB81fblm7GEMN00V2noU2lw9l511zY_aYwylos1f5-ujiIpPsB',
+						currency: 'USD',
+					},
+				});
+				paypalDispatch({ type: 'setLoadingStatus', value: 'pending' });
+			};
+			loadPaypalScript();
+		}
+	}, [
+		navigate,
+		order._id,
+		order.id,
+		order_id,
+		paypalDispatch,
+		successDeliver,
+		successPay,
+		userInfo,
+		userInfo.authorization.token,
+	]);
 
-	return (
+	return loading ? (
+		<LoadingBox></LoadingBox>
+	) : error ? (
+		<MessageBox variant="danger">{error}</MessageBox>
+	) : (
 		<div>
 			<div className="order_screen">
 				<Row>
@@ -78,25 +184,31 @@ const OrderScreen = () => {
 										<Row>
 											<Col>
 												<strong>Name: </strong>
-												{cart.shippingAddress.fullName}
+												{order.name}
 											</Col>
 											<Col>
 												<strong>phone: </strong>
-												{cart.shippingAddress.phone}
+												{order.phone}
 											</Col>
 										</Row>
 										<Row>
 											<Col>
 												<strong>Address: </strong>
-												{cart.shippingAddress.address}
+												{order.address}
 											</Col>
 											<Col>
 												<strong>City: </strong>
-												{cart.shippingAddress.city}
+												{order.city}
 											</Col>
 										</Row>
 									</Card.Text>
-									<MessageBox variant="danger">Not Delivered</MessageBox>
+									{order.is_delivered ? (
+										<MessageBox variant="success">
+											Delivered at {order.delivered_at}
+										</MessageBox>
+									) : (
+										<MessageBox variant="danger">Not Delivered</MessageBox>
+									)}
 								</Card.Body>
 							</Card>
 						</div>
@@ -105,9 +217,15 @@ const OrderScreen = () => {
 							<Card.Body>
 								<Card.Title>Payment</Card.Title>
 								<Card.Text>
-									<strong>Method: </strong> {cart.paymentMethod}
+									<strong>Method: </strong> {order.payment_method}
 								</Card.Text>
-								<MessageBox variant="danger">Not Paid</MessageBox>
+								{order.is_paid ? (
+									<MessageBox variant="success">
+										Paid at {order.paid_at}
+									</MessageBox>
+								) : (
+									<MessageBox variant="danger">Not Paid</MessageBox>
+								)}
 							</Card.Body>
 						</Card>
 
@@ -116,22 +234,27 @@ const OrderScreen = () => {
 								<Card.Title>Items</Card.Title>
 
 								<ListGroup className="cart_table_body">
-									{cart.cartItems.map((item) => (
-										<ListGroup.Item key={item._id}>
+									{order.order_details.map((item) => (
+										<ListGroup.Item key={item.product_id}>
 											<div className="cart_table_box_img">
 												<img
-													src={item.image}
-													alt={item.name}
+													src={item.product.image}
+													alt={item.product.name}
 													className="img-fluid img-thumbnail rounded"
 												></img>
 											</div>
 											<div class="cart_table_box_name">
-												<Link to={`/product/${item.slug}`}>{item.name}</Link>
+												<Link to={`/product/${item.product.slug}`}>
+													{item.product.name}
+												</Link>
 											</div>
 											<div className="cart_table_box_price">
 												{item.quantity}
 											</div>
 											<div className="cart_table_box_price">${item.price}</div>
+											<div className="cart_table_box_price">
+												${item.subtotal}
+											</div>
 										</ListGroup.Item>
 									))}
 								</ListGroup>
@@ -147,22 +270,22 @@ const OrderScreen = () => {
 										<ListGroup.Item>
 											<span>Items</span>
 
-											<span>${cart.itemsPrice.toFixed(2)}</span>
+											<span>${order.items_price.toFixed(2)}</span>
 										</ListGroup.Item>
 										<ListGroup.Item>
 											<span>Shipping Price</span>
-											<span>${cart.shippingPrice.toFixed(2)}</span>
+											<span>${order.shipping_price.toFixed(2)}</span>
 										</ListGroup.Item>
 										<ListGroup.Item>
 											<span>Tax Price</span>
-											<span>${cart.taxPrice.toFixed(2)}</span>
+											<span>${order.tax_price.toFixed(2)}</span>
 										</ListGroup.Item>
 										<ListGroup.Item>
 											<span>
 												<strong>Order Total</strong>
 											</span>
 											<span>
-												<strong>${cart.totalPrice.toFixed(2)}</strong>
+												<strong>${order.total_price.toFixed(2)}</strong>
 											</span>
 										</ListGroup.Item>
 										<ListGroup.Item>
@@ -173,6 +296,7 @@ const OrderScreen = () => {
 													onError={onError}
 												></PayPalButtons>
 											</div>
+											{loadingPay && <LoadingBox></LoadingBox>}
 										</ListGroup.Item>
 									</ListGroup>
 								</Card.Body>

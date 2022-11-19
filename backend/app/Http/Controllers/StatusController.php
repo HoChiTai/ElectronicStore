@@ -8,6 +8,12 @@ use App\Http\Requests\UpdateStatusRequest;
 
 class StatusController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth', ['except' => ['index', 'show']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +21,11 @@ class StatusController extends Controller
      */
     public function index()
     {
-        //
+        $statuses = Status::all();
+        return response()->json([
+            'status' => 200,
+            'statuses' => $statuses,
+        ]);
     }
 
     /**
@@ -36,7 +46,8 @@ class StatusController extends Controller
      */
     public function store(StoreStatusRequest $request)
     {
-        //
+        $status_model = Status::create($request->all());
+        return response()->json(['status' => 200, "message" => "Inserted successfully"]);
     }
 
     /**
@@ -45,9 +56,13 @@ class StatusController extends Controller
      * @param  \App\Models\Status  $status
      * @return \Illuminate\Http\Response
      */
-    public function show(Status $status)
+    public function show($id)
     {
-        //
+        $status_model = Status::find($id)->load("products");
+        if (!$status_model)
+            return response()->json(['status' => 404, 'message' => 'Status not found']);
+
+        return response()->json(['status_model' => $status_model]);
     }
 
     /**
@@ -68,9 +83,15 @@ class StatusController extends Controller
      * @param  \App\Models\Status  $status
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateStatusRequest $request, Status $status)
+    public function update(UpdateStatusRequest $request, $id)
     {
-        //
+        $status_model = Status::find($id);
+        if (!$status_model) {
+            return response()->json(['status' => 404, 'message' => 'Status not found']);
+        }
+
+        $status_model->update($request->all());
+        return response()->json(['status' => 200, 'message' => 'Updated successfully', 'status_model' => $status_model]);
     }
 
     /**
@@ -79,8 +100,15 @@ class StatusController extends Controller
      * @param  \App\Models\Status  $status
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Status $status)
+    public function destroy($id)
     {
-        //
+        $status_model = Status::find($id);
+        if (!$status_model) {
+            return response()->json(['status' => 404, 'message' => 'Status not found']);
+        }
+        $status_model->delete();
+        return response()->json([
+            'status' => 200, 'message' => 'Deleted successfully'
+        ]);
     }
 }

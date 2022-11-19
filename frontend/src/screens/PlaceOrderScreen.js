@@ -1,11 +1,31 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useReducer } from 'react';
+import axios from 'axios';
 import { Button, Card, Col, ListGroup, Row } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import CheckoutSteps from '../components/CheckoutSteps';
 import { Store } from '../Store';
+import LoadingBox from '../components/LoadingBox';
+import { getError } from '../utils';
+
+const reducer = (state, action) => {
+	switch (action.type) {
+		case 'CREATE_REQUEST':
+			return { ...state, loading: true };
+		case 'CREATE_SUCCESS':
+			return { ...state, loading: false };
+		case 'CREATE_FAIL':
+			return { ...state, loading: false };
+		default:
+			return state;
+	}
+};
 
 const PlaceOrderScreen = () => {
 	const navigate = useNavigate();
+
+	const [{ loading }, dispatch] = useReducer(reducer, {
+		loading: false,
+	});
 
 	const { state, dispatch: ctxDispatch } = useContext(Store);
 
@@ -22,8 +42,45 @@ const PlaceOrderScreen = () => {
 	cart.totalPrice = cart.itemsPrice + cart.shippingPrice + cart.taxPrice;
 
 	const placeOrderHandler = async () => {
-		navigate(`/order/${cart.cartItems[0].id}`);
+		try {
+			dispatch({ type: 'CREATE_REQUEST' });
+			const { data } = await axios.post(
+				'/api/orders',
+				{
+					items: cart.cartItems,
+					name: cart.shippingAddress.fullName,
+					phone: cart.shippingAddress.phone,
+					address: cart.shippingAddress.address,
+					city: cart.shippingAddress.city,
+					payment_method: cart.paymentMethod,
+					items_price: cart.itemsPrice,
+					shipping_price: cart.shippingPrice,
+					tax_price: cart.taxPrice,
+					total_price: cart.totalPrice,
+					cus_id: userInfo.user.id,
+				},
+				{
+					headers: {
+						authorization: `Bearer ${userInfo.authorization.token}`,
+					},
+				}
+			);
+			ctxDispatch({ type: 'CART_CLEAR' });
+			dispatch({ type: 'CREAT_SUCCESS' });
+			localStorage.removeItem('cartItems');
+
+			navigate(`/order/${data.order_id}`);
+		} catch (error) {
+			dispatch({ type: 'CREATE_FAIL' });
+			alert(getError(error));
+		}
 	};
+
+	useEffect(() => {
+		if (!cart.paymentMethod) {
+			navigate('/payment');
+		}
+	}, [cart, navigate]);
 
 	return (
 		<div>
@@ -78,7 +135,7 @@ const PlaceOrderScreen = () => {
 
 								<ListGroup className="cart_table_body">
 									{cart.cartItems.map((item) => (
-										<ListGroup.Item key={item._id}>
+										<ListGroup.Item key={item.id}>
 											<div className="cart_table_box_img">
 												<img
 													src={item.image}
@@ -93,6 +150,9 @@ const PlaceOrderScreen = () => {
 												{item.quantity}
 											</div>
 											<div className="cart_table_box_price">${item.price}</div>
+											<div className="cart_table_box_price">
+												${item.quantity * item.price}
+											</div>
 										</ListGroup.Item>
 									))}
 								</ListGroup>

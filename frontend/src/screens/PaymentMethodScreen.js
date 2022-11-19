@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Button, Card, Col, Form, ListGroup, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
@@ -15,6 +15,12 @@ const PaymentMethodScreen = () => {
 	const [paymentMethodName, setPaymentMethod] = useState(
 		paymentMethod || 'PayPal'
 	);
+
+	useEffect(() => {
+		if (!shippingAddress.address) {
+			navigate('/shipping');
+		}
+	}, [shippingAddress, navigate]);
 
 	const submitHandler = (e) => {
 		e.preventDefault();

@@ -9,7 +9,14 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+
     protected $PAGE_SIZE = 2;
+
+    public function __construct()
+    {
+        $this->middleware('auth', ['except' => ['index', 'show', 'search', 'findSlug', 'relativeProduct']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -61,6 +68,7 @@ class ProductController extends Controller
     {
         $product = Product::find($id);
         if (!$product)
+
             return response()->json(['status' => 404, 'message' => 'Product not found']);
 
         $product->load(['categories', 'brands']);
