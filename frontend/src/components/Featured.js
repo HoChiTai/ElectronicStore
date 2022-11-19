@@ -7,7 +7,6 @@ import data from '../data';
 import ProductCard from './ProductCard';
 
 const Featured = (props) => {
-	//const { products } = data;
 	const { products } = props;
 	const settings = {
 		dots: false,

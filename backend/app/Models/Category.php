@@ -13,10 +13,10 @@ class Category extends Model
 
     public function brands()
     {
-        return $this->hasMany('App\Models\Brand', 'id');
+        return $this->hasMany('App\Models\Brand', 'brand_id', 'id');
     }
     public function products()
     {
-        return $this->hasMany('App\Models\Product', 'id');
+        return $this->hasMany('App\Models\Product', 'cate_id', 'id');
     }
 }

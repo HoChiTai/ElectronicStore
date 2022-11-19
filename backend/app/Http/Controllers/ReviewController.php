@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Review;
 use App\Http\Requests\StoreReviewRequest;
 use App\Http\Requests\UpdateReviewRequest;
+use App\Models\Product;
 
 class ReviewController extends Controller
 {
@@ -45,8 +46,40 @@ class ReviewController extends Controller
      */
     public function store(StoreReviewRequest $request)
     {
-        $review = Review::create($request->all());
-        return response()->json(['status' => 200, "message" => "Inserted successfully", "review" => $review]);
+        $product_id = $request->input('product_id');
+        $user_id = $request->input('user_id');
+        // $product = Product::find($product_id);
+        // if (!$product)
+        //     return response()->json(['status' => 404, 'message' => 'Product not found']);
+
+        // $reviews = Review::where("product_id", "=", $product_id);
+
+        // $product->numReviews += 1;
+        // $product->numReviews += 1;
+
+        $product = Product::find($product_id);
+        if (!$product) {
+            return response()->json(['status' => 404, 'message' => 'Product not found']);
+        }
+
+        $existReview = Review::where("product_id", "=", $product_id)->where('user_id', '=', $user_id)->first();
+
+        if ($existReview == null) {
+            return response()->json(['status' => 404, 'message' => 'This user have aldready submit review', 'review' => $existReview]);
+        }
+
+        $review = Review::create([
+            'product_id' => $product_id,
+            'user_id' => $user_id,
+            'comment' => $request->input('comment'),
+            'rating' => $request->input('rating'),
+        ]);
+
+        $product->rating = $request->input('newRating');
+        $product->numReviews = $request->input('newNumReviews');
+        $product->update();
+        // $review = Review::create($request->all());
+        return response()->json(['status' => 200, "message" => "Inserted successfully", "product" => $product]);
     }
 
 

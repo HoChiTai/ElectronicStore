@@ -1,17 +1,26 @@
 {
     "users": [
         {
-            "fname": "john",
-            "lname": "ryan",
-            "email": "john@gmail.com",
+            "fname": "Admin",
+            "lname": "",
+            "email": "admin@gmail.com",
             "password": "123",
             "phone": "0123456789",
             "image": "/images/p5.jpg",
             "role_id": "2"
         },
         {
-            "fname": "alice",
-            "lname": "kyte",
+            "fname": "John",
+            "lname": "Ryan",
+            "email": "john@gmail.com",
+            "password": "123",
+            "phone": "0123456789",
+            "image": "/images/p5.jpg",
+            "role_id": "1"
+        },
+        {
+            "fname": "Alice",
+            "lname": "Kyte",
             "email": "alice@gmail.com",
             "password": "123",
             "phone": "0123456789",
