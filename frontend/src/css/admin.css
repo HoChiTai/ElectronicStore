@@ -605,8 +605,10 @@ body a {
 	display: none;
 }
 
-.dashboard .content .product-img + .row .txt-field > span {
-	font-size: 14px;
+
+.dashboard .content .row .txt-field > span {
+    font-size: 14px;
+
 }
 
 /*--------------------Admin-product-create--------------------*/
