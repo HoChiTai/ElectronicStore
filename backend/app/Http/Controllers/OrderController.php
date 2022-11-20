@@ -158,11 +158,14 @@ class OrderController extends Controller
         ]);
     }
 
-    public function updateStatus($id, $status_id)
+    public function updateStatus(Request $request)
     {
-        $order = Order::find($id);
+        $order_id = $request->input('order_id');
+        $status_id = $request->input('status_id');
+
+        $order = Order::find($order_id);
         if (!$order) {
-            return response()->json(['status' => 404, 'message' => 'Order not found']);
+            return response()->json(['status' => 404, 'message' => 'Order not found', 'Order' => $order]);
         }
         $order->status_id = $status_id;
         $order->save();
@@ -184,7 +187,7 @@ class OrderController extends Controller
 
 
         return response()->json([
-            'status' => 200, 'order_details' => $order_details, 'message' => 'Updated successfully'
+            'status' => 200, 'orders' => Order::where('status_id', '=', $status_id)->with("order_details.product")->get(), 'message' => 'Updated successfully'
         ]);
     }
 
@@ -211,7 +214,7 @@ class OrderController extends Controller
         $orders = Order::where('cus_id', '=', $id)->where('status_id', '=', $status_id)->with("order_details.product")->get();
 
         if (!$orders) {
-            return response()->json(['status' => 404, 'message' => 'Order user not found']);
+            return response()->json(['status' => 404, 'message' => 'Order not found']);
         }
 
         // $orders = DB::table('orders')->join('order_details', 'order_details.order_id', '=', 'orders.id')->get();
@@ -219,7 +222,23 @@ class OrderController extends Controller
         return response()->json([
             'status' => 200,
             'orders' => $orders,
-            'status_id' => $status_id,
+        ]);
+    }
+    public function getOrdersByStatus($id)
+    {
+        // $orders = Order::where(['cus_id', '=', $id],['status_id','=',$status_id])->with("order_details.product")->get();
+
+        $orders = Order::where('status_id', '=', $id)->with("order_details.product")->get();
+
+        if (!$orders) {
+            return response()->json(['status' => 404, 'message' => 'Order not found']);
+        }
+
+        // $orders = DB::table('orders')->join('order_details', 'order_details.order_id', '=', 'orders.id')->get();
+
+        return response()->json([
+            'status' => 200,
+            'orders' => $orders,
         ]);
     }
 }

@@ -7,16 +7,8 @@ import { getError } from '../utils';
 import LoadingBox from './LoadingBox';
 import MessageBox from './MessageBox';
 
-
 const reducer = (state, action) => {
 	switch (action.type) {
-		// case 'FETCH_REQUEST':
-		// 	return { ...state, loading: true, error: '' };
-		// case 'FETCH_SUCCESS':
-		// 	return { ...state, loading: false, orders: action.payload, error: '' };
-		// case 'FETCH_FAIL':
-		// 	return { ...state, loading: false, error: action.payload };
-
 		case 'UPDATE_REQUEST':
 			return { ...state, loadingUpdate: true };
 		case 'UPDATE_SUCCESS':
@@ -35,51 +27,10 @@ const UserCartItem = (props) => {
 
 	const { userInfo } = state;
 
-	// const [{ loading, error, orders, loadingUpdate }, dispatch] = useReducer(
-	// 	reducer,
-	// 	{
-	// 		loading: true,
-	// 		orders: [],
-	// 		error: '',
-	// 		loadingUpdate: false,
-	// 	}
-	// );
-
-	const [{ error, loadingUpdate }, dispatch] = useReducer(reducer, {
-		error: '',
-		loadingUpdate: false,
-	});
-
-	// useEffect(() => {
-	// 	const fetchOrders = async () => {
-	// 		try {
-	// 			dispatch({ type: 'FETCH_REQUEST' });
-	// 			const { data } = await axios.get(
-	// 				`/api/orders/user/${userInfo.user.id}/status/${status_id}`,
-	// 				{
-	// 					headers: {
-	// 						authorization: `Bearer ${userInfo.authorization.token}`,
-	// 					},
-	// 				}
-	// 			);
-	// 			dispatch({ type: 'FETCH_SUCCESS', payload: data.orders });
-	// 		} catch (error) {
-	// 			dispatch({ type: 'FETCH_FAIL', payload: getError(error) });
-	// 			alert(getError(error));
-	// 		}
-	// 	};
-	// 	fetchOrders();
-	// }, [userInfo.authorization.token, userInfo.id, userInfo.user.id]);
-
 	const UpdateStatusHandller = async () => {
 		const { data } = {};
 	};
 
-	// return loading ? (
-	// 	<LoadingBox></LoadingBox>
-	// ) : error ? (
-	// 	<MessageBox variant="danger">{error}</MessageBox>
-	// ) : (
 	return (
 		<div>
 			{orders.map((order) => (

@@ -25,7 +25,8 @@ class ProductController extends Controller
     public function index()
     {
 
-        $products = Product::select('id', 'name', 'slug', 'price', 'stock', 'rating', 'numReviews', 'image', 'cate_id', 'brand_id')->get();
+        // $products = Product::select('id', 'name', 'slug', 'price', 'stock', 'rating', 'numReviews', 'image', 'cate_id', 'brand_id')->get();
+        $products = Product::all()->load(['categories', 'brands']);
         return response()->json([
             'status' => 200,
             'products' => $products,

@@ -49,20 +49,6 @@ const UserCart = () => {
 
 	const [selected, setSelected] = useState(1);
 
-	useEffect(() => {
-		const fetchStatuses = async () => {
-			try {
-				dispatch({ type: 'FETCH_REQUEST' });
-				const { data } = await axios.get(`/api/statuses`);
-				dispatch({ type: 'FETCH_SUCCESS', payload: data.statuses });
-			} catch (error) {
-				dispatch({ type: 'FETCH_FAIL', payload: getError(error) });
-				alert(getError(error));
-			}
-		};
-		fetchStatuses();
-	}, []);
-
 	const fetchOrdersByState = async (status_id) => {
 		try {
 			dispatch({ type: 'FETCH_ORDER_REQUEST' });
@@ -80,6 +66,21 @@ const UserCart = () => {
 			alert(getError(error));
 		}
 	};
+
+	useEffect(() => {
+		const fetchStatuses = async () => {
+			try {
+				dispatch({ type: 'FETCH_REQUEST' });
+				const { data } = await axios.get(`/api/statuses`);
+				dispatch({ type: 'FETCH_SUCCESS', payload: data.statuses });
+			} catch (error) {
+				dispatch({ type: 'FETCH_FAIL', payload: getError(error) });
+				alert(getError(error));
+			}
+		};
+		fetchStatuses();
+		fetchOrdersByState(1);
+	}, []);
 
 	return loading ? (
 		<LoadingBox></LoadingBox>

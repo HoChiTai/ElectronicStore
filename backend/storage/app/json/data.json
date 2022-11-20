@@ -96,11 +96,6 @@
         },
         {
             "id": "6",
-            "name": "Cancel",
-            "desc": "..."
-        },
-        {
-            "id": "7",
             "name": "Fail",
             "desc": "..."
         }
@@ -123,9 +118,29 @@
             "shipping_price": "10",
             "tax_price": "20",
             "total_price": "657",
-            "cus_id": "1",
-            "emp_id": "2",
+            "cus_id": "2",
+            "emp_id": "1",
             "status_id": "5"
+        },
+        {
+            "id": "02",
+            "name": "Asley Dona",
+            "phone": "0822782392",
+            "date": "2022-08-11 18:50:30",
+            "address": "255 Johnson",
+            "city": "LA",
+            "payment_method": "Cash",
+            "is_paid": "1",
+            "paid_at": "2022-08-13 14:55:30",
+            "is_delivered": "1",
+            "delivered_at": "2022-08-13 14:50:30",
+            "items_price": "878",
+            "shipping_price": "20",
+            "tax_price": "40",
+            "total_price": "1020",
+            "cus_id": "3",
+            "emp_id": "1",
+            "status_id": "1"
         }
     ],
     "order_details": [
@@ -142,6 +157,14 @@
             "quantity": "1",
             "price": "499",
             "subtotal": "499"
+        },
+
+        {
+            "order_id": "2",
+            "product_id": "3",
+            "quantity": "1",
+            "price": "128",
+            "subtotal": "128"
         }
     ],
 

@@ -83,6 +83,21 @@ const PaymentMethodScreen = () => {
 										</span>
 										<Form.Label>Credit Card</Form.Label>
 									</Form.Group>{' '}
+									<Form.Group
+										controlId="Cash"
+										className="checkout_radio_item mb-3"
+									>
+										<Form.Check
+											type="radio"
+											value="Cash"
+											checked={paymentMethodName === 'Cash'}
+											onChange={(e) => setPaymentMethod(e.target.value)}
+										></Form.Check>
+										<span>
+											<i class="fa-solid fa-wallet"></i>
+										</span>
+										<Form.Label>Cash</Form.Label>
+									</Form.Group>
 								</div>
 								<div className="btn_group_cart">
 									<div>

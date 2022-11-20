@@ -44,9 +44,10 @@ route::apiResource('/statuses', StatusController::class);
 // route::put('/orders/{id}/pay', [OrderController::class, 'isPaid']);
 // route::get('/orders/user/{id}', [OrderController::class, 'getOrdersUser']);
 Route::controller(OrderController::class)->group(function () {
-    route::put('/orders/{id}/status/{status_id}', 'updateStatus');
+    route::put('/orders/status/update', 'updateStatus');
     route::put('/orders/{id}/pay', 'isPaid');
     route::get('/orders/user/{id}/status/{status_id}', 'getOrdersUser');
+    route::get('/orders/status/{status_id}', 'getOrdersByStatus');
 });
 
 Route::controller(AuthController::class)->group(function () {

@@ -4,12 +4,20 @@ import { useContext } from 'react';
 import { Store } from '../Store';
 
 function App() {
-
 	const { state, dispatch: ctxDispatch } = useContext(Store);
 	const { cart, userInfo } = state;
 	// return <>{true ? <User /> : <Admin />}</>;
-	return <>{userInfo.user.role_id !== 2 ? <User></User> : <Admin></Admin>}</>;
-
+	return (
+		<>
+			{userInfo === null ? (
+				<User></User>
+			) : userInfo.user.role_id !== 1 ? (
+				<Admin></Admin>
+			) : (
+				<User></User>
+			)}
+		</>
+	);
 }
 
 export default App;
