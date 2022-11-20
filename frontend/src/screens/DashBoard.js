@@ -1,9 +1,10 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { Row, Col, Container } from "react-bootstrap";
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Row, Col, Container } from 'react-bootstrap';
 
 const DashBoard = ({ children }) => {
-    const [content, setContent] = useState("home");
+	const [content, setContent] = useState('home');
+
 
     return (
         <Container fluid={true} className="dashboard">
@@ -93,6 +94,7 @@ const DashBoard = ({ children }) => {
             </Row>
         </Container>
     );
+
 };
 
 export default DashBoard;

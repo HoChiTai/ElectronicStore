@@ -1,3 +1,4 @@
+
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import DashBoard from "../screens/DashBoard";
 import AdminHome from "../components/AdminHome";
@@ -58,6 +59,7 @@ function Admin() {
             </DashBoard>
         </BrowserRouter>
     );
+
 }
 
 export default Admin;

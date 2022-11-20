@@ -25,7 +25,8 @@ class ProductController extends Controller
     public function index()
     {
 
-        $products = Product::select('id', 'name', 'slug', 'price', 'stock', 'rating', 'numReviews', 'image', 'cate_id', 'brand_id')->get();
+        // $products = Product::select('id', 'name', 'slug', 'price', 'stock', 'rating', 'numReviews', 'image', 'cate_id', 'brand_id')->get();
+        $products = Product::all()->load(['categories', 'brands']);
         return response()->json([
             'status' => 200,
             'products' => $products,
@@ -71,7 +72,7 @@ class ProductController extends Controller
 
             return response()->json(['status' => 404, 'message' => 'Product not found']);
 
-        $product->load(['categories', 'brands']);
+        $product->load(['categories', 'brands', 'reviews']);
 
         return response()->json(['status' => 200, 'product' => $product]);
     }
@@ -166,11 +167,11 @@ class ProductController extends Controller
 
     public function findSlug($slug)
     {
-        $product = Product::where('slug', $slug)->get();
+        $product = Product::where('slug', $slug)->first();
         if (!$product)
             return response()->json(['status' => 404, 'message' => 'Product not found']);
 
-        $product->load(['categories', 'brands']);
+        $product->load(['categories.products', 'brands', 'reviews.users']);
 
         return response()->json(['status' => 200, 'product' => $product]);
     }
@@ -181,6 +182,19 @@ class ProductController extends Controller
         if (!$product) {
             return response()->json(['status' => 404, 'message' => 'Product not found']);
         }
+        return response()->json(['status' => 200, 'products' => $product]);
+    }
+
+    public function updateReview(Request $request)
+    {
+        $id = $request->input('product_id');
+
+        $product = Product::find($id);
+        if (!$product) {
+            return response()->json(['status' => 404, 'message' => 'Product not found']);
+        }
+        $product->rating = $request->input('rating');
+        $product->numReviews = $request->input('numReviews');
         return response()->json(['status' => 200, 'product' => $product]);
     }
 }
