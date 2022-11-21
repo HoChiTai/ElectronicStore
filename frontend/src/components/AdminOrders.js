@@ -8,43 +8,6 @@ import LoadingBox from './LoadingBox';
 import MessageBox from './MessageBox';
 import UserCartProduct from './UserCartProduct';
 
-// const AdminOrder = () => {
-//     return (
-//         <div className="admin-orders">
-//             <div className="user-cart">
-//                 <ul className="user-cart__tab">
-//                     <li className="active">All</li>
-//                     <li>All</li>
-//                     <li>All</li>
-//                     <li>All</li>
-//                     <li>All</li>
-//                 </ul>
-//             </div>
-//             <div className="orders-header-table">
-//                 <Row className="g-0 orders-header">
-//                     <Col className="id" xs={2}>
-//                         ID
-//                     </Col>
-//                     <Col className="id" xs={2}>
-//                         CustomerID
-//                     </Col>
-//                     <Col className="date" xs={1}>
-//                         Date
-//                     </Col>
-//                     <Col className="status" xs={4}>
-//                         Status
-//                     </Col>
-//                     <Col className="price" xs={2}>
-//                         Price
-//                     </Col>
-//                     <Col className="icon" xs={1}></Col>
-//                 </Row>
-//             </div>
-//             <AdminOrderItem />
-//         </div>
-//     );
-// };
-
 const reducer = (state, action) => {
 	switch (action.type) {
 		case 'FETCH_REQUEST':
@@ -74,11 +37,6 @@ const reducer = (state, action) => {
 				loadingUpdate: false,
 				error: '',
 			};
-		// case 'RELOAD_ORDERS':
-		// 	return {
-		// 		...state,
-		// 		orders: action.payload,
-		// 	};
 		case 'UPDATE_FAIL':
 			return { ...state, loadingUpdate: false, error: action.payload };
 
@@ -145,6 +103,7 @@ const AdminOrder = () => {
 				{
 					order_id: order_id,
 					status_id: status_id,
+					emp_id: userInfo.user.id,
 				},
 				{
 					headers: {
@@ -190,10 +149,10 @@ const AdminOrder = () => {
 					<Col className="id" xs={2}>
 						CustomerID
 					</Col>
-					<Col className="date" xs={1}>
+					<Col className="date" xs={3}>
 						Date
 					</Col>
-					<Col className="status" xs={4}>
+					<Col className="status" xs={2}>
 						Status
 					</Col>
 					<Col className="price" xs={2}>

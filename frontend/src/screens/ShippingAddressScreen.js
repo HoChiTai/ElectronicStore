@@ -8,17 +8,14 @@ import { Store } from '../Store';
 const ShippingAddressScreen = () => {
 	const { state, dispatch: ctxDispatch } = useContext(Store);
 
-	const {
-		cart: { cartItems, shippingAddress },
-		userInfo,
-	} = state;
+	const { cart, userInfo } = state;
 
 	const navigate = useNavigate();
 
-	const [fullName, setFullName] = useState(shippingAddress.fullName || '');
-	const [phone, setPhone] = useState(shippingAddress.phone || '');
-	const [address, setAddress] = useState(shippingAddress.address || '');
-	const [city, setCity] = useState(shippingAddress.city || '');
+	const [fullName, setFullName] = useState(cart.shippingAddress.fullName || '');
+	const [phone, setPhone] = useState(cart.shippingAddress.phone || '');
+	const [address, setAddress] = useState(cart.shippingAddress.address || '');
+	const [city, setCity] = useState(cart.shippingAddress.city || '');
 
 	useEffect(() => {
 		if (!userInfo) {
@@ -122,7 +119,7 @@ const ShippingAddressScreen = () => {
 								<Card.Header>SUMMARY</Card.Header>
 								<Card.Body variant="flush">
 									<ListGroup>
-										{cartItems.map((item) => (
+										{cart.cartItems.map((item) => (
 											<ListGroup.Item>
 												<div className="payment_box_img">
 													<img
@@ -145,21 +142,21 @@ const ShippingAddressScreen = () => {
 											</span>
 
 											<span>
-												{cartItems.reduce((a, c) => a + c.quantity, 0)} items
+												{cart.cartItems.reduce((a, c) => a + c.quantity, 0)}{' '}
+												items
 											</span>
+										</ListGroup.Item>
+										<ListGroup.Item>
+											<span>
+												<h5>Discount</h5>
+											</span>
+											<span>${cart.sale}</span>
 										</ListGroup.Item>
 										<ListGroup.Item>
 											<span>
 												<h5>Total Price</h5>
 											</span>
-											<span>
-												{' '}
-												$
-												{cartItems.reduce(
-													(a, c) => a + c.price * c.quantity,
-													0
-												)}
-											</span>
+											<span> ${cart.total_price_apply_coupon}</span>
 										</ListGroup.Item>
 									</ListGroup>
 								</Card.Body>

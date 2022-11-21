@@ -78,7 +78,7 @@
                 @endif
 
                 <div class="links">
-                    <form action="/upload" method="POST" enctype="multipart/form-data">
+                    <form action="/api/upload" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
 

@@ -16,6 +16,7 @@ class Product extends Model
         return $this->belongsTo('App\Models\Category', 'cate_id');
     }
 
+
     public function brands()
     {
         return $this->belongsTo('App\Models\Brand', 'brand_id');
@@ -24,6 +25,11 @@ class Product extends Model
     public function reviews()
     {
         return $this->hasMany('App\Models\Review', 'product_id', 'id');
+    }
+
+    public function wishlists()
+    {
+        return $this->hasMany('App\Models\WishList', 'product_id', 'id');
     }
 
     public function order_details()

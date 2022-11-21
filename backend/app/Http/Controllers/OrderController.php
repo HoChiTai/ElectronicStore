@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
+use App\Models\CustomerCoupon;
 use App\Models\OrderDetail;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -27,7 +28,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::all()->load("order_details.product");
+        $orders = Order::all()->load(["order_details.product", "statuses"]);
 
 
         // $orders = DB::table('orders')->join('order_details', 'order_details.order_id', '=', 'orders.id')->get();
@@ -67,9 +68,6 @@ class OrderController extends Controller
             'tax_price' => $request->input('tax_price'),
             'total_price' => $request->input('total_price'),
             'cus_id' => $request->input('cus_id'),
-            // 'cus_id' => 1,
-            // 'emp_id' => 1,
-            // 'status_id' => 1,
         ]);
 
         // $items = json_decode($request->input('orderItems'), true);
@@ -90,6 +88,19 @@ class OrderController extends Controller
             } else {
                 $product->stock = $product->stock - $item['quantity'];
                 $product->update();
+            }
+        }
+
+        $cus_id = $request->input('cus_id');
+        $coupon_id = $request->input('coupon_id');
+
+        if ($coupon_id && $coupon_id != 0) {
+            $coupon = CustomerCoupon::where('cus_id', '=', $cus_id)->where('coupon_id', '=', $coupon_id)->get();
+            if (!$coupon)
+                return response()->json(['status' => 404, 'message' => 'Coupon not found']);
+            else {
+                $coupon->is_used = true;
+                $coupon->save();
             }
         }
 
@@ -168,6 +179,7 @@ class OrderController extends Controller
             return response()->json(['status' => 404, 'message' => 'Order not found', 'Order' => $order]);
         }
         $order->status_id = $status_id;
+        $order->emp_id = $request->input('emp_id');
         $order->save();
 
         if ($status_id == 6) {
@@ -184,7 +196,6 @@ class OrderController extends Controller
                 }
             }
         }
-
 
         return response()->json([
             'status' => 200, 'orders' => Order::where('status_id', '=', $status_id)->with("order_details.product")->get(), 'message' => 'Updated successfully'
@@ -211,7 +222,7 @@ class OrderController extends Controller
     {
         // $orders = Order::where(['cus_id', '=', $id],['status_id','=',$status_id])->with("order_details.product")->get();
 
-        $orders = Order::where('cus_id', '=', $id)->where('status_id', '=', $status_id)->with("order_details.product")->get();
+        $orders = Order::where('cus_id', '=', $id)->where('status_id', '=', $status_id)->with(["order_details.product", "statuses"])->get();
 
         if (!$orders) {
             return response()->json(['status' => 404, 'message' => 'Order not found']);
@@ -228,7 +239,7 @@ class OrderController extends Controller
     {
         // $orders = Order::where(['cus_id', '=', $id],['status_id','=',$status_id])->with("order_details.product")->get();
 
-        $orders = Order::where('status_id', '=', $id)->with("order_details.product")->get();
+        $orders = Order::where('status_id', '=', $id)->with(["order_details.product", "statuses"])->get();
 
         if (!$orders) {
             return response()->json(['status' => 404, 'message' => 'Order not found']);

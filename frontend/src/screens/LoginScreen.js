@@ -1,18 +1,54 @@
 import axios from 'axios';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useReducer, useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
 import FormInput from '../components/FormInput';
+import LoadingBox from '../components/LoadingBox';
+import MessageBox from '../components/MessageBox';
 import { Store } from '../Store';
 import { getError } from '../utils';
 
+const reducer = (state, action) => {
+	switch (action.type) {
+		case 'LOGIN_REQUEST':
+			return { ...state, loading: true, error: '' };
+		case 'LOGIN_SUCCESS':
+			return { ...state, loading: false, error: '' };
+		case 'LOGIN_FAIL':
+			return { ...state, loading: false, error: action.payload };
+
+		case 'REGISTER_REQUEST':
+			return { ...state, loadingRegister: true, errorRegister: '' };
+		case 'REGISTER_SUCCESS':
+			return { ...state, loadingRegister: false, errorRegister: '' };
+		case 'REGISTER_FAIL':
+			return {
+				...state,
+				loadingRegister: false,
+				errorRegister: action.payload,
+			};
+
+		default:
+			return state;
+	}
+};
+
 const LoginScreen = () => {
+	const [{ loading, loadingRegister, error, errorRegister }, dispatch] =
+		useReducer(reducer, {
+			loading: false,
+			loadingRegister: false,
+			error: '',
+			errorRegister: '',
+		});
+
 	const { state, dispatch: ctxDispatch } = useContext(Store);
 
 	const { userInfo } = state;
 
 	const [isLogin, setIsLogin] = useState(true);
 	const [loginMessage, setLoginMessage] = useState('');
+
 	const navigate = useNavigate();
 
 	const { search } = useLocation();
@@ -126,23 +162,27 @@ const LoginScreen = () => {
 	}, [navigate, redirect, userInfo]);
 
 	const handleSubmitLogin = async (e) => {
+		e.preventDefault();
 		const email = values.email;
 		const password = values.password;
-		e.preventDefault();
+
 		try {
+			dispatch({ type: 'LOGIN_REQUEST' });
 			const { data } = await axios.post('/api/login', {
 				email,
 				password,
 			});
 			if (data.status === '200') {
+				dispatch({ type: 'LOGIN_SUCCESS' });
 				ctxDispatch({ type: 'USER_SIGNIN', payload: data });
 				localStorage.setItem('userInfo', JSON.stringify(data));
+				alert('Login success');
 				navigate(redirect || '/');
 			} else {
 				setLoginMessage('Login failed, please check your email and password');
 			}
 		} catch (error) {
-			alert(getError(error));
+			dispatch({ type: 'LOGIN_FAIL', payload: getError(error) });
 		}
 	};
 
@@ -154,6 +194,7 @@ const LoginScreen = () => {
 		const password = values.reRegPassword;
 		const phone = values.phone;
 		try {
+			dispatch({ type: 'REGISTER_REQUEST' });
 			const { data } = await axios.post('/api/register', {
 				fname,
 				lname,
@@ -162,14 +203,16 @@ const LoginScreen = () => {
 				phone,
 			});
 			if (data.status === '200') {
+				dispatch({ type: 'REGISTER_SUCCESS' });
 				ctxDispatch({ type: 'USER_SIGNIN', payload: data });
 				localStorage.setItem('userInfo', JSON.stringify(data));
+				alert('Register success');
 				navigate(redirect || '/');
 			} else {
 				setLoginMessage('Register failed, please check your input again');
 			}
 		} catch (error) {
-			alert(getError(error));
+			dispatch({ type: 'REGISTER_FAIL', payload: getError(error) });
 		}
 	};
 
@@ -200,6 +243,14 @@ const LoginScreen = () => {
 								<button type="submit" className="btn-login">
 									Login
 								</button>
+								{loading ? (
+									<LoadingBox></LoadingBox>
+								) : error ? (
+									<MessageBox variant="danger">{error}</MessageBox>
+								) : (
+									''
+								)}
+
 								<div className="bar-or">
 									<p>OR</p>
 								</div>
@@ -243,6 +294,13 @@ const LoginScreen = () => {
 									/>
 								))}
 								<button className="btn-register">Register</button>
+								{loadingRegister ? (
+									<LoadingBox></LoadingBox>
+								) : errorRegister ? (
+									<MessageBox variant="danger">{errorRegister}</MessageBox>
+								) : (
+									''
+								)}
 							</div>
 						</form>
 					</Col>

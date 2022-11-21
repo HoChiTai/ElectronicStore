@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->unique();
             $table->string('slug');
             $table->integer('stock');
             $table->double('price');
@@ -34,8 +34,9 @@ return new class extends Migration
             $table->text('description');
             $table->foreignId('cate_id')->index()->constrained()->on('categories')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('brand_id')->index()->constrained()->on('brands')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->double('rating');
-            $table->integer('numReviews');
+            $table->double('rating')->default(0);
+            $table->integer('numReviews')->default(0);
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

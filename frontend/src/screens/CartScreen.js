@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useReducer, useState } from 'react';
 import {
 	Button,
 	Card,
@@ -13,13 +13,52 @@ import MessageBox from '../components/MessageBox';
 import data from '../data.js';
 import { Link, useNavigate } from 'react-router-dom';
 import { Store } from '../Store';
+import axios from 'axios';
+import { getError } from '../utils';
+import LoadingBox from '../components/LoadingBox';
+
+const reducer = (state, action) => {
+	switch (action.type) {
+		case 'FETCH_REQUEST':
+			return { ...state, loading: true, error: '' };
+		case 'FETCH_SUCCESS':
+			return { ...state, loading: false, coupons: action.payload, error: '' };
+		case 'FETCH_FAIL':
+			return { ...state, loading: false, error: action.payload };
+
+		default:
+			return state;
+	}
+};
+
 const CartScreen = () => {
 	const { state, dispatch: ctxDispatch } = useContext(Store);
-	const {
-		cart: { cartItems },
-	} = state;
+	const { cart } = state;
+	const { userInfo } = state;
 
 	const navigate = useNavigate();
+
+	const [{ loading, coupons, error }, dispatch] = useReducer(reducer, {
+		loading: true,
+		coupons: [],
+		error: '',
+	});
+
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				dispatch({ type: 'FETCH_REQUEST' });
+				const { data } = await axios.get(
+					`/api/customercoupons/user/${userInfo.user.id}`
+				);
+				// setCoupons(data.cus_coupon.coupon);
+				dispatch({ type: 'FETCH_SUCCESS', payload: data.cus_coupon });
+			} catch (error) {
+				dispatch({ type: 'FETCH_SUCCESS', payload: getError(error) });
+			}
+		};
+		fetchData();
+	}, [userInfo.user.id]);
 
 	const updateCartHandler = async (item, quantity) => {
 		ctxDispatch({ type: 'CART_ADD_ITEM', payload: { ...item, quantity } });
@@ -33,6 +72,32 @@ const CartScreen = () => {
 		ctxDispatch({ type: 'CART_CLEAR' });
 	};
 
+	const applyCoupon = (id) => {
+		const c = coupons.find((item) => {
+			return item.coupon_id == id;
+		});
+
+		const percent = c ? c.coupon.percent : 0;
+
+		ctxDispatch({
+			type: 'SAVE_COUPON_APPLY',
+			payload: {
+				id,
+				percent: percent,
+			},
+		});
+	};
+
+	cart.total_price = cart.cartItems.reduce(
+		(a, c) => a + c.price * c.quantity,
+		0
+	);
+	cart.sale =
+		cart.cartItems.reduce((a, c) => a + c.price * c.quantity, 0) *
+		(cart.couponApply.percent / 100);
+
+	cart.total_price_apply_coupon = cart.total_price - cart.sale;
+
 	return (
 		<div className="cart_screen">
 			<div>
@@ -41,7 +106,7 @@ const CartScreen = () => {
 
 			<Row>
 				<Col md={9}>
-					{cartItems.length === 0 ? (
+					{cart.cartItems.length === 0 ? (
 						<div className="mt-3">
 							<MessageBox>
 								Cart is empty. <Link to="/">Go Shopping</Link>
@@ -61,7 +126,7 @@ const CartScreen = () => {
 								</div>
 
 								<ListGroup className="cart_table_body">
-									{cartItems.map((item) => (
+									{cart.cartItems.map((item) => (
 										<ListGroup.Item key={item._id}>
 											<div className="cart_table_box_img">
 												<img
@@ -110,21 +175,32 @@ const CartScreen = () => {
 							</div>
 							<div className="box_bottom">
 								<div className="float_select">
-									<FloatingLabel
-										controlId="floatingSelect"
-										label="Discount Coupon You Have"
-									>
-										<Form.Select
-											value={''}
-											onChange={(e) => {}}
-											aria-label="floadingSelect"
+									{loading ? (
+										<LoadingBox></LoadingBox>
+									) : error ? (
+										<MessageBox variant="danger">{error}</MessageBox>
+									) : (
+										<FloatingLabel
+											controlId="floatingSelect"
+											label="Discount Coupon You Have"
 										>
-											<option value="newest">Newest Arrivals</option>
-											<option value="lowest">Price: Low to High</option>
-											<option value="highest">Price: High to low</option>
-											<option value="toprated">Customer Reviews</option>
-										</Form.Select>
-									</FloatingLabel>
+											<Form.Select
+												value={cart.couponApply.id}
+												name="coupon"
+												onChange={(e) => {
+													applyCoupon(e.target.value);
+												}}
+												aria-label="floadingSelect"
+											>
+												<option value={0}>None</option>
+												{coupons.map((coupon) => (
+													<option value={coupon.coupon.id}>
+														{coupon.coupon.name}
+													</option>
+												))}
+											</Form.Select>
+										</FloatingLabel>
+									)}
 								</div>
 								<div className="btn_group_cart">
 									<div>
@@ -159,27 +235,31 @@ const CartScreen = () => {
 										<span>
 											<h5>Quantity</h5>
 										</span>
-
 										<span>
-											{cartItems.reduce((a, c) => a + c.quantity, 0)} items
+											{' '}
+											{cart.cartItems.reduce((a, c) => a + c.quantity, 0)} items
 										</span>
+									</ListGroup.Item>
+									<ListGroup.Item>
+										<span>
+											<h5>Discount</h5>
+										</span>
+										<span>${cart.sale}</span>
 									</ListGroup.Item>
 									<ListGroup.Item>
 										<span>
 											<h5>Total Price</h5>
 										</span>
-										<span>
-											{' '}
-											${cartItems.reduce((a, c) => a + c.price * c.quantity, 0)}
-										</span>
+										<span> ${cart.total_price_apply_coupon}</span>
 									</ListGroup.Item>
+
 									<ListGroup.Item>
 										<div className="box_btn_checkout">
 											<Button
 												variant="primary"
 												className="btn_checkout"
 												onClick={() => navigate('/shipping')}
-												disabled={cartItems.length === 0}
+												disabled={cart.cartItems.length === 0}
 											>
 												Proceed To Checkout
 											</Button>
