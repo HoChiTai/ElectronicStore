@@ -69,14 +69,27 @@ class User extends Authenticatable implements JWTSubject
 
     public function reivews()
     {
-        return $this->hasMany('App\Models\Reviews', 'user_id', 'id');
+        return $this->hasMany('App\Models\Review', 'user_id', 'id');
     }
 
+    public function receives()
+    {
+        return $this->hasMany('App\Models\Receive', 'emp_id', 'id');
+    }
 
+    public function wishlists()
+    {
+        return $this->hasMany('App\Models\WishList', 'cus_id', 'id');
+    }
+
+    public function customer_coupons()
+    {
+        return $this->hasMany('App\Models\CustomerCoupon', 'cus_id', 'id');
+    }
 
     public function orders()
     {
-        return $this->hasMany('App\Models\Orders', 'user_id', 'id');
+        return $this->hasMany('App\Models\Order', 'user_id', 'id');
     }
 
     public function roles()

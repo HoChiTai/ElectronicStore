@@ -1,8 +1,7 @@
 import React from 'react';
 import { Row, Col } from 'react-bootstrap';
 
-const UserCartProduct = (props) => {
-	const { item } = props;
+const UserCartProduct = ({ item }) => {
 	return (
 		<Row className="cart-content__item">
 			<Col xs={2}>

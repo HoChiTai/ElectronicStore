@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Row, Col, Table } from 'react-bootstrap';
 
-const AdminProductItem = (props) => {
-	const { product } = props;
+const AdminProductItem = ({ product, updateActive }) => {
 	// trạng thái khóa theo sản phẩm
-	const [blocked, setBlocked] = useState(true);
-
+	const [active, setActive] = useState(product.is_active);
+	console.log(product.id, active);
 	return (
 		<tr>
 			<td>{product.id}</td>
@@ -21,17 +20,26 @@ const AdminProductItem = (props) => {
 			<td>{product.stock}</td>
 			<td>{product.price}</td>
 			<td>{product.brands.name}</td>
-			<td>{product.categories.name}</td>
+			<td>
+				{product.categories.name}
+				{product.is_active}
+			</td>
 			<td>
 				<div className="action-icon">
-					<Link to="/admin/products/update/1" className="btn-update">
+					<Link
+						to={`/admin/products/update/${product.id}`}
+						className="btn-update"
+					>
 						<i className="fa-light fa-pen"></i>
 					</Link>
 					<div
 						className={
-							blocked ? 'btn-block bot-unblocked' : 'btn-block bot-blocked'
+							active ? 'btn-block bot-unblocked' : 'btn-block bot-blocked'
 						}
-						onClick={() => setBlocked(!blocked)}
+						onClick={() => {
+							setActive(!active);
+							updateActive(product.id, !active);
+						}}
 					>
 						<div className="bot"></div>
 					</div>
