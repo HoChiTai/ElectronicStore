@@ -21,6 +21,7 @@ class StatusController extends Controller
      */
     public function index()
     {
+        // $statuses = Status::all()->load('orders.order_details.product');
         $statuses = Status::all();
         return response()->json([
             'status' => 200,

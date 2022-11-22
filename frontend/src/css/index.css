@@ -22,7 +22,7 @@ main {
 .box {
     position: relative;
     width: 100%;
-    min-height: 200px;
+    height: 200px;
 }
 
 .box img {
@@ -30,8 +30,9 @@ main {
     top: 20px;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 200px;
     object-fit: contain;
+    padding: 0px 20px;
 }
 body a {
     text-decoration: none;
@@ -84,6 +85,54 @@ body a {
     color: white;
     text-decoration: none;
     font-size: 18px;
+}
+
+.header-icon-menu {
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    position: relative;
+}
+
+#btn-small-menu {
+    display: none;
+}
+
+.header-small-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 200px;
+    background-color: white;
+    z-index: 10;
+    padding-top: 50px;
+    transform: translateX(-100%);
+    transition: all 0.4s linear;
+}
+
+.header-small-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.header-small-menu ul li {
+    padding: 20px;
+    font-size: 20px;
+    text-align: center;
+}
+
+.btn-exit-menu-small {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+input#btn-small-menu:checked ~ .header-small-menu {
+    transform: translateX(0);
 }
 
 .header-search {
@@ -475,7 +524,7 @@ input#cart-detail-btn:checked ~ .cart-detail {
 
 .footer .social-media {
     font-size: 16px;
-    margin-top: 20px;
+    margin: 20px 0px;
     padding-left: 40px;
 }
 
@@ -627,7 +676,6 @@ input#cart-detail-btn:checked ~ .cart-detail {
 .product .image .sub-img {
     position: absolute;
     opacity: 0;
-    top: 0;
     left: 0;
     transition: all 0.4s linear;
 }
@@ -640,6 +688,7 @@ input#cart-detail-btn:checked ~ .cart-detail {
     font-size: 18px;
     font-weight: 400;
     transition: all 0.4s linear;
+    height: 40px;
 }
 
 .product .content h4:hover {
@@ -1311,14 +1360,14 @@ input#cart-detail-btn:checked ~ .cart-detail {
     justify-content: center;
     height: 600px;
     align-items: center;
-    margin: 0px 100px;
     padding: 0px 60px;
 }
 
 .slide-content img {
-    width: 400px;
-    height: 400px;
+    width: 70%;
+    height: 60%;
     margin-right: 40px;
+    margin-top: 20px;
 }
 
 .slide-content .content {
@@ -1362,8 +1411,11 @@ input#cart-detail-btn:checked ~ .cart-detail {
     background-size: cover;
 }
 
+.hot-deal .content {
+    padding: 0px 40px;
+}
+
 .hot-deal p {
-    width: 400px;
     font-size: 14px;
     margin: 20px 0px;
 }
@@ -1380,6 +1432,11 @@ input#cart-detail-btn:checked ~ .cart-detail {
 
 .hot-deal button:hover {
     background-color: #0256ff;
+}
+
+.hot-deal img {
+    margin-top: 10px;
+    width: 30%;
 }
 
 /*--------------------Homepage-hotdeal--------------------*/
@@ -1409,9 +1466,8 @@ input#cart-detail-btn:checked ~ .cart-detail {
 }
 
 .featured-product-btn li {
-    padding: 10px;
+    padding: 10px 20px;
     text-align: center;
-    min-width: 200px;
     font-size: 18px;
     font-weight: 400;
     cursor: pointer;
