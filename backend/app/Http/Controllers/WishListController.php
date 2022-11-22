@@ -98,7 +98,7 @@ class WishListController extends Controller
 
     public function getWishListByUser($id)
     {
-        $wishlists = WishList::where('cus_id', '=', $id)->with("products")->get();
+        $wishlists = WishList::where('cus_id', '=', $id)->with("product")->get();
 
         if (!$wishlists) {
             return response()->json(['status' => 404, 'message' => 'Wishlists not found']);

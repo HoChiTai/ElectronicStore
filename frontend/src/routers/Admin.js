@@ -16,6 +16,7 @@ function Admin() {
 		<BrowserRouter>
 			<DashBoard>
 				<Routes>
+					<Route path="/" element={<AdminHome />}></Route>
 					<Route path="/admin/" element={<AdminHome />}></Route>
 					<Route path="/admin/home" element={<AdminHome />}></Route>
 					<Route path="/admin/orders" element={<AdminOrder />}></Route>

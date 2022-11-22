@@ -18,7 +18,6 @@ const Header = () => {
 		localStorage.removeItem('cartItems');
 		localStorage.removeItem('shippingAddress');
 		localStorage.removeItem('paymentMethod');
-		localStorage.removeItem('paymentMethod');
 		navigate('/login');
 	};
 

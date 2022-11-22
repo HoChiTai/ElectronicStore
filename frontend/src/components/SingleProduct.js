@@ -1,16 +1,21 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Rating from './Rating';
 
 const SingleProduct = (props) => {
 	const { product } = props;
 	return (
 		<div className="single-product">
-			<div className="box_img">
-				<img src={product.image} alt="" />
-			</div>
+			<Link to={`/product/${product.slug}`}>
+				<div className="box_img">
+					<img src={product.image} alt={product.name} />
+				</div>
+			</Link>
 
 			<div className="content">
-				<h4>{product.name}</h4>
+				<Link to={`/product/${product.slug}`}>
+					<h4>{product.name}</h4>
+				</Link>
 				<h5>$ {product.price}</h5>
 				<div className="review-star">
 					<Rating
