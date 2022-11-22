@@ -39,7 +39,7 @@ const CartScreen = () => {
 	const navigate = useNavigate();
 
 	const [{ loading, coupons, error }, dispatch] = useReducer(reducer, {
-		loading: true,
+		loading: false,
 		coupons: [],
 		error: '',
 	});
@@ -57,8 +57,8 @@ const CartScreen = () => {
 				dispatch({ type: 'FETCH_SUCCESS', payload: getError(error) });
 			}
 		};
-		fetchData();
-	}, [userInfo.user.id]);
+		if (userInfo !== null) fetchData();
+	}, []);
 
 	const updateCartHandler = async (item, quantity) => {
 		ctxDispatch({ type: 'CART_ADD_ITEM', payload: { ...item, quantity } });
@@ -93,8 +93,10 @@ const CartScreen = () => {
 		0
 	);
 	cart.sale =
-		cart.cartItems.reduce((a, c) => a + c.price * c.quantity, 0) *
-		(cart.couponApply.percent / 100);
+		cart.couponApply !== null
+			? cart.cartItems.reduce((a, c) => a + c.price * c.quantity, 0) *
+			  (cart.couponApply.percent / 100)
+			: 0;
 
 	cart.total_price_apply_coupon = cart.total_price - cart.sale;
 
@@ -179,6 +181,22 @@ const CartScreen = () => {
 										<LoadingBox></LoadingBox>
 									) : error ? (
 										<MessageBox variant="danger">{error}</MessageBox>
+									) : coupons.length === 0 ? (
+										<FloatingLabel
+											controlId="floatingSelect"
+											label="Discount Coupon You Have"
+										>
+											<Form.Select
+												value={cart.couponApply.id}
+												name="coupon"
+												onChange={(e) => {
+													applyCoupon(e.target.value);
+												}}
+												aria-label="floadingSelect"
+											>
+												<option value={0}>None</option>
+											</Form.Select>
+										</FloatingLabel>
 									) : (
 										<FloatingLabel
 											controlId="floatingSelect"
@@ -193,6 +211,7 @@ const CartScreen = () => {
 												aria-label="floadingSelect"
 											>
 												<option value={0}>None</option>
+
 												{coupons.map((coupon) => (
 													<option value={coupon.coupon.id}>
 														{coupon.coupon.name}

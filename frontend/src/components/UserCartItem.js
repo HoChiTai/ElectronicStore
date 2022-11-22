@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useReducer } from 'react';
 import { Row, Col } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import UserCartProduct from '../components/UserCartProduct';
 import { Store } from '../Store';
 import { getError } from '../utils';
@@ -110,6 +111,9 @@ const UserCartItem = ({ order, UpdateStatusHandller }) => {
 										</ul>
 									</Col>
 								</Row>
+							</div>
+							<div>
+								<Link to={`/order/${order.id}`}>Detail Order</Link>
 							</div>
 							{order.status_id === 1 ? (
 								<>

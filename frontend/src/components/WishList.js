@@ -40,6 +40,7 @@ const WishList = () => {
 					`/api/wishlists/user/${userInfo.user.id}`
 				);
 				dispatch({ type: 'FETCH_SUCCESS', payload: data.wishlists });
+				console.log(data.wishlists);
 			} catch (error) {
 				dispatch({ type: 'FETCH_FAIL', payload: getError(error) });
 				alert(getError(error));
@@ -54,14 +55,14 @@ const WishList = () => {
 				<LoadingBox></LoadingBox>
 			) : error ? (
 				<MessageBox variant="danger">{error}</MessageBox>
-			) : wishlists ? (
+			) : wishlists.length == 0 ? (
 				<MessageBox>Empty</MessageBox>
 			) : (
 				<Row>
 					{wishlists.map((wishlist) => (
-						<Col xs={4} key={wishlist.product.id}>
+						<div class="wishlist_box" key={wishlist.product.id}>
 							<SingleProduct product={wishlist.product} />
-						</Col>
+						</div>
 					))}
 				</Row>
 			)}
