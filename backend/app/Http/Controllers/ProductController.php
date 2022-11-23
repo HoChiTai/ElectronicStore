@@ -218,7 +218,7 @@ class ProductController extends Controller
         if (!$product)
             return response()->json(['status' => 404, 'message' => 'Product not found']);
 
-        $product->load(['categories.products', 'brands', 'reviews.users']);
+        $product->load(['categories.products', 'brands', 'reviews.users', 'product_images']);
 
         return response()->json(['status' => 200, 'product' => $product]);
     }
@@ -259,5 +259,36 @@ class ProductController extends Controller
         $product->load(['categories', 'brands']);
 
         return response()->json(['status' => 200, 'message' => 'Updated successfully', 'product' => $product]);
+    }
+
+    public function createDummyData(Request $request)
+    {
+        $product = Product::create([
+            "name" => "dumydata",
+            "slug" => "dumy-data",
+            "stock" => 0,
+            "price" => 0,
+            "screen" => "dumydata",
+            "fcam" => 0,
+            "bcam" => 0,
+            "os" => "dumydata",
+            "cpu" => "dumydata",
+            "gpu" => "dumydata",
+            "ram" => "dumydata",
+            "rom" => "dumydata",
+            "battery" => 0,
+            "weight" => 0,
+            "description" => "dumydata",
+            "rating" => 0,
+            "numReviews" => 0,
+            "cate_id" => 1,
+            "brand_id" => 1,
+        ]);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Inserted successfully',
+            'id' => $product->id,
+        ]);
     }
 }

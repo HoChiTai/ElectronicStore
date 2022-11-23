@@ -62,6 +62,8 @@ const UserCoupon = () => {
 					<LoadingBox></LoadingBox>
 				) : error ? (
 					<MessageBox variant="danger">{error}</MessageBox>
+				) : coupons.length === 0 ? (
+					<MessageBox>Empty</MessageBox>
 				) : (
 					<Row>
 						{coupons.map((coupon) => (

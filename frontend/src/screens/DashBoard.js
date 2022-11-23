@@ -17,7 +17,6 @@ const DashBoard = ({ children }) => {
 		localStorage.removeItem('shippingAddress');
 		localStorage.removeItem('paymentMethod');
 		localStorage.removeItem('paymentMethod');
-		navigate('/');
 	};
 
 	return (
@@ -97,7 +96,7 @@ const DashBoard = ({ children }) => {
 							{userInfo ? (
 								<>
 									<div>
-										<Link to="#" onClick={signoutHandler}>
+										<Link to="/admin/login" onClick={signoutHandler}>
 											Log out
 										</Link>
 									</div>
@@ -112,11 +111,12 @@ const DashBoard = ({ children }) => {
 									</div>
 								</>
 							) : (
-								<div>
-									<Link to="/login">
-										<div className="header__btn">Log in</div>
-									</Link>
-								</div>
+								// <div>
+								// 	<Link to="/login">
+								// 		<div className="header__btn">Log in</div>
+								// 	</Link>
+								// </div>
+								<></>
 							)}
 						</div>
 						{children}

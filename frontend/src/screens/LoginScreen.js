@@ -176,9 +176,11 @@ const LoginScreen = () => {
 				dispatch({ type: 'LOGIN_SUCCESS' });
 				ctxDispatch({ type: 'USER_SIGNIN', payload: data });
 				localStorage.setItem('userInfo', JSON.stringify(data));
+
 				alert('Login success');
 				navigate(redirect || '/');
 			} else {
+				dispatch({ type: 'LOGIN_FAIL', payload: data.message });
 				setLoginMessage('Login failed, please check your email and password');
 			}
 		} catch (error) {
@@ -209,6 +211,7 @@ const LoginScreen = () => {
 				alert('Register success');
 				navigate(redirect || '/');
 			} else {
+				dispatch({ type: 'LOGIN_FAIL', payload: data.message });
 				setLoginMessage('Register failed, please check your input again');
 			}
 		} catch (error) {

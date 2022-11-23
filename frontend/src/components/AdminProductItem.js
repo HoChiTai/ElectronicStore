@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Row, Col, Table } from 'react-bootstrap';
+import { Row, Col, Table, Button } from 'react-bootstrap';
 
 const AdminProductItem = ({ product, updateActive }) => {
 	// trạng thái khóa theo sản phẩm
@@ -20,12 +20,12 @@ const AdminProductItem = ({ product, updateActive }) => {
 			<td>{product.stock}</td>
 			<td>{product.price}</td>
 			<td>{product.brands.name}</td>
-			<td>
-				{product.categories.name}
-				{product.is_active}
-			</td>
+			<td>{product.categories.name}</td>
 			<td>
 				<div className="action-icon">
+					<Link to={`/admin/products/images/${product.id}`}>
+						<Button variant="success">Images</Button>
+					</Link>
 					<Link
 						to={`/admin/products/update/${product.id}`}
 						className="btn-update"

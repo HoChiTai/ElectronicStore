@@ -111,9 +111,13 @@ const AdminOrder = () => {
 					},
 				}
 			);
-			dispatch({ type: 'UPDATE_SUCCESS' });
-			fetchOrdersByStatus(selected);
-			alert('Update success');
+			if (data.status === 200) {
+				dispatch({ type: 'UPDATE_SUCCESS' });
+				fetchOrdersByStatus(selected);
+			} else {
+				dispatch({ type: 'UPDATE_FAIL', payload: data.message });
+			}
+			alert(data.message);
 		} catch (error) {
 			dispatch({ type: 'UPDATE_FAIL', payload: getError(error) });
 			alert(getError(error));
@@ -147,7 +151,7 @@ const AdminOrder = () => {
 						ID
 					</Col>
 					<Col className="id" xs={2}>
-						CustomerID
+						Custommer Name
 					</Col>
 					<Col className="date" xs={3}>
 						Date
@@ -173,6 +177,13 @@ const AdminOrder = () => {
 							UpdateStatusHandller={UpdateStatusHandller}
 						/>
 					))}
+					{loadingUpdate ? (
+						<LoadingBox></LoadingBox>
+					) : error ? (
+						<MessageBox variant="danger">{error}</MessageBox>
+					) : (
+						''
+					)}
 				</>
 			)}
 		</div>
