@@ -168,6 +168,96 @@
         }
     ],
 
+    "receives": [
+        {
+            "id": "01",
+            "date": "2022-05-20 15:50:30",
+            "total_qty": 20,
+            "total_price": 3455,
+            "emp_id": "1"
+        },
+        {
+            "id": "01",
+            "date": "2022-05-20 15:50:30",
+            "total_qty": 30,
+            "total_price": 1020,
+            "emp_id": "2"
+        }
+    ],
+    "receive_details": [
+        {
+            "receive_id": "1",
+            "product_id": "1",
+            "quantity": "10",
+            "price": "128",
+            "subtotal": "128"
+        },
+        {
+            "receive_id": "1",
+            "product_id": "2",
+            "quantity": "10",
+            "price": "499",
+            "subtotal": "499"
+        },
+
+        {
+            "receive_id": "2",
+            "product_id": "3",
+            "quantity": "30",
+            "price": "128",
+            "subtotal": "128"
+        }
+    ],
+
+    "wishlists": [
+        {
+            "product_id": "1",
+            "cus_id": "1"
+        },
+        {
+            "product_id": "2",
+            "cus_id": "1"
+        },
+        {
+            "product_id": "2",
+            "cus_id": "2"
+        }
+    ],
+
+    "coupons": [
+        {
+            "id": "1",
+            "name": "20% off",
+            "percent": "20%",
+            "apply": 500,
+            "is_active": 1
+        },
+        {
+            "id": "2",
+            "name": "50% off",
+            "percent": "50%",
+            "apply": 2000,
+            "is_active": 1
+        }
+    ],
+    "customer_coupons": [
+        {
+            "coupon_id": "1",
+            "cus_id": "2",
+            "is_used": 0
+        },
+        {
+            "coupon_id": "1",
+            "cus_id": "3",
+            "is_used": 0
+        },
+        {
+            "coupon_id": "2",
+            "cus_id": "2",
+            "is_used": 0
+        }
+    ],
+
     "categories": [
         {
             "_id": "01",
@@ -247,7 +337,8 @@
             "releasedDate": "2022-10-02 23:59:59",
             "rating": 3.5,
             "numReviews": 5,
-            "description": "Pro-Grade Camera: The New Samsung Galaxy S20 Fe Mobile Phone Features High-Powered Pro Lenses For Beautiful Portraits, Stunning Landscapes And Crisp Close-Ups In Any Light With Its 3X Optical Zoom"
+            "description": "Pro-Grade Camera: The New Samsung Galaxy S20 Fe Mobile Phone Features High-Powered Pro Lenses For Beautiful Portraits, Stunning Landscapes And Crisp Close-Ups In Any Light With Its 3X Optical Zoom",
+            "is_active": "1"
         },
         {
             "_id": "02",
@@ -267,7 +358,8 @@
             "releasedDate": "2021-08-20 23:59:59",
             "rating": 4.5,
             "numReviews": 16,
-            "description": "Hasselblad Camera for Mobile- Take your best shot with the OnePlus 9 5G’s Triple Camera system co-developed by Hasselblad, featuring a 48MP main camera, 50MP Ultra-Wide camera, and 2MP monochrome lens"
+            "description": "Hasselblad Camera for Mobile- Take your best shot with the OnePlus 9 5G’s Triple Camera system co-developed by Hasselblad, featuring a 48MP main camera, 50MP Ultra-Wide camera, and 2MP monochrome lens",
+            "is_active": "1"
         },
         {
             "_id": "03",
@@ -287,7 +379,8 @@
             "releasedDate": "2022-06-21 23:59:59",
             "rating": 3.5,
             "numReviews": 25,
-            "description": "15inch HD IPS LED Display(1366x768), Intel Graphics Intel Dual-Core Celeron Processor Up to 2.55GHz, 4GB RAM, 32GB Storage 2x USB Type-A, 2x USB Type-C, 1x Headphone/microphone, Micro SD Card Reader Super-Fast WiFi Up to 1300 Mbps, Bluetooth 5.0 Chrome OS"
+            "description": "15inch HD IPS LED Display(1366x768), Intel Graphics Intel Dual-Core Celeron Processor Up to 2.55GHz, 4GB RAM, 32GB Storage 2x USB Type-A, 2x USB Type-C, 1x Headphone/microphone, Micro SD Card Reader Super-Fast WiFi Up to 1300 Mbps, Bluetooth 5.0 Chrome OS",
+            "is_active": "1"
         },
         {
             "_id": "04",
@@ -307,7 +400,8 @@
             "releasedDate": "2022-05-12 23:59:59",
             "rating": 4,
             "numReviews": 10,
-            "description": "NVIDIA GeForce RTX 3070 Ti 8GB GDDR6 - ROG Boost up to 1460 MHz at 150W (125W plus 25W with Dynamic Boost)"
+            "description": "NVIDIA GeForce RTX 3070 Ti 8GB GDDR6 - ROG Boost up to 1460 MHz at 150W (125W plus 25W with Dynamic Boost)",
+            "is_active": "1"
         }
     ]
 }

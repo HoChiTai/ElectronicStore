@@ -28,6 +28,17 @@ const reducer = (state, action) => {
 		case 'FETCH_ORDER_FAIL':
 			return { ...state, loadingOrder: false, error: action.payload };
 
+		case 'UPDATE_REQUEST':
+			return { ...state, loadingUpdate: true };
+		case 'UPDATE_SUCCESS':
+			return {
+				...state,
+				loadingUpdate: false,
+				error: '',
+			};
+		case 'UPDATE_FAIL':
+			return { ...state, loadingUpdate: false, error: action.payload };
+
 		default:
 			return state;
 	}
@@ -38,18 +49,21 @@ const UserCart = () => {
 
 	const { userInfo } = state;
 
-	const [{ loading, loadingOrder, orders, statuses, error }, dispatch] =
-		useReducer(reducer, {
-			loading: true,
-			loadingOrder: true,
-			orders: [],
-			statuses: [],
-			error: '',
-		});
+	const [
+		{ loading, loadingUpdate, loadingOrder, orders, statuses, error },
+		dispatch,
+	] = useReducer(reducer, {
+		loading: true,
+		loadingOrder: true,
+		loadingUpdate: false,
+		orders: [],
+		statuses: [],
+		error: '',
+	});
 
 	const [selected, setSelected] = useState(1);
 
-	const fetchOrdersByState = async (status_id) => {
+	const fetchOrdersByStatus = async (status_id) => {
 		try {
 			dispatch({ type: 'FETCH_ORDER_REQUEST' });
 			const { data } = await axios.get(
@@ -79,8 +93,33 @@ const UserCart = () => {
 			}
 		};
 		fetchStatuses();
-		fetchOrdersByState(1);
+		fetchOrdersByStatus(1);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
+
+	const UpdateStatusHandller = async (order_id, status_id) => {
+		try {
+			dispatch({ type: 'UPDATE_REQUEST' });
+			const { data } = await axios.put(
+				`/api/orders/status/update`,
+				{
+					order_id: order_id,
+					status_id: status_id,
+				},
+				{
+					headers: {
+						authorization: `Bearer ${userInfo.authorization.token}`,
+					},
+				}
+			);
+			dispatch({ type: 'UPDATE_SUCCESS' });
+			fetchOrdersByStatus(selected);
+			alert('Update success');
+		} catch (error) {
+			dispatch({ type: 'UPDATE_FAIL', payload: getError(error) });
+			alert(getError(error));
+		}
+	};
 
 	return loading ? (
 		<LoadingBox></LoadingBox>
@@ -97,7 +136,7 @@ const UserCart = () => {
 								onClick={() => {
 									setSelected(status.id);
 
-									fetchOrdersByState(status.id);
+									fetchOrdersByStatus(status.id);
 								}}
 							>
 								{status.name}
@@ -110,7 +149,14 @@ const UserCart = () => {
 				) : error ? (
 					<MessageBox variant="danger">{error}</MessageBox>
 				) : (
-					<UserCartItem orders={orders} />
+					<>
+						{orders.map((order) => (
+							<UserCartItem
+								order={order}
+								UpdateStatusHandller={UpdateStatusHandller}
+							/>
+						))}
+					</>
 				)}
 			</Col>
 		</Row>

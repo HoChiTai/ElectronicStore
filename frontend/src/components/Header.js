@@ -1,11 +1,13 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Store } from "../Store";
 import MessageBox from "./MessageBox";
 
 const Header = () => {
     const { state, dispatch: ctxDispatch } = useContext(Store);
     const { cart, userInfo } = state;
+    const navigate = useNavigate();
+
     const removeItemHandler = async (item) => {
         ctxDispatch({ type: "CART_REMOVE_ITEM", payload: item });
     };
@@ -16,6 +18,8 @@ const Header = () => {
         localStorage.removeItem("cartItems");
         localStorage.removeItem("shippingAddress");
         localStorage.removeItem("paymentMethod");
+        localStorage.removeItem("paymentMethod");
+        navigate("/login");
     };
 
     return (

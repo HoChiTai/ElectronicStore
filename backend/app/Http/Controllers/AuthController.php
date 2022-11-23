@@ -79,6 +79,16 @@ class AuthController extends Controller
         ]);
     }
 
+    public function updateProfile(Request $request, $id)
+    {
+        $user = User::find($id);
+        $user->image = $request->input('image');
+        $user->fname = $request->input('fname');
+        $user->lname = $request->input('lname');
+        $user->update();
+        return response()->json(['status' => 200, 'message' => 'Updated successfully', 'user' => Auth::user()]);
+    }
+
     public function me()
     {
         return response()->json([

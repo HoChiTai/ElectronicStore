@@ -22,7 +22,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all()->with("products");
+        // $categories = Category::all()->("products");
+        $categories = Category::all();
         return response()->json([
             'status' => 200,
             'categories' => $categories,

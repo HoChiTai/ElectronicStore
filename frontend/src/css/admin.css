@@ -67,6 +67,18 @@ body a {
     flex-direction: column;
     justify-content: space-between;
     overflow: hidden;
+    z-index: 10;
+    transition: all 0.2s linear;
+}
+
+.dashboard .navigation .dashboard-exit {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: white;
+    font-size: 20px;
+    padding: 4px;
+    cursor: pointer;
 }
 
 .dashboard .navigation ul {
@@ -78,6 +90,11 @@ body a {
 .dashboard .navigation ul li:first-child {
     margin-bottom: 40px;
     pointer-events: none;
+    font-size: 24px;
+}
+
+.dashboard .navigation ul li:last-child {
+    margin-top: 100px;
 }
 
 .dashboard .navigation ul li {
@@ -97,6 +114,10 @@ body a {
     display: flex;
     align-items: center;
     color: white;
+}
+
+.dashboard .navigation ul li a i {
+    width: 30px;
 }
 
 .dashboard .navigation ul li div {
@@ -169,7 +190,7 @@ body a {
 
 /*--------------------Dashboard--------------------*/
 
-/*--------------------Admin-home--------------------*/
+/*--------------------Admin-header--------------------*/
 
 .dashboard .content .admin-header {
     display: flex;
@@ -193,6 +214,9 @@ body a {
 .dashboard .content .admin-header .icon {
     font-size: 20px;
     cursor: pointer;
+}
+
+.dashboard .content .admin-header .icon > i {
     padding: 6px;
 }
 
@@ -215,9 +239,13 @@ body a {
     margin-right: 10px;
 }
 
+/*--------------------Admin-header--------------------*/
+
+/*--------------------Admin-home--------------------*/
 .dashboard .content .statistic {
     display: flex;
     align-items: center;
+    justify-content: space-evenly;
 }
 
 .dashboard .content .statistic-item {
@@ -227,12 +255,12 @@ body a {
     background: #6ea6de;
     color: white;
     border-radius: 10px;
-    margin-left: 30px;
 }
 
 .dashboard .content .statistic-item .icon {
     font-size: 36px;
     margin-right: 30px;
+    width: 50px;
 }
 
 .dashboard .content .statistic-item .heading {
@@ -622,3 +650,16 @@ body a {
     border-radius: none;
 }
 /*--------------------Admin-receive-note-create--------------------*/
+
+/*--------------------Resoponsive--------------------*/
+
+@media (max-width: 1200px) {
+    .dashboard .navigation.active {
+        transform: translateX(0);
+    }
+    .dashboard .navigation {
+        transform: translateX(-100%);
+    }
+}
+
+/*--------------------Resoponsive--------------------*/

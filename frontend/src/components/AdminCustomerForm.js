@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Row, Col, Button, Form } from "react-bootstrap";
-import FormInput from "./FormInput";
+import FormInputAdmin from "./FormInputAdmin";
 
 const AdminCustomerForm = () => {
     const [values, setValues] = useState({
@@ -88,8 +88,8 @@ const AdminCustomerForm = () => {
             <h3>Customer Infomation</h3>
             <Row className="mt-4">
                 {inputs.map((input) => (
-                    <Col xs={6} className="px-4" key={input.id}>
-                        <FormInput
+                    <Col xs={12} md={6} xl={6} className="px-4" key={input.id}>
+                        <FormInputAdmin
                             {...input}
                             value={values[input.name]}
                             onChange={onChange}

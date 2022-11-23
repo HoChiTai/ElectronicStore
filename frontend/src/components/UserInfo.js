@@ -1,22 +1,71 @@
-import React, { useState, useEffect, useContext } from "react";
+import axios from "axios";
+import React, { useState, useEffect, useContext, useReducer } from "react";
 import { Row, Col } from "react-bootstrap";
 import { Store } from "../Store";
+import { getError } from "../utils";
 import FormInput from "./FormInput";
+
+const reducer = (state, action) => {
+    switch (action.type) {
+        case "UPDATE_REQUEST":
+            return { ...state, loadingUpdate: true };
+        case "UPDATE_SUCCESS":
+            return { ...state, loadingUpdate: false, errorUpdate: "" };
+        case "UPDATE_FAIL":
+            return {
+                ...state,
+                loadingUpdate: false,
+                errorUpdate: action.payload,
+            };
+
+        case "UPLOAD_REQUEST":
+            return { ...state, loadingUpload: true, errorUpload: "" };
+        case "UPLOAD_SUCCESS":
+            return {
+                ...state,
+                loadingUpload: false,
+                errorUpload: "",
+            };
+        case "UPLOAD_FAIL":
+            return {
+                ...state,
+                loadingUpload: false,
+                errorUpload: action.payload,
+            };
+
+        default:
+            return state;
+    }
+};
 
 const UserInfo = () => {
     const { state, dispatch: ctxDispatch } = useContext(Store);
 
     const { userInfo } = state;
 
-    const [avatar, setAvatar] = useState();
+    const [
+        { loadingUpload, errorUpload, loadingUpdate, errorUpdate },
+        dispatch,
+    ] = useReducer(reducer, {
+        loadingUpload: false,
+        loadingUpdate: false,
+        errorUpload: "",
+        errorUpdate: "",
+    });
+
+    const [avatar, setAvatar] = useState(userInfo.user.image);
+
+    const [path, setPath] = useState(userInfo.user.image);
+
+    const [file, setFile] = useState("");
 
     const [values, setValues] = useState({
         firstName: userInfo.user.fname,
         lastName: userInfo.user.lname,
         email: userInfo.user.email,
         phone: userInfo.user.phone,
-        address: "...",
-        image: "/images/p5.jpg",
+        address: userInfo.user.address,
+        // image: '/images/p5.jpg',
     });
 
     const inputs = [
@@ -77,19 +126,69 @@ const UserInfo = () => {
         },
     ];
 
+    const updateProfile = async (path) => {
+        try {
+            dispatch({ type: "UPDATE_REQUEST" });
+
+            const { data } = await axios.put(
+                `/api/updateProfile/${userInfo.user.id}`,
+                {
+                    fname: values.firstName,
+                    lname: values.lastName,
+                    phone: values.phone,
+                    address: values.address,
+                    image: path,
+                },
+                {
+                    headers: {
+                        authorization: `Bearer ${userInfo.authorization.token}`,
+                    },
+                }
+            );
+            dispatch({ type: "UPDATE_SUCCESS" });
+            ctxDispatch({ type: "USER_SIGNIN", payload: data });
+            localStorage.getItem("userInfo", JSON.stringify(data));
+            alert("Update successs");
+        } catch (error) {
+            dispatch({ type: "UPDATE_FAIL", payload: getError(error) });
+        }
+    };
+
+    const updateHandler = async () => {
+        const bodyFormData = new FormData();
+        bodyFormData.append("file", file);
+
+        try {
+            dispatch({ type: "UPLOAD_REQUEST" });
+            const { data } = await axios.post("/api/upload", bodyFormData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    authorization: `Bearer ${userInfo.authorization.token}`,
+                },
+            });
+            dispatch({ type: "UPLOAD_SUCCESS" });
+            if (data.status === 200) {
+                updateProfile(data.path);
+            }
+        } catch (err) {
+            dispatch({ type: "UPLOAD_FAIL", payload: getError(err) });
+        }
+    };
+
     useEffect(() => {
         return () => {
-            avatar && URL.revokeObjectURL(avatar.preview);
+            // avatar && URL.revokeObjectURL(avatar.preview);
+            URL.revokeObjectURL(avatar);
         };
     }, [avatar]);
 
     const handlePreviewAvatar = (e) => {
         const file = e.target.files[0];
-
-        file.preview = URL.createObjectURL(file);
-
-        setAvatar(file);
-
+        // file.preview = URL.createObjectURL(file);
+        // setAvatar(file);
+        setFile(file);
+        setAvatar(URL.createObjectURL(file));
+        // uploadFileHandler(file);
         e.target.value = null;
     };
 
@@ -109,16 +208,18 @@ const UserInfo = () => {
                         <div
                             className="avatar__img"
                             style={{
-                                backgroundImage: `url(${
-                                    avatar && avatar.preview
-                                }),url(${values.image})`,
+                                // backgroundImage: `url(${avatar && avatar.preview}),url(${
+                                // 	values.image
+                                // })`,
+                                backgroundImage: `url(${avatar})`,
                             }}>
                             <div
                                 className="shadow-avatar"
                                 style={{
-                                    backgroundImage: `url(${
-                                        avatar && avatar.preview
-                                    }),url(${values.image})`,
+                                    // backgroundImage: `url(${avatar && avatar.preview}),url(${
+                                    // 	values.image
+                                    // })`,
+                                    backgroundImage: `url(${avatar})`,
                                 }}></div>
                             <label htmlFor="update-avatar">
                                 <i className="fa-solid fa-pen"></i>
@@ -141,7 +242,7 @@ const UserInfo = () => {
             <form className="user-info__form" onSubmit={handleUpdate}>
                 <Row>
                     {inputs.map((input) => (
-                        <Col xs={6} className="px-4" key={input.id}>
+                        <Col xs={12} xl={6} className="px-4" key={input.id}>
                             <FormInput
                                 {...input}
                                 value={values[input.name]}
@@ -150,7 +251,11 @@ const UserInfo = () => {
                         </Col>
                     ))}
                 </Row>
-                <button className="btn-update-form">Update</button>
+                <button
+                    className="btn-update-form"
+                    onClick={() => updateProfile(path)}>
+                    Update
+                </button>
             </form>
         </div>
     );

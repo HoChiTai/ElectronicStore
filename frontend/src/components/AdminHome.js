@@ -1,10 +1,11 @@
 import React from "react";
+import { Container, Row, Col } from "react-bootstrap";
 
 const AdminHome = () => {
     return (
-        <>
-            <div className="statistic mt-4">
-                <div className="col-3">
+        <Container fluid>
+            <Row className="statistic mt-4">
+                <Col xl={3} xs={12} className="mb-3">
                     <div className="statistic-item">
                         <div className="icon">
                             <i className="fa-regular fa-box"></i>
@@ -14,8 +15,8 @@ const AdminHome = () => {
                             <div className="count">200</div>
                         </div>
                     </div>
-                </div>
-                <div className="col-3">
+                </Col>
+                <Col xl={3} xs={12} className="mb-3">
                     <div className="statistic-item">
                         <div className="icon">
                             <i className="fa-light fa-user"></i>
@@ -25,8 +26,8 @@ const AdminHome = () => {
                             <div className="count">20</div>
                         </div>
                     </div>
-                </div>
-                <div className="col-3">
+                </Col>
+                <Col xl={3} xs={12} className="mb-3">
                     <div className="statistic-item">
                         <div className="icon">
                             <i className="fa-light fa-users"></i>
@@ -36,8 +37,8 @@ const AdminHome = () => {
                             <div className="count">18</div>
                         </div>
                     </div>
-                </div>
-            </div>
+                </Col>
+            </Row>
             <div className="statistic-chart">
                 <div className="heading">
                     <ul className="menu">
@@ -152,7 +153,7 @@ const AdminHome = () => {
                     <li>Available</li>
                 </ul>
             </div>
-        </>
+        </Container>
     );
 };
 

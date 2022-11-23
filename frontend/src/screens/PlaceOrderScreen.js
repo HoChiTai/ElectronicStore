@@ -33,9 +33,11 @@ const PlaceOrderScreen = () => {
 
 	const round = (num) => Math.round(num * 100 + Number.EPSILON) / 100;
 
-	cart.itemsPrice = round(
-		cart.cartItems.reduce((a, c) => a + c.quantity * c.price, 0)
-	);
+	// cart.itemsPrice = round(
+	// 	cart.cartItems.reduce((a, c) => a + c.quantity * c.price, 0)
+	// );
+
+	cart.itemsPrice = round(cart.cartItems.total_price_apply_coupon);
 
 	cart.shippingPrice = cart.itemsPrice > 500 ? round(0) : round(10);
 	cart.taxPrice = round(0.1 * cart.itemsPrice);
@@ -58,6 +60,7 @@ const PlaceOrderScreen = () => {
 					tax_price: cart.taxPrice,
 					total_price: cart.totalPrice,
 					cus_id: userInfo.user.id,
+					coupon_id: userInfo.couponApply.id,
 				},
 				{
 					headers: {
@@ -167,18 +170,25 @@ const PlaceOrderScreen = () => {
 								<Card.Body>
 									<ListGroup>
 										<ListGroup.Item>
-											<span>Items</span>
+											<span>
+												<h5>Discount</h5>
+											</span>
+											<span>${cart.cartItems.sale}</span>
+										</ListGroup.Item>
+										<ListGroup.Item>
+											<h5>Items</h5>
 
 											<span>${cart.itemsPrice.toFixed(2)}</span>
 										</ListGroup.Item>
 										<ListGroup.Item>
-											<span>Shipping Price</span>
+											<h5>Shipping Price</h5>
 											<span>${cart.shippingPrice.toFixed(2)}</span>
 										</ListGroup.Item>
 										<ListGroup.Item>
-											<span>Tax Price</span>
+											<h5>Tax Price</h5>
 											<span>${cart.taxPrice.toFixed(2)}</span>
 										</ListGroup.Item>
+
 										<ListGroup.Item>
 											<span>
 												<strong>Order Total</strong>

@@ -17,6 +17,18 @@ const reducer = (state, action) => {
 		case 'FETCH_FAIL':
 			return { ...state, loading: false, error: action.payload };
 
+		case 'UPDATE_ACTIVE':
+			return { ...state, loading: true };
+		case 'UPDATE_ACTIVE_SUCCESS':
+			const updateProduct = action.payload;
+			const products = state.products.map((item) =>
+				item.id === updateProduct.id ? updateProduct : item
+			);
+
+			return { ...state, products, loading: false };
+		case 'UPDATE_ACTIVE_FAIL':
+			return { ...state, loading: false, errorUpdate: action.payload };
+
 		default:
 			return state;
 	}
@@ -47,8 +59,31 @@ const AdminProducts = () => {
 			}
 		};
 		fetchData();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
+
+	const updateActive = async (id, active) => {
+		try {
+			dispatch({ type: 'UPDATE_ACTIVE' });
+			const { data } = await axios.put(
+				`/api/products/active/${id}`,
+				{
+					is_active: active,
+				},
+				{
+					headers: {
+						authorization: `Bearer ${userInfo.authorization.token}`,
+					},
+				}
+			);
+
+			dispatch({ type: 'UPDATE_ACTIVE_SUCCESS', payload: data.product });
+			alert('Update success');
+		} catch (error) {
+			dispatch({ type: 'UPDATE_ACTIVE_FAIL', payload: getError(error) });
+			alert(getError(error));
+		}
+	};
+
 	return (
 		<div className="mt-4 px-4">
 			<div className="products-search mb-4">
@@ -58,7 +93,7 @@ const AdminProducts = () => {
 						<i className="fa-light fa-magnifying-glass"></i>
 					</div>
 				</div>
-				<Link to="/products/create">
+				<Link to="/admin/products/create">
 					<Button variant="success">Create</Button>
 				</Link>
 			</div>
@@ -82,7 +117,7 @@ const AdminProducts = () => {
 					</thead>
 					<tbody>
 						{products.map((product) => (
-							<AdminProductItem product={product} />
+							<AdminProductItem product={product} updateActive={updateActive} />
 						))}
 					</tbody>
 				</Table>

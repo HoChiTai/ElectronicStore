@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Button, Card, Col, Form, ListGroup, Row } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { createHashRouter, Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import CheckoutSteps from '../components/CheckoutSteps';
 import { Store } from '../Store';
@@ -8,19 +8,17 @@ import { Store } from '../Store';
 const PaymentMethodScreen = () => {
 	const navigate = useNavigate();
 	const { state, dispatch: ctxDispatch } = useContext(Store);
-	const {
-		cart: { cartItems, shippingAddress, paymentMethod },
-	} = state;
+	const { cart } = state;
 
 	const [paymentMethodName, setPaymentMethod] = useState(
-		paymentMethod || 'PayPal'
+		cart.paymentMethod || 'PayPal'
 	);
 
 	useEffect(() => {
-		if (!shippingAddress.address) {
+		if (!cart.shippingAddress.address) {
 			navigate('/shipping');
 		}
-	}, [shippingAddress, navigate]);
+	}, [cart.shippingAddress, navigate]);
 
 	const submitHandler = (e) => {
 		e.preventDefault();
@@ -128,7 +126,7 @@ const PaymentMethodScreen = () => {
 								<Card.Header>SUMMARY</Card.Header>
 								<Card.Body variant="flush">
 									<ListGroup>
-										{cartItems.map((item) => (
+										{cart.cartItems.map((item) => (
 											<ListGroup.Item>
 												<div className="payment_box_img">
 													<img
@@ -151,21 +149,21 @@ const PaymentMethodScreen = () => {
 											</span>
 
 											<span>
-												{cartItems.reduce((a, c) => a + c.quantity, 0)} items
+												{cart.cartItems.reduce((a, c) => a + c.quantity, 0)}{' '}
+												items
 											</span>
+										</ListGroup.Item>
+										<ListGroup.Item>
+											<span>
+												<h5>Discount</h5>
+											</span>
+											<span>${cart.sale}</span>
 										</ListGroup.Item>
 										<ListGroup.Item>
 											<span>
 												<h5>Total Price</h5>
 											</span>
-											<span>
-												{' '}
-												$
-												{cartItems.reduce(
-													(a, c) => a + c.price * c.quantity,
-													0
-												)}
-											</span>
+											<span> ${cart.total_price_apply_coupon}</span>
 										</ListGroup.Item>
 									</ListGroup>
 								</Card.Body>

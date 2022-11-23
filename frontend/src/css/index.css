@@ -661,6 +661,7 @@ input#cart-detail-btn:checked ~ .cart-detail {
     /* height: 440px; */
     background: #f7f8f9;
     padding: 10px;
+    margin-bottom: 10px;
 }
 
 .product .image {
@@ -1728,15 +1729,16 @@ input#cart-detail-btn:checked ~ .cart-detail {
     margin-right: 10px;
 }
 .review-content {
-    display: flex;
     align-items: center;
     padding: 20px 60px;
+    justify-content: space-evenly;
 }
 .review .summary {
 }
 .review .score {
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 .review .score-average {
     font-size: 50px;
@@ -1758,7 +1760,6 @@ input#cart-detail-btn:checked ~ .cart-detail {
 }
 
 .review .detail {
-    margin-left: 80px;
 }
 
 .review .detail ul {
@@ -1896,6 +1897,7 @@ input#cart-detail-btn:checked ~ .cart-detail {
     border: 1px solid var(--primary-bg);
     outline: none;
 }
+
 .txt-field label {
     position: absolute;
     top: 50%;
@@ -2169,7 +2171,6 @@ input#cart-detail-btn:checked ~ .cart-detail {
 
 .user-info {
     margin-top: 80px;
-    padding-left: 100px;
 }
 
 .user-info .avatar {
@@ -2246,7 +2247,6 @@ input#cart-detail-btn:checked ~ .cart-detail {
 
 .user-cart {
     margin-top: 80px;
-    padding-left: 100px;
 }
 
 .user-cart__tab {
@@ -2255,6 +2255,7 @@ input#cart-detail-btn:checked ~ .cart-detail {
     list-style: none;
     margin: 0;
     padding: 0;
+    flex-wrap: wrap;
 }
 
 .user-cart__tab li {
@@ -2267,6 +2268,7 @@ input#cart-detail-btn:checked ~ .cart-detail {
     color: var(--primary-bg);
     cursor: pointer;
     transition: all 0.2s linear;
+    margin-bottom: 10px;
 }
 
 .user-cart__tab li:hover {
@@ -2288,7 +2290,6 @@ input#cart-detail-btn:checked ~ .cart-detail {
 /*--------------------User-cart-item---------------------*/
 
 .user-cart__item {
-    padding-left: 100px;
     margin-top: 20px;
 }
 
@@ -2441,12 +2442,13 @@ input#cart-detail-btn:checked ~ .cart-detail {
 
 .user-change-password {
     margin-top: 110px;
-    padding-left: 100px;
 }
 
 .user-change-password__item {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
 }
 
 .user-change-password__item h6 {
@@ -2486,8 +2488,7 @@ input#cart-detail-btn:checked ~ .cart-detail {
 /*--------------------User-coupon---------------------*/
 
 .user-coupon-list {
-    margin-left: 100px;
-    padding-top: 30px;
+    margin-top: 30px;
 }
 
 .user-coupon {

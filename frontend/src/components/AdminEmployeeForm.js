@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Row, Col, Button, Form } from "react-bootstrap";
-import FormInput from "./FormInput";
+import FormInputAdmin from "./FormInputAdmin";
 
 const AdminEmployeeForm = () => {
     const [values, setValues] = useState({
@@ -88,15 +88,15 @@ const AdminEmployeeForm = () => {
             <h3>Employee Infomation</h3>
             <Row className="mt-4">
                 {inputs.map((input) => (
-                    <Col xs={6} className="px-4" key={input.id}>
-                        <FormInput
+                    <Col xs={12} md={6} xl={6} className="px-4" key={input.id}>
+                        <FormInputAdmin
                             {...input}
                             value={values[input.name]}
                             onChange={onChange}
                         />
                     </Col>
                 ))}
-                <Col xs={2} className="px-4 my-3">
+                <Col xs={4} md={2} className="px-4 my-3">
                     <h6 className="mb-2">RoleID</h6>
                     <Form.Select aria-label="Default select example">
                         <option value="1">1</option>
