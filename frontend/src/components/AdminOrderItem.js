@@ -6,9 +6,12 @@ import { Store } from '../Store';
 import { getError } from '../utils';
 import LoadingBox from './LoadingBox';
 import MessageBox from './MessageBox';
+import { Link } from 'react-router-dom';
 
 const AdminOrderItem = ({ order, UpdateStatusHandller }) => {
-	// const { ords } = props;
+	const { state, dispatch: ctxDispatch } = useContext(Store);
+
+	const { userInfo } = state;
 	return (
 		<div>
 			<Row className="g-0">
@@ -21,7 +24,8 @@ const AdminOrderItem = ({ order, UpdateStatusHandller }) => {
 									{order.id}
 								</Col>
 								<Col className="id" xs={2}>
-									{order.cus_id}
+									{/* {order.cus_id} */}
+									{userInfo.user.fname}
 								</Col>
 								<Col xs={3} className="cart-date">
 									{order.date}
@@ -50,6 +54,9 @@ const AdminOrderItem = ({ order, UpdateStatusHandller }) => {
 											<h6>Phone: {order.phone}</h6>
 											<h6>Address: {order.address}</h6>
 											<h6>City: {order.city}</h6>
+											<Link to={`/admin/order/${order.id}`}>
+												<h5>Detail Order</h5>
+											</Link>
 										</div>
 									</Col>
 									<Col xs={8}>
@@ -83,7 +90,7 @@ const AdminOrderItem = ({ order, UpdateStatusHandller }) => {
 								</Row>
 							</div>
 							<div>
-								{order.status_id === 1 ? (
+								{order.statuses.name === 'Wait' ? (
 									<>
 										<div
 											className="btn-cancel"
@@ -100,16 +107,16 @@ const AdminOrderItem = ({ order, UpdateStatusHandller }) => {
 											Confirm
 										</div>
 									</>
-								) : order.status_id === 2 ? (
+								) : order.statuses.name === 'Confirmed' ? (
 									<div
 										className="btn-cancel"
 										onClick={() =>
 											UpdateStatusHandller(order.id, order.status_id + 1)
 										}
 									>
-										Packed
+										Pack
 									</div>
-								) : order.status_id === 3 ? (
+								) : order.statuses.name === 'Packed' ? (
 									<div
 										className="btn-cancel"
 										onClick={() =>

@@ -94,7 +94,7 @@ const AdminProducts = () => {
 					</div>
 				</div>
 				<Link to="/admin/products/create">
-					<Button variant="success">Create</Button>
+					<Button variant="success">New Product</Button>
 				</Link>
 			</div>
 			{loading ? (
@@ -106,13 +106,13 @@ const AdminProducts = () => {
 					<thead>
 						<tr>
 							<th style={{ width: '5%' }}>#</th>
-							<th style={{ width: '15%' }}>Image</th>
+							<th style={{ width: '10%' }}>Image</th>
 							<th style={{ width: '20%' }}>Name</th>
 							<th style={{ width: '10%' }}>Stock</th>
 							<th style={{ width: '10%' }}>Price</th>
 							<th style={{ width: '15%' }}>Brand</th>
 							<th style={{ width: '15%' }}>Cate</th>
-							<th style={{ width: '15%' }}>Action</th>
+							<th style={{ width: '20%' }}>Action</th>
 						</tr>
 					</thead>
 					<tbody>

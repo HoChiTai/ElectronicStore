@@ -10,6 +10,9 @@ import AdminCustomer from '../components/AdminCustomer';
 import AdminCustomerForm from '../components/AdminCustomerForm';
 import AdminEmployee from '../components/AdminEmployee';
 import AdminEmployeeForm from '../components/AdminEmployeeForm';
+import AdminProductImage from '../components/AdminProductImage';
+import OrderScreen from '../screens/OrderScreen';
+import LoginScreen from '../screens/LoginScreen';
 
 function Admin() {
 	return (
@@ -17,7 +20,7 @@ function Admin() {
 			<DashBoard>
 				<Routes>
 					<Route path="/" element={<AdminHome />}></Route>
-					<Route path="/admin/" element={<AdminHome />}></Route>
+					<Route path="/admin/login" element={<LoginScreen />}></Route>
 					<Route path="/admin/home" element={<AdminHome />}></Route>
 					<Route path="/admin/orders" element={<AdminOrder />}></Route>
 					<Route path="/admin/products" element={<AdminProducts />}></Route>
@@ -29,6 +32,11 @@ function Admin() {
 						path="/admin/products/update/:id"
 						element={<AdminProductForm />}
 					></Route>
+					<Route
+						path="/admin/products/images/:id"
+						element={<AdminProductImage />}
+					></Route>
+					<Route path="/admin/order/:id" element={<OrderScreen />}></Route>
 					<Route path="/admin/customer" element={<AdminCustomer />}></Route>
 					<Route
 						path="/admin/customer/create"

@@ -30,6 +30,7 @@ class UserSeeder extends Seeder
                 'phone' => $user['phone'],
                 'image' => $user['image'],
                 'phone' => $user['phone'],
+                'address' => $user['address'],
                 'role_id' => $user['role_id'],
             ]);
         }

@@ -62,9 +62,9 @@ class ReviewController extends Controller
             return response()->json(['status' => 404, 'message' => 'Product not found']);
         }
 
-        $existReview = Review::where("product_id", "=", $product_id)->where('user_id', '=', $user_id)->first();
+        $existReview = Review::where('product_id', '=', $product_id)->where('user_id', '=', $user_id)->get();
 
-        if ($existReview == null) {
+        if (!$existReview) {
             return response()->json(['status' => 404, 'message' => 'This user have aldready submit review', 'review' => $existReview]);
         }
 
@@ -78,6 +78,8 @@ class ReviewController extends Controller
         $product->rating = $request->input('newRating');
         $product->numReviews = $request->input('newNumReviews');
         $product->update();
+
+        $product->load(['brands', 'categories.products', 'reviews.users', 'product_images']);
         // $review = Review::create($request->all());
         return response()->json(['status' => 200, "message" => "Inserted successfully", "product" => $product]);
     }

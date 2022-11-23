@@ -5,8 +5,8 @@ import { Store } from '../Store';
 
 function App() {
 	const { state, dispatch: ctxDispatch } = useContext(Store);
-	const { cart, userInfo } = state;
-	// return <>{true ? <User /> : <Admin />}</>;
+	const { userInfo } = state;
+
 	return (
 		<>
 			{userInfo === null ? (

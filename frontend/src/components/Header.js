@@ -18,7 +18,6 @@ const Header = () => {
 		localStorage.removeItem('cartItems');
 		localStorage.removeItem('shippingAddress');
 		localStorage.removeItem('paymentMethod');
-		navigate('/login');
 	};
 
 	return (
@@ -60,7 +59,7 @@ const Header = () => {
 										<div className="user__tag">
 											<img
 												className="avatar"
-												src="/images/p5.jpg"
+												src={userInfo.user.image}
 												alt="avatar"
 											/>
 											<div className="name">
@@ -79,7 +78,12 @@ const Header = () => {
 												<Link to="">Order History</Link>
 											</li>
 											<li>
-												<Link to="#" onClick={signoutHandler}>
+												<Link
+													to="/login"
+													onClick={() => {
+														signoutHandler();
+													}}
+												>
 													Log out
 												</Link>
 											</li>

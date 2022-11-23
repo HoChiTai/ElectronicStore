@@ -88,15 +88,21 @@ const CartScreen = () => {
 		});
 	};
 
+	const round = (num) => Math.round(num * 100 + Number.EPSILON) / 100;
+
 	cart.total_price = cart.cartItems.reduce(
 		(a, c) => a + c.price * c.quantity,
 		0
 	);
 	cart.sale =
-		cart.couponApply !== null
-			? cart.cartItems.reduce((a, c) => a + c.price * c.quantity, 0) *
-			  (cart.couponApply.percent / 100)
-			: 0;
+		!cart.couponApply || cart.couponApply === null
+			? 0
+			: round(
+					cart.cartItems.reduce((a, c) => a + c.price * c.quantity, 0) *
+						(cart.couponApply.percent / 100)
+			  );
+
+	console.log(cart.sale);
 
 	cart.total_price_apply_coupon = cart.total_price - cart.sale;
 
@@ -263,13 +269,22 @@ const CartScreen = () => {
 										<span>
 											<h5>Discount</h5>
 										</span>
-										<span>${cart.sale}</span>
+										<span>${cart.sale ? cart.sale : 0}</span>
 									</ListGroup.Item>
 									<ListGroup.Item>
 										<span>
 											<h5>Total Price</h5>
 										</span>
-										<span> ${cart.total_price_apply_coupon}</span>
+										<span>
+											{' '}
+											$
+											{cart.total_price_apply_coupon
+												? cart.total_price_apply_coupon
+												: cart.cartItems.reduce(
+														(a, c) => a + c.price * c.quantity,
+														0
+												  )}
+										</span>
 									</ListGroup.Item>
 
 									<ListGroup.Item>

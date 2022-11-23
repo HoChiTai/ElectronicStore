@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\CustomerCoupon;
 use App\Http\Requests\StoreCustomerCouponRequest;
 use App\Http\Requests\UpdateCustomerCouponRequest;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 use PHPOpenSourceSaver\JWTAuth\Claims\Custom;
 
 class CustomerCouponController extends Controller
@@ -51,12 +51,20 @@ class CustomerCouponController extends Controller
         //     ]);
         // }
 
+        $coupon_id = $request->input('coupon_id');
+        $cus_id  = $request->input('cus_id');
+
+        $exist = CustomerCoupon::where('cus_id', '=', $cus_id)->where('coupon_id', '=', $coupon_id)->first();
+        if ($exist) {
+            return response()->json(['status' => 404, "message" => "You have already had it"]);
+        }
+
         $cus_coupon = CustomerCoupon::create([
-            'coupon_id' => $request->input('coupon_id'),
-            'cus_id' => $request->input('cus_id'),
+            'coupon_id' => $coupon_id,
+            'cus_id' => $cus_id,
         ]);
 
-        return response()->json(['status' => 200, "message" => "Inserted successfully"]);
+        return response()->json(['status' => 200, "message" => "Inserted successfully", "exist" => $exist]);
     }
 
     /**

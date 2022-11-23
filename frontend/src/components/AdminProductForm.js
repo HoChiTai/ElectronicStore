@@ -52,14 +52,14 @@ const AdminProductForm = () => {
 
 	const [avatar, setAvatar] = useState('/images/p5.jpg');
 
-	const [path, setPath] = useState('');
+	const [path, setPath] = useState('/images/p5.jpg');
 
 	const [file, setFile] = useState('');
 
 	const [description, setDescription] = useState('');
 
 	const [values, setValues] = useState({
-		image: avatar.preview,
+		image: path,
 		// name: "",
 		// price: "",
 		// screenSize: "",
@@ -125,9 +125,9 @@ const AdminProductForm = () => {
 			type: 'text',
 			label: 'Screen Size',
 			iconShow: false,
-			errorMessage: "ScreenSize shouldn't include any special character!",
-			pattern:
-				'^[a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\\s]+$',
+			errorMessage:
+				"Price should be numbers and shouldn't include any special character!",
+			pattern: '^[0-9]+$',
 			required: true,
 		},
 		{
@@ -325,7 +325,7 @@ const AdminProductForm = () => {
 			}
 		};
 		if (productId) fetchData();
-	}, [avatar, productId]);
+	}, [productId]);
 
 	useEffect(() => {
 		return () => {
@@ -415,27 +415,32 @@ const AdminProductForm = () => {
 	};
 
 	const updateHandler = async () => {
-		const bodyFormData = new FormData();
-		bodyFormData.append('file', file);
-		console.log(file);
-		try {
-			dispatch({ type: 'UPLOAD_REQUEST' });
-			const { data } = await axios.post('/api/upload', bodyFormData, {
-				headers: {
-					'Content-Type': 'multipart/form-data',
-					authorization: `Bearer ${userInfo.authorization.token}`,
-				},
-			});
-			dispatch({ type: 'UPLOAD_SUCCESS' });
-			if (data.status === 200) {
-				updateProduct(data.path);
-			}
-		} catch (err) {
-			dispatch({ type: 'UPLOAD_FAIL', payload: getError(err) });
-		}
+		updateProduct(path);
 	};
 
 	const createHandler = async () => {
+		// const bodyFormData = new FormData();
+		// bodyFormData.append('file', file);
+		// console.log(file);
+		// try {
+		// 	dispatch({ type: 'UPLOAD_REQUEST' });
+		// 	const { data } = await axios.post('/api/upload', bodyFormData, {
+		// 		headers: {
+		// 			'Content-Type': 'multipart/form-data',
+		// 			authorization: `Bearer ${userInfo.authorization.token}`,
+		// 		},
+		// 	});
+		// 	dispatch({ type: 'UPLOAD_SUCCESS' });
+		// 	if (data.status === 200) {
+		// 		createProduct(data.path);
+		// 	}
+		// } catch (err) {
+		// 	dispatch({ type: 'UPLOAD_FAIL', payload: getError(err) });
+		// }
+		createProduct(path);
+	};
+
+	const uploadHandler = async () => {
 		const bodyFormData = new FormData();
 		bodyFormData.append('file', file);
 		console.log(file);
@@ -449,7 +454,8 @@ const AdminProductForm = () => {
 			});
 			dispatch({ type: 'UPLOAD_SUCCESS' });
 			if (data.status === 200) {
-				createProduct(data.path);
+				alert('Upload success');
+				setPath(data.path);
 			}
 		} catch (err) {
 			dispatch({ type: 'UPLOAD_FAIL', payload: getError(err) });
@@ -499,10 +505,6 @@ const AdminProductForm = () => {
 		setValues((prevValues) => {
 			return { ...prevValues, [e.target.name]: e.target.value };
 		});
-	};
-
-	const handleCreate = (e) => {
-		e.preventDefault();
 	};
 
 	return (
@@ -581,51 +583,55 @@ const AdminProductForm = () => {
 							onChange={(e) => setDescription(e.target.value)}
 						/>
 					</FloatingLabel>
-					{productId ? (
-						<div>
-							<Button
-								variant="success"
-								className="my-4 "
-								onClick={updateHandler}
-							>
-								Update
-							</Button>{' '}
-							<Button
-								variant="success"
-								className="my-4 "
-								onClick={() => updateProduct(path)}
-							>
-								Update none image
-							</Button>
-						</div>
-					) : (
-						<Button variant="success" className="my-4 " onClick={createHandler}>
-							Create
-						</Button>
-					)}
-				</form>
-			)}
 
-			{loadingUpload ? (
-				<LoadingBox></LoadingBox>
-			) : errorUpload ? (
-				<MessageBox variant="danger">{errorUpload}</MessageBox>
-			) : (
-				''
-			)}
-			{loadingUpdate ? (
-				<LoadingBox></LoadingBox>
-			) : errorUpdate ? (
-				<MessageBox variant="danger">{errorUpdate}</MessageBox>
-			) : (
-				''
-			)}
-			{loadingCreate ? (
-				<LoadingBox></LoadingBox>
-			) : error ? (
-				<MessageBox variant="danger">{error}</MessageBox>
-			) : (
-				''
+					<div>
+						<Button variant="success" className="my-4 " onClick={uploadHandler}>
+							Upload Image
+						</Button>{' '}
+						{loadingUpload ? (
+							<LoadingBox></LoadingBox>
+						) : errorUpload ? (
+							<MessageBox variant="danger">{errorUpload}</MessageBox>
+						) : (
+							''
+						)}
+						{productId ? (
+							<>
+								<Button
+									variant="success"
+									className="my-4 "
+									onClick={() => updateHandler()}
+								>
+									Update Product
+								</Button>
+								{loadingUpdate ? (
+									<LoadingBox></LoadingBox>
+								) : errorUpdate ? (
+									<MessageBox variant="danger">{errorUpdate}</MessageBox>
+								) : (
+									''
+								)}
+							</>
+						) : (
+							<>
+								<Button
+									variant="success"
+									className="my-4 "
+									onClick={createHandler}
+								>
+									Save product
+								</Button>
+								{loadingCreate ? (
+									<LoadingBox></LoadingBox>
+								) : error ? (
+									<MessageBox variant="danger">{error}</MessageBox>
+								) : (
+									''
+								)}
+							</>
+						)}
+					</div>
+				</form>
 			)}
 		</div>
 	);

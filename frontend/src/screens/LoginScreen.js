@@ -134,8 +134,8 @@ const LoginScreen = () => {
 			type: 'password',
 			label: 'Confirm Password',
 			iconShow: true,
-			errorMessage: "Passwords don't match!",
-			pattern: values.password,
+			// errorMessage: "Passwords don't match!",
+			// pattern: values.password,
 			required: true,
 		},
 		{
@@ -176,11 +176,13 @@ const LoginScreen = () => {
 				dispatch({ type: 'LOGIN_SUCCESS' });
 				ctxDispatch({ type: 'USER_SIGNIN', payload: data });
 				localStorage.setItem('userInfo', JSON.stringify(data));
-				alert('Login success');
+
 				navigate(redirect || '/');
 			} else {
+				dispatch({ type: 'LOGIN_FAIL', payload: data.message });
 				setLoginMessage('Login failed, please check your email and password');
 			}
+			alert(data.message);
 		} catch (error) {
 			dispatch({ type: 'LOGIN_FAIL', payload: getError(error) });
 		}
@@ -191,8 +193,12 @@ const LoginScreen = () => {
 		const fname = values.firstName;
 		const lname = values.lastName;
 		const email = values.regEmail;
-		const password = values.reRegPassword;
+		const password = values.regPassword;
 		const phone = values.phone;
+		if (values.reRegPassword !== values.regPassword) {
+			alert('Password not match');
+			return;
+		}
 		try {
 			dispatch({ type: 'REGISTER_REQUEST' });
 			const { data } = await axios.post('/api/register', {
@@ -204,13 +210,15 @@ const LoginScreen = () => {
 			});
 			if (data.status === '200') {
 				dispatch({ type: 'REGISTER_SUCCESS' });
-				ctxDispatch({ type: 'USER_SIGNIN', payload: data });
-				localStorage.setItem('userInfo', JSON.stringify(data));
-				alert('Register success');
-				navigate(redirect || '/');
+				// ctxDispatch({ type: 'USER_SIGNIN', payload: data });
+				// localStorage.setItem('userInfo', JSON.stringify(data));
+				navigate('/login');
 			} else {
+				dispatch({ type: 'REGISTER_FAIL', payload: data.message });
+
 				setLoginMessage('Register failed, please check your input again');
 			}
+			alert(data.message);
 		} catch (error) {
 			dispatch({ type: 'REGISTER_FAIL', payload: getError(error) });
 		}

@@ -23,8 +23,9 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('image')->default("/images/p5.jpg");
+            $table->boolean('is_locked')->default(false);
             // $table->foreignId('role_id')->index()->constrained()->on('roles')->cascadeOnDelete()->cascadeOnUpdate()->default(1);
-            $table->bigInteger('role_id')->unsigned()->default(2);
+            $table->bigInteger('role_id')->unsigned()->default(1);
             $table->foreign('role_id')->references('id')->on('roles')->cascadeOnDelete()->cascadeOnUpdate();
             $table->rememberToken();
             $table->timestamps();

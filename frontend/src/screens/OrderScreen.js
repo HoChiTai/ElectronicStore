@@ -104,8 +104,12 @@ const OrderScreen = () => {
 						authorization: `Bearer ${userInfo.authorization.token}`,
 					},
 				});
-				dispatch({ type: 'PAY_SUCCESS', payload: data });
-				alert('Order is paid');
+				if (data.status === 200) {
+					dispatch({ type: 'PAY_SUCCESS', payload: data });
+				} else {
+					dispatch({ type: 'PAY_FAIL', payload: data.message });
+				}
+				alert(data.message);
 			} catch (error) {
 				dispatch({ type: 'PAY_FAIL', payload: getError(error) });
 				alert(getError(error));
@@ -288,16 +292,20 @@ const OrderScreen = () => {
 												<strong>${order.total_price.toFixed(2)}</strong>
 											</span>
 										</ListGroup.Item>
-										<ListGroup.Item>
-											<div className="paypal_box">
-												<PayPalButtons
-													createOrder={createOrder}
-													onApprove={onApprove}
-													onError={onError}
-												></PayPalButtons>
-											</div>
-											{loadingPay && <LoadingBox></LoadingBox>}
-										</ListGroup.Item>
+										{!order.is_paid && userInfo.user.role_id == 1 ? (
+											<ListGroup.Item>
+												<div className="paypal_box">
+													<PayPalButtons
+														createOrder={createOrder}
+														onApprove={onApprove}
+														onError={onError}
+													></PayPalButtons>
+												</div>
+												{loadingPay && <LoadingBox></LoadingBox>}
+											</ListGroup.Item>
+										) : (
+											''
+										)}
 									</ListGroup>
 								</Card.Body>
 							</Card>

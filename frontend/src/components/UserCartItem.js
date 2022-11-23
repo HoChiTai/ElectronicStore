@@ -51,7 +51,7 @@ const UserCartItem = ({ order, UpdateStatusHandller }) => {
 									{order.id}
 								</Col>
 								<Col className="id" xs={2}>
-									{order.cus_id}
+									{userInfo.fname}
 								</Col>
 								<Col xs={3} className="cart-date">
 									{order.date}
@@ -80,6 +80,9 @@ const UserCartItem = ({ order, UpdateStatusHandller }) => {
 											<h6>Phone: {order.phone}</h6>
 											<h6>Address: {order.address}</h6>
 											<h6>City: {order.city}</h6>
+											<Link to={`/order/${order.id}`}>
+												<h6>Detail Order</h6>
+											</Link>
 										</div>
 									</Col>
 									<Col xs={8}>
@@ -112,10 +115,8 @@ const UserCartItem = ({ order, UpdateStatusHandller }) => {
 									</Col>
 								</Row>
 							</div>
-							<div>
-								<Link to={`/order/${order.id}`}>Detail Order</Link>
-							</div>
-							{order.status_id === 1 ? (
+
+							{order.statuses.name === 'Wait' ? (
 								<>
 									<div
 										className="btn-cancel"

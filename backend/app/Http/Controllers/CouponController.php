@@ -6,7 +6,7 @@ use App\Http\Requests\StoreCouponRequest;
 use App\Http\Requests\UpdateCouponRequest;
 use App\Models\Coupon;
 use App\Models\CustomerCoupon;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 
 class CouponController extends Controller
 {
@@ -26,7 +26,7 @@ class CouponController extends Controller
         $coupon = Coupon::all();
         return response()->json([
             'status' => 200,
-            'products' => $coupon,
+            'coupons' => $coupon,
         ]);
     }
 

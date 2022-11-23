@@ -13,6 +13,7 @@ import {
 	Button,
 	Form,
 	FloatingLabel,
+	Card,
 } from 'react-bootstrap';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -21,7 +22,7 @@ import Featured from '../components/Featured';
 import { FeaturedStyle } from '../components/FeaturedStyle';
 import data from '../data';
 import UserReview from '../components/UserReview';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import Rating from '../components/Rating';
 import axios from 'axios';
 import { getError } from '../utils';
@@ -38,21 +39,6 @@ const reducer = (state, action) => {
 		case 'FETCH_FAIL':
 			return { ...state, loading: false, error: action.payload };
 
-		case 'FETCH_RELATIVE_REQUEST':
-			return { ...state, loadingRelative: true };
-		case 'FETCH_RELATIVE_SUCCESS':
-			return {
-				...state,
-				loadingRelative: false,
-				relativeProduct: action.payload,
-			};
-		case 'FETCH_RELATIVE_FAIL':
-			return {
-				...state,
-				loadingRelative: false,
-				errorRelative: action.payload,
-			};
-
 		case 'REFRESH_PRODUCT':
 			return { ...state, product: action.payload };
 		case 'CREATE_REQUEST':
@@ -61,6 +47,13 @@ const reducer = (state, action) => {
 			return { ...state, loadingCreateReview: false };
 		case 'CREATE_FAIL':
 			return { ...state, loadingCreateReview: false };
+
+		case 'SAVE_WISHLIST_REQUEST':
+			return { ...state, loadingAddWish: true };
+		case 'SAVE_WISHLIST_SUCCESS':
+			return { ...state, loadingAddWish: false };
+		case 'SAVE_WISHLIST_FAIL':
+			return { ...state, loadingAddWish: false, errorAddWish: action.payload };
 		default:
 			return state;
 	}
@@ -82,22 +75,23 @@ const ProductDetailScreen = () => {
 	const [
 		{
 			loading,
+			loadingAddWish,
 			error,
 			product,
 			loadingCreateReview,
-			loadingRelative,
-			errorRelative,
-			relativeProduct,
+			errorAddWish,
 		},
 		dispatch,
 	] = useReducer(reducer, {
-		loading: true,
+		loading: false,
+		loadingAddWish: false,
 		product: null,
 		error: '',
-		relativeProduct: [],
-		loadingRelative: true,
-		errorRelative: '',
+		loadingCreateReview: false,
+		errorAddWish: '',
 	});
+
+	const [selectedImage, setSelectedImage] = useState('');
 
 	const [qtyProduct, setQtyProduct] = useState(1);
 
@@ -133,6 +127,34 @@ const ProductDetailScreen = () => {
 		// getRelativeProduct();
 	}, [slug]);
 
+	const addToWishlistHandler = async () => {
+		if (userInfo === null) {
+			alert('You have to login first!!!');
+			return;
+		}
+		try {
+			dispatch({ type: 'SAVE_WISHLIST_REQUEST' });
+			const { data } = await axios.post(
+				`/api/wishlists`,
+				{
+					cus_id: userInfo.user.id,
+					product_id: product.id,
+				},
+				{
+					headers: {
+						authorization: `Bearer ${userInfo.authorization.token}`,
+					},
+				}
+			);
+			if (data.status === 200) dispatch({ type: 'SAVE_WISHLIST_SUCCESS' });
+			else dispatch({ type: 'SAVE_WISHLIST_FAIL' });
+			alert(data.message);
+		} catch (error) {
+			alert(getError(error));
+			dispatch({ type: 'SAVE_WISHLIST_FAIL' });
+		}
+	};
+
 	const addToCartHandler = async () => {
 		const existItem = cart.cartItems.find((x) => x.id === product.id);
 		const quantity = existItem ? existItem.quantity + qtyProduct : qtyProduct;
@@ -150,14 +172,18 @@ const ProductDetailScreen = () => {
 		});
 		navigate('/cart');
 	};
-	const updateCartHandler = () => {};
 
 	const submitReview = async () => {
 		if (!commit.text || !commit.star) {
 			alert('Please enter comment and rating');
 			return;
 		}
+		if (userInfo === null) {
+			alert('Please login first!!!');
+			return;
+		}
 		try {
+			dispatch({ type: 'CREATE_REQUEST' });
 			// product.reviews.push(data.review);
 			// product.numReviews = product.reviews.length;
 
@@ -167,8 +193,12 @@ const ProductDetailScreen = () => {
 
 			const newNumReviews = product.reviews.length + 1;
 
-			const newRating = (product.rating + commit.star) / newNumReviews;
-			console.log(product.rating);
+			const newRating =
+				(product.reviews.reduce((a, c) => c.rating + a, 0) + commit.star) /
+				newNumReviews;
+
+			// const newRating = (product.rating + commit.star) / newNumReviews;
+
 			const { data } = await axios.post(
 				`/api/reviews/`,
 				{
@@ -188,27 +218,35 @@ const ProductDetailScreen = () => {
 
 			if (data.status === 200) {
 				dispatch({ type: 'CREATE_SUCCESS' });
-				alert('Review submitted successfully');
 				dispatch({ type: 'REFRESH_PRODUCT', payload: data.product });
-
 				window.scrollTo({
 					behavior: 'smooth',
 					top: reviewsRef.current.offsetTop,
 				});
+			} else {
+				dispatch({ type: 'CREATE_FAIL', payload: data.message });
 			}
+			alert(data.message);
 		} catch (error) {
-			alert(getError(error));
-			dispatch({ type: 'CREATE_FAIL' });
+			dispatch({ type: 'CREATE_FAIL', payload: getError(error) });
 		}
 	};
+
+	// const settings = {
+	// 	dots: false,
+	// 	infinite: true,
+	// 	speed: 500,
+	// 	slidesToShow: 2,
+	// 	slidesToScroll: 1,
+	// 	arrows: false,
+	// };
 
 	const settings = {
 		dots: false,
 		infinite: true,
 		speed: 500,
-		slidesToShow: 3,
+		slidesToShow: 4,
 		slidesToScroll: 1,
-		arrows: false,
 	};
 	return (
 		<>
@@ -222,7 +260,9 @@ const ProductDetailScreen = () => {
 				<div>
 					<Container className="breadcrumb-app">
 						<Breadcrumb>
-							<Breadcrumb.Item href="#">Home</Breadcrumb.Item>
+							<Link to="/">
+								<Breadcrumb.Item href="#">Home/</Breadcrumb.Item>
+							</Link>
 							<Breadcrumb.Item active>{product.name}</Breadcrumb.Item>
 						</Breadcrumb>
 					</Container>
@@ -230,11 +270,29 @@ const ProductDetailScreen = () => {
 						<Row>
 							<Col xs={4}>
 								<div className="product-details__img">
-									<img src={product.image} alt={product.name} />
+									<img
+										src={selectedImage || product.image}
+										alt={product.name}
+									/>
 									<Row>
 										<FeaturedStyle>
 											<Slider {...settings}>
-												<div>
+												<div onClick={() => setSelectedImage(product.image)}>
+													<img src={product.image} alt="" />
+												</div>
+												{product.product_images.length !== 0
+													? product.product_images.map((product_image) => (
+															<div
+																onClick={() =>
+																	setSelectedImage(product_image.image)
+																}
+															>
+																<img src={product_image.image} alt="" />
+															</div>
+													  ))
+													: ''}
+
+												{/* <div>
 													<img src="/images/p5.jpg" alt="" />
 												</div>
 												<div>
@@ -242,10 +300,7 @@ const ProductDetailScreen = () => {
 												</div>
 												<div>
 													<img src="/images/p5.jpg" alt="" />
-												</div>
-												<div>
-													<img src="/images/p5.jpg" alt="" />
-												</div>
+												</div> */}
 											</Slider>
 										</FeaturedStyle>
 									</Row>
@@ -357,10 +412,11 @@ const ProductDetailScreen = () => {
 										<div>
 											<Button
 												className="btn_whislist"
-												onClick={() => navigate('/')}
+												onClick={() => addToWishlistHandler()}
 											>
 												ADD TO WHISHLIST
 											</Button>
+											{loadingAddWish ? <LoadingBox></LoadingBox> : ''}
 										</div>
 									</div>
 								</div>
@@ -383,7 +439,7 @@ const ProductDetailScreen = () => {
 								></Rating>
 								{/* <span className="count">{product.numReviews}</span> */}
 							</div>
-							<div className="detail">
+							{/* <div className="detail">
 								<ul>
 									<li>
 										<div className="review-star">
@@ -476,7 +532,7 @@ const ProductDetailScreen = () => {
 										<div className="count">65</div>
 									</li>
 								</ul>
-							</div>
+							</div> */}
 						</div>
 						<div className="my-4">
 							<div className="d-flex">
@@ -527,21 +583,25 @@ const ProductDetailScreen = () => {
 								style={{ marginTop: 10, marginLeft: 10 }}
 								onClick={submitReview}
 							>
-								Send
+								Submit
 							</Button>
+							{loadingCreateReview ? <LoadingBox></LoadingBox> : ''}
 						</div>
 						<h6>Nhận xét về sản phẩm</h6>
 						<div className="mod-reviews">
-							{product.reviews.map((review) => (
-								<UserReview
-									userName={review.users.fname + ' ' + review.users.lname}
-									comment={review.comment}
-									rating={review.rating}
-								/>
-							))}
-							{/* <UserReview />
-							<UserReview />
-							<UserReview /> */}
+							{product.reviews.length === 0 ? (
+								<MessageBox>Not have any review yet!!!</MessageBox>
+							) : (
+								<>
+									{product.reviews.map((review) => (
+										<UserReview
+											userName={review.users.fname + ' ' + review.users.lname}
+											comment={review.comment}
+											rating={review.rating}
+										/>
+									))}
+								</>
+							)}
 						</div>
 					</Container>
 
@@ -552,9 +612,15 @@ const ProductDetailScreen = () => {
 									<li className="active">Related Product</li>
 								</ul>
 							</div>
-							<FeaturedStyle>
-								<Featured products={product.categories.products} />
-							</FeaturedStyle>
+							{product.categories.products.length === 0 ? (
+								<MessageBox>Not have anny relative product yet!!!</MessageBox>
+							) : (
+								<>
+									<FeaturedStyle>
+										<Featured products={product.categories.products} />
+									</FeaturedStyle>
+								</>
+							)}
 						</Col>
 					</Row>
 				</div>
