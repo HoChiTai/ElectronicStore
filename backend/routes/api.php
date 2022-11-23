@@ -63,6 +63,7 @@ route::apiResource('/statuses', StatusController::class);
 Route::controller(ProductController::class)->group(function () {
     route::post('/products/search', 'search');
     route::get('/products/slug/{slug}', 'findSlug');
+    route::get('/getProductHome', 'getProductHome');
     route::put('/products/updateReview',  'updateReview');
     route::put('/products/active/{id}', 'updateActive');
     // route::get('/products/brand/{brand}', 'relativeProduct');

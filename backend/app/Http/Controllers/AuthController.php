@@ -39,7 +39,7 @@ class AuthController extends Controller
 
         $user = Auth::user();
 
-        if ($user->is_locked === true) {
+        if ($user->is_locked == 1) {
             return response(['status' => 404, 'message' => "This user had been locked for some reason!!!"]);
         }
 

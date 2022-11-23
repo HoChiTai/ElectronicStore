@@ -96,7 +96,7 @@ const DashBoard = ({ children }) => {
 							{userInfo ? (
 								<>
 									<div>
-										<Link to="/admin/login" onClick={signoutHandler}>
+										<Link to="/login" onClick={signoutHandler}>
 											Log out
 										</Link>
 									</div>

@@ -15,7 +15,7 @@ class ProductController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth', ['except' => ['index', 'show', 'search', 'findSlug', 'relativeProduct']]);
+        $this->middleware('auth', ['except' => ['index', 'show', 'search', 'findSlug', 'relativeProduct', 'getProductHome']]);
     }
 
     /**
@@ -28,6 +28,17 @@ class ProductController extends Controller
 
         // $products = Product::select('id', 'name', 'slug', 'price', 'stock', 'rating', 'numReviews', 'image', 'cate_id', 'brand_id')->get();
         $products = Product::all()->load(['categories', 'brands']);
+        return response()->json([
+            'status' => 200,
+            'products' => $products,
+        ]);
+    }
+
+    public function getProductHome()
+    {
+
+        $products = Product::select('id', 'name', 'slug', 'price', 'stock', 'rating', 'numReviews', 'image', 'cate_id', 'brand_id')->where("is_active", "=", true)->get();
+
         return response()->json([
             'status' => 200,
             'products' => $products,
