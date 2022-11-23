@@ -7,10 +7,10 @@
 4. php artisan db:seed 
 
 #paypal client test account
-username: sb-diqnp19982275@personal.example.com
-password: 12345678
+1. username: sb-diqnp19982275@personal.example.com
+2. password: 12345678
 
 #Install library cloudinary
-composer require jrm2k6/cloudder:0.4.*
-composer require cloudinary-labs/cloudinary-laravel
-php artisan vendor:publish --provider="JD\Cloudder\CloudderServiceProvider"
+1. composer require jrm2k6/cloudder:0.4.*
+2. composer require cloudinary-labs/cloudinary-laravel
+3. php artisan vendor:publish --provider="JD\Cloudder\CloudderServiceProvider"
