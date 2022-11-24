@@ -185,7 +185,7 @@ const CateScreen = () => {
     return (
         <div className="cate mt-5">
             <Row>
-                <Col md={3}>
+                <Col md={3} className="mt-3">
                     <div className="cate_sidebar">
                         <div className="list_filters">
                             <div className="list_filters_head">FILTERS</div>

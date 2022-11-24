@@ -229,7 +229,7 @@ const HomeScreen = () => {
                         </Row>
                         <Row>
                             <Col xs={12}>
-                                <div className="menu-product">
+                                <div className="menu-product d-block d-xl-flex">
                                     <h2>Laptops & Computers</h2>
                                     <ul>
                                         {categories.length !== 0
@@ -248,7 +248,7 @@ const HomeScreen = () => {
 
                         <Row>
                             {products.map((product) => (
-                                <Col xs={4} key={product.id}>
+                                <Col xl={4} md={6} xs={12} key={product.id}>
                                     <SingleProduct product={product} />
                                 </Col>
                             ))}

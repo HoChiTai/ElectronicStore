@@ -113,7 +113,7 @@ const CartScreen = () => {
 
     return (
         <div className="cart_screen">
-            <div>
+            <div className="pt-4">
                 <div className="top_title">Your Shopping Cart</div>
             </div>
 

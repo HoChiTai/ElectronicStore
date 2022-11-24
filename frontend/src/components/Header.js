@@ -110,9 +110,9 @@ const Header = () => {
                                                     User profile
                                                 </Link>
                                             </li>
-                                            <li>
+                                            {/* <li>
                                                 <Link to="">Order History</Link>
-                                            </li>
+                                            </li> */}
                                             <li>
                                                 <Link
                                                     to="/login"
@@ -249,12 +249,12 @@ const Header = () => {
                                                             </div>
                                                         </Link>
 
-                                                        <div className="btn-checkout">
+                                                        {/* <div className="btn-checkout">
                                                             <div className="icon">
                                                                 <i className="fa-regular fa-arrow-right-from-bracket"></i>
                                                             </div>
                                                             CHECKOUT
-                                                        </div>
+                                                        </div> */}
                                                     </div>
                                                 </div>
                                             )}

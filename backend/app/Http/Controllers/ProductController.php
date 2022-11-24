@@ -37,7 +37,7 @@ class ProductController extends Controller
     public function getProductHome()
     {
 
-        $products = Product::select('id', 'name', 'slug', 'price', 'stock', 'rating', 'numReviews', 'image', 'cate_id', 'brand_id')->where("is_active", "=", true)->get();
+        $products = Product::select('id', 'name', 'slug', 'price', 'stock', 'rating', 'numReviews', 'image', 'cate_id', 'brand_id')->where("is_active", "=", 1)->get();
 
         return response()->json([
             'status' => 200,
