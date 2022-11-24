@@ -6,15 +6,16 @@ import CheckoutSteps from '../components/CheckoutSteps';
 import { Store } from '../Store';
 import LoadingBox from '../components/LoadingBox';
 import { getError } from '../utils';
+import MessageBox from '../components/MessageBox';
 
 const reducer = (state, action) => {
 	switch (action.type) {
 		case 'CREATE_REQUEST':
 			return { ...state, loading: true };
 		case 'CREATE_SUCCESS':
-			return { ...state, loading: false };
+			return { ...state, loading: false, error: '' };
 		case 'CREATE_FAIL':
-			return { ...state, loading: false };
+			return { ...state, loading: false, error: action.payload };
 		default:
 			return state;
 	}
@@ -23,25 +24,34 @@ const reducer = (state, action) => {
 const PlaceOrderScreen = () => {
 	const navigate = useNavigate();
 
-	const [{ loading }, dispatch] = useReducer(reducer, {
+	const [{ loading, error }, dispatch] = useReducer(reducer, {
 		loading: false,
+		error: '',
 	});
 
 	const { state, dispatch: ctxDispatch } = useContext(Store);
 
 	const { cart, userInfo } = state;
 
+	useEffect(() => {
+		if (!cart.paymentMethod) {
+			navigate('/pay');
+		}
+	}, [cart.paymentMethod, navigate]);
+
 	const round = (num) => Math.round(num * 100 + Number.EPSILON) / 100;
 
-	// cart.itemsPrice = round(
-	// 	cart.cartItems.reduce((a, c) => a + c.quantity * c.price, 0)
-	// );
+	cart.itemsPrice = round(
+		cart.cartItems.reduce((a, c) => a + c.quantity * c.price, 0)
+	);
 
-	cart.itemsPrice = round(cart.cartItems.total_price_apply_coupon);
+	// cart.itemsPrice = round(cart.total_price_apply_coupon);
 
 	cart.shippingPrice = cart.itemsPrice > 500 ? round(0) : round(10);
 	cart.taxPrice = round(0.1 * cart.itemsPrice);
-	cart.totalPrice = cart.itemsPrice + cart.shippingPrice + cart.taxPrice;
+	cart.totalPrice = cart.total_price_apply_coupon
+		? cart.total_price_apply_coupon + cart.shippingPrice + cart.taxPrice
+		: cart.shippingPrice + cart.taxPrice + cart.itemsPrice;
 
 	const placeOrderHandler = async () => {
 		try {
@@ -60,7 +70,7 @@ const PlaceOrderScreen = () => {
 					tax_price: cart.taxPrice,
 					total_price: cart.totalPrice,
 					cus_id: userInfo.user.id,
-					coupon_id: userInfo.couponApply.id,
+					coupon_id: cart.couponApply.id,
 				},
 				{
 					headers: {
@@ -68,11 +78,15 @@ const PlaceOrderScreen = () => {
 					},
 				}
 			);
-			ctxDispatch({ type: 'CART_CLEAR' });
-			dispatch({ type: 'CREAT_SUCCESS' });
-			localStorage.removeItem('cartItems');
-
-			navigate(`/order/${data.order_id}`);
+			if (data.status === 200) {
+				ctxDispatch({ type: 'CART_CLEAR' });
+				dispatch({ type: 'CREAT_SUCCESS' });
+				localStorage.removeItem('cartItems');
+				navigate(`/order/${data.order_id}`);
+			} else {
+				dispatch({ type: 'CREATE_FAIL' });
+			}
+			alert(data.message);
 		} catch (error) {
 			dispatch({ type: 'CREATE_FAIL' });
 			alert(getError(error));
@@ -170,12 +184,6 @@ const PlaceOrderScreen = () => {
 								<Card.Body>
 									<ListGroup>
 										<ListGroup.Item>
-											<span>
-												<h5>Discount</h5>
-											</span>
-											<span>${cart.cartItems.sale}</span>
-										</ListGroup.Item>
-										<ListGroup.Item>
 											<h5>Items</h5>
 
 											<span>${cart.itemsPrice.toFixed(2)}</span>
@@ -188,7 +196,12 @@ const PlaceOrderScreen = () => {
 											<h5>Tax Price</h5>
 											<span>${cart.taxPrice.toFixed(2)}</span>
 										</ListGroup.Item>
-
+										<ListGroup.Item>
+											<span>
+												<h5>Discount</h5>
+											</span>
+											<span>${cart.sale ? cart.sale : 0}</span>
+										</ListGroup.Item>
 										<ListGroup.Item>
 											<span>
 												<strong>Order Total</strong>
@@ -207,6 +220,17 @@ const PlaceOrderScreen = () => {
 												>
 													Place Order
 												</Button>
+											</div>
+										</ListGroup.Item>
+										<ListGroup.Item>
+											<div>
+												{loading ? (
+													<LoadingBox></LoadingBox>
+												) : error ? (
+													<MessageBox variant="danger">{error}</MessageBox>
+												) : (
+													''
+												)}
 											</div>
 										</ListGroup.Item>
 									</ListGroup>

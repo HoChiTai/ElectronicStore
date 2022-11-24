@@ -7,7 +7,8 @@
             "password": "123",
             "phone": "0123456789",
             "image": "/images/p5.jpg",
-            "role_id": "2"
+            "role_id": "2",
+            "address": "123 LA"
         },
         {
             "fname": "John",
@@ -16,7 +17,8 @@
             "password": "123",
             "phone": "0123456789",
             "image": "/images/p5.jpg",
-            "role_id": "1"
+            "role_id": "1",
+            "address": "456 SF"
         },
         {
             "fname": "Alice",
@@ -25,7 +27,27 @@
             "password": "123",
             "phone": "0123456789",
             "image": "/images/p5.jpg",
-            "role_id": "1"
+            "role_id": "1",
+            "address": "2222 Cali"
+        }
+    ],
+
+    "productimages": [
+        {
+            "product_id": 1,
+            "image": "/images/p5.jpg"
+        },
+        {
+            "product_id": 1,
+            "image": "/images/p5.jpg"
+        },
+        {
+            "product_id": 2,
+            "image": "/images/p5.jpg"
+        },
+        {
+            "product_id": 2,
+            "image": "/images/p5.jpg"
         }
     ],
     "roles": [
@@ -212,15 +234,15 @@
     "wishlists": [
         {
             "product_id": "1",
-            "cus_id": "1"
-        },
-        {
-            "product_id": "2",
-            "cus_id": "1"
+            "cus_id": "2"
         },
         {
             "product_id": "2",
             "cus_id": "2"
+        },
+        {
+            "product_id": "2",
+            "cus_id": "3"
         }
     ],
 
@@ -237,6 +259,20 @@
             "name": "50% off",
             "percent": "50%",
             "apply": 2000,
+            "is_active": 1
+        },
+        {
+            "id": "3",
+            "name": "10% off",
+            "percent": "10%",
+            "apply": 100,
+            "is_active": 1
+        },
+        {
+            "id": "4",
+            "name": "25% off",
+            "percent": "25%",
+            "apply": 700,
             "is_active": 1
         }
     ],

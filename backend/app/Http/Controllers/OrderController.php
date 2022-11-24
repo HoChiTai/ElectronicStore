@@ -18,7 +18,7 @@ class OrderController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth', ['except' => ['index', 'show', 'getOrdersUser']]);
+        $this->middleware('auth', ['except' => ['index', 'show', 'getOrdersUser', 'isPaid']]);
     }
 
     /**
@@ -95,12 +95,14 @@ class OrderController extends Controller
         $coupon_id = $request->input('coupon_id');
 
         if ($coupon_id && $coupon_id != 0) {
-            $coupon = CustomerCoupon::where('cus_id', '=', $cus_id)->where('coupon_id', '=', $coupon_id)->get();
-            if (!$coupon)
+            $customercoupon = CustomerCoupon::where('cus_id', '=', $cus_id)->where('coupon_id', '=', $coupon_id)->first();
+            if (!$customercoupon)
                 return response()->json(['status' => 404, 'message' => 'Coupon not found']);
+
             else {
-                $coupon->is_used = true;
-                $coupon->save();
+                $customercoupon->is_used = 1;
+                $customercoupon->save();
+                // return response()->json(['status' => 404, 'customercoupon' => $customercoupon]);
             }
         }
 
@@ -180,12 +182,13 @@ class OrderController extends Controller
         }
         $order->status_id = $status_id;
         $order->emp_id = $request->input('emp_id');
-        $order->save();
 
-        if ($status_id == 6) {
+        if ($status_id == 4) {
+            $order->is_delivered = true;
+            $order->delivered_at = Carbon::now();
+        } else if ($status_id == 6) {
             $order_details = OrderDetail::where('order_id', '=', $order->id)->get();
             foreach ($order_details as $item) {
-
                 $product = Product::find($item['product_id']);
 
                 if (!$product) {
@@ -196,6 +199,7 @@ class OrderController extends Controller
                 }
             }
         }
+        $order->save();
 
         return response()->json([
             'status' => 200, 'orders' => Order::where('status_id', '=', $status_id)->with("order_details.product")->get(), 'message' => 'Updated successfully'
@@ -211,10 +215,10 @@ class OrderController extends Controller
 
         $order->is_paid = true;
         $order->paid_at = Carbon::now();
-
         $order->save();
+
         return response()->json([
-            'status' => 200, 'message' => 'Updated paid successfully'
+            'status' => 200, 'message' => 'Paid successfully'
         ]);
     }
 

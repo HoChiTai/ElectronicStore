@@ -19,7 +19,7 @@ const ShippingAddressScreen = () => {
 
 	useEffect(() => {
 		if (!userInfo) {
-			navigate('/signin?redirect=/shipping');
+			navigate('/login?redirect=/shipping');
 		}
 	}, [userInfo, navigate]);
 
@@ -132,7 +132,7 @@ const ShippingAddressScreen = () => {
 													<Link to={`/product/${item._id}`}>{item.name}</Link>
 												</span>
 												<span>{item.quantity}</span>
-												<span>{item.price * item.quantity}</span>
+												<span>${item.price * item.quantity}</span>
 											</ListGroup.Item>
 										))}
 

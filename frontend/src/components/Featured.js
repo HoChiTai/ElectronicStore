@@ -14,6 +14,9 @@ const Featured = (props) => {
         speed: 500,
         slidesToShow: 4,
         slidesToScroll: 1,
+        appendDots: (dots) => {
+            return <ul style={{ margin: "0px" }}>{dots}</ul>;
+        },
         responsive: [
             {
                 breakpoint: 991,

@@ -2338,7 +2338,7 @@ input#cart-detail-btn:checked ~ .cart-detail {
 }
 
 .user-cart__item input[type="checkbox"]:checked + .cart-info + .cart-content {
-    max-height: 600px;
+    max-height: 2000px;
 }
 
 .user-cart__item input[type="checkbox"]:checked + .cart-info {
@@ -2357,6 +2357,7 @@ input#cart-detail-btn:checked ~ .cart-detail {
 
 .user-cart__item .cart-content__item img {
     width: 100%;
+    height: 140px;
     border: 1px solid var(--second-color);
 }
 

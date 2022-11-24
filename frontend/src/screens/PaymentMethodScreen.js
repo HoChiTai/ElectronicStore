@@ -139,7 +139,7 @@ const PaymentMethodScreen = () => {
 													<Link to={`/product/${item._id}`}>{item.name}</Link>
 												</span>
 												<span>{item.quantity}</span>
-												<span>{item.price * item.quantity}</span>
+												<span>${item.price * item.quantity}</span>
 											</ListGroup.Item>
 										))}
 

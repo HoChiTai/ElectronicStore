@@ -18,7 +18,6 @@ const DashBoard = ({ children }) => {
         localStorage.removeItem("shippingAddress");
         localStorage.removeItem("paymentMethod");
         localStorage.removeItem("paymentMethod");
-        navigate("/");
     };
 
     return (
@@ -77,7 +76,7 @@ const DashBoard = ({ children }) => {
                         </Link>
                     </li>
                     <li>
-                        <Link to="#" onClick={signoutHandler}>
+                        <Link to="/login" onClick={signoutHandler}>
                             <i className="fa-regular fa-arrow-up-left-from-circle"></i>
                             <div>Log out</div>
                         </Link>

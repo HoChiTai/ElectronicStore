@@ -6,9 +6,12 @@ import { Store } from "../Store";
 import { getError } from "../utils";
 import LoadingBox from "./LoadingBox";
 import MessageBox from "./MessageBox";
+import { Link } from "react-router-dom";
 
 const AdminOrderItem = ({ order, UpdateStatusHandller }) => {
-    // const { ords } = props;
+    const { state, dispatch: ctxDispatch } = useContext(Store);
+
+    const { userInfo } = state;
     return (
         <div className="mb-2">
             <Row className="g-0">
@@ -21,7 +24,8 @@ const AdminOrderItem = ({ order, UpdateStatusHandller }) => {
                                     {order.id}
                                 </Col>
                                 <Col className="id" xs={2}>
-                                    {order.cus_id}
+                                    {/* {order.cus_id} */}
+                                    {order.name}
                                 </Col>
                                 <Col xs={3} className="cart-date">
                                     {order.date}
@@ -30,7 +34,7 @@ const AdminOrderItem = ({ order, UpdateStatusHandller }) => {
                                     {order.statuses.name}
                                 </Col>
                                 <Col xs={2} className="cart-total">
-                                    {order.total_price}
+                                    {order.total_price} $
                                 </Col>
                                 <Col xs={1} className="cart-icon">
                                     <i className="fa-regular fa-angle-right"></i>
@@ -50,6 +54,10 @@ const AdminOrderItem = ({ order, UpdateStatusHandller }) => {
                                             <h6>Phone: {order.phone}</h6>
                                             <h6>Address: {order.address}</h6>
                                             <h6>City: {order.city}</h6>
+                                            <Link
+                                                to={`/admin/order/${order.id}`}>
+                                                <h5>Detail Order</h5>
+                                            </Link>
                                         </div>
                                     </Col>
                                     <Col xs={8}>
@@ -101,7 +109,7 @@ const AdminOrderItem = ({ order, UpdateStatusHandller }) => {
                                 </Row>
                             </div>
                             <div>
-                                {order.status_id === 1 ? (
+                                {order.statuses.name === "Wait" ? (
                                     <>
                                         <div
                                             className="btn-cancel"
@@ -124,7 +132,7 @@ const AdminOrderItem = ({ order, UpdateStatusHandller }) => {
                                             Confirm
                                         </div>
                                     </>
-                                ) : order.status_id === 2 ? (
+                                ) : order.statuses.name === "Confirmed" ? (
                                     <div
                                         className="btn-cancel"
                                         onClick={() =>
@@ -133,9 +141,9 @@ const AdminOrderItem = ({ order, UpdateStatusHandller }) => {
                                                 order.status_id + 1
                                             )
                                         }>
-                                        Packed
+                                        Pack
                                     </div>
-                                ) : order.status_id === 3 ? (
+                                ) : order.statuses.name === "Packed" ? (
                                     <div
                                         className="btn-cancel"
                                         onClick={() =>
@@ -146,6 +154,10 @@ const AdminOrderItem = ({ order, UpdateStatusHandller }) => {
                                         }>
                                         Delivery
                                     </div>
+                                ) : order.statuses.name === "Success" ? (
+                                    ""
+                                ) : order.statuses.name === "Fail" ? (
+                                    ""
                                 ) : (
                                     <>
                                         <div

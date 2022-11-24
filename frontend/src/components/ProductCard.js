@@ -37,7 +37,7 @@ const ProductCard = (props) => {
                                 class="main-img "
                             />
                             <img
-                                src="./images/p5.jpg"
+                                src={product.image}
                                 alt={product.name}
                                 class="sub-img"
                             />

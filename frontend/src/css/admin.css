@@ -370,7 +370,7 @@ body a {
     left: 50%;
     transform: translateX(-50%);
     color: white;
-    width: 80px;
+    width: 90px;
     text-align: center;
     padding: 20px 10px;
     border-radius: 10px;
@@ -541,7 +541,6 @@ body a {
 }
 
 .dashboard .content .action-icon .btn-update {
-    margin-right: 20px;
     padding: 6px 10px;
     border-radius: 10px;
     background-color: green;

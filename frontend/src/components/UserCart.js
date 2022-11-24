@@ -112,9 +112,13 @@ const UserCart = () => {
 					},
 				}
 			);
-			dispatch({ type: 'UPDATE_SUCCESS' });
-			fetchOrdersByStatus(selected);
-			alert('Update success');
+			if (data.status === 200) {
+				dispatch({ type: 'UPDATE_SUCCESS' });
+				fetchOrdersByStatus(selected);
+			} else {
+				dispatch({ type: 'UPDATE_FAIL', payload: data.message });
+			}
+			alert(data.message);
 		} catch (error) {
 			dispatch({ type: 'UPDATE_FAIL', payload: getError(error) });
 			alert(getError(error));

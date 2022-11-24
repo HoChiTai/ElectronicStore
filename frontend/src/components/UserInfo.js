@@ -4,6 +4,8 @@ import { Row, Col } from "react-bootstrap";
 import { Store } from "../Store";
 import { getError } from "../utils";
 import FormInput from "./FormInput";
+import LoadingBox from "./LoadingBox";
+import MessageBox from "./MessageBox";
 
 const reducer = (state, action) => {
     switch (action.type) {
@@ -65,6 +67,7 @@ const UserInfo = () => {
         email: userInfo.user.email,
         phone: userInfo.user.phone,
         address: userInfo.user.address,
+        image: path,
         // image: '/images/p5.jpg',
     });
 
@@ -93,15 +96,15 @@ const UserInfo = () => {
                 "^[a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\\s]{3,16}$",
             required: true,
         },
-        {
-            id: 3,
-            name: "email",
-            type: "email",
-            label: "Email",
-            iconShow: false,
-            errorMessage: "It should be a valid email address!",
-            required: true,
-        },
+        // {
+        // 	id: 3,
+        // 	name: 'email',
+        // 	type: 'email',
+        // 	label: 'Email',
+        // 	iconShow: false,
+        // 	errorMessage: 'It should be a valid email address!',
+        // 	required: true,
+        // },
         {
             id: 4,
             name: "phone",
@@ -129,7 +132,6 @@ const UserInfo = () => {
     const updateProfile = async (path) => {
         try {
             dispatch({ type: "UPDATE_REQUEST" });
-
             const { data } = await axios.put(
                 `/api/updateProfile/${userInfo.user.id}`,
                 {
@@ -155,23 +157,30 @@ const UserInfo = () => {
     };
 
     const updateHandler = async () => {
-        const bodyFormData = new FormData();
-        bodyFormData.append("file", file);
+        if (file) {
+            console.log(file);
+            const bodyFormData = new FormData();
+            bodyFormData.append("file", file);
 
-        try {
-            dispatch({ type: "UPLOAD_REQUEST" });
-            const { data } = await axios.post("/api/upload", bodyFormData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                    authorization: `Bearer ${userInfo.authorization.token}`,
-                },
-            });
-            dispatch({ type: "UPLOAD_SUCCESS" });
-            if (data.status === 200) {
-                updateProfile(data.path);
+            try {
+                // dispatch({ type: 'UPLOAD_REQUEST' });
+                dispatch({ type: "UPDATE_REQUEST" });
+                const { data } = await axios.post("/api/upload", bodyFormData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                        authorization: `Bearer ${userInfo.authorization.token}`,
+                    },
+                });
+                // dispatch({ type: 'UPLOAD_SUCCESS' });
+                if (data.status === 200) {
+                    updateProfile(data.path);
+                }
+            } catch (error) {
+                // dispatch({ type: 'UPLOAD_FAIL', payload: getError(error) });
+                dispatch({ type: "UPDATE_FAIL", payload: getError(error) });
             }
-        } catch (err) {
-            dispatch({ type: "UPLOAD_FAIL", payload: getError(err) });
+        } else {
+            updateProfile(path);
         }
     };
 
@@ -184,11 +193,8 @@ const UserInfo = () => {
 
     const handlePreviewAvatar = (e) => {
         const file = e.target.files[0];
-        // file.preview = URL.createObjectURL(file);
-        // setAvatar(file);
         setFile(file);
         setAvatar(URL.createObjectURL(file));
-        // uploadFileHandler(file);
         e.target.value = null;
     };
 
@@ -234,7 +240,7 @@ const UserInfo = () => {
                             <h3>
                                 {userInfo.user.fname} {userInfo.user.lname}
                             </h3>
-                            <h6>Rank Bạc</h6>
+                            {/* <h6>Rank Bạc</h6> */}
                         </div>
                     </div>
                 </Col>
@@ -253,9 +259,16 @@ const UserInfo = () => {
                 </Row>
                 <button
                     className="btn-update-form"
-                    onClick={() => updateProfile(path)}>
+                    onClick={() => updateHandler()}>
                     Update
                 </button>
+                {loadingUpdate ? (
+                    <LoadingBox></LoadingBox>
+                ) : errorUpdate ? (
+                    <MessageBox variant="danger">{errorUpdate}</MessageBox>
+                ) : (
+                    ""
+                )}
             </form>
         </div>
     );

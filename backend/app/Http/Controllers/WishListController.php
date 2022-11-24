@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\WishList;
 use App\Http\Requests\StoreWishListRequest;
 use App\Http\Requests\UpdateWishListRequest;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 
 class WishListController extends Controller
 {
@@ -43,12 +43,19 @@ class WishListController extends Controller
      */
     public function store(Request $request)
     {
+        $cus_id = $request->input('cus_id');
+        $product_id = $request->input('product_id');
+
+        $exist = WishList::where('product_id', '=', $product_id)->where('cus_id', '=', $cus_id)->first();
+        if ($exist)
+            return response()->json(['status' => 404, "message" => "This product have already in your wishlist!!!"]);
+
         $wishlist = WishList::create([
-            'cus_id' => $request->input('cus_id'),
-            'product_id' => $request->input('product_id'),
+            'cus_id' => $cus_id,
+            'product_id' => $product_id,
         ]);
 
-        return response()->json(['status' => 200, "message" => "Inserted successfully"]);
+        return response()->json(['status' => 200, "message" => "Save successfully"]);
     }
 
     /**
@@ -98,7 +105,7 @@ class WishListController extends Controller
 
     public function getWishListByUser($id)
     {
-        $wishlists = WishList::where('cus_id', '=', $id)->with("products")->get();
+        $wishlists = WishList::where('cus_id', '=', $id)->with("product")->get();
 
         if (!$wishlists) {
             return response()->json(['status' => 404, 'message' => 'Wishlists not found']);

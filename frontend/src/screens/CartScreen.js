@@ -44,7 +44,7 @@ const CartScreen = () => {
     const navigate = useNavigate();
 
     const [{ loading, coupons, error }, dispatch] = useReducer(reducer, {
-        loading: true,
+        loading: false,
         coupons: [],
         error: "",
     });
@@ -62,7 +62,7 @@ const CartScreen = () => {
                 dispatch({ type: "FETCH_SUCCESS", payload: getError(error) });
             }
         };
-        if (userInfo != null) fetchData();
+        if (userInfo !== null) fetchData();
     }, []);
 
     const updateCartHandler = async (item, quantity) => {
@@ -93,13 +93,21 @@ const CartScreen = () => {
         });
     };
 
+    const round = (num) => Math.round(num * 100 + Number.EPSILON) / 100;
+
     cart.total_price = cart.cartItems.reduce(
         (a, c) => a + c.price * c.quantity,
         0
     );
     cart.sale =
-        cart.cartItems.reduce((a, c) => a + c.price * c.quantity, 0) *
-        (cart.couponApply.percent / 100);
+        !cart.couponApply || cart.couponApply === null
+            ? 0
+            : round(
+                  cart.cartItems.reduce((a, c) => a + c.price * c.quantity, 0) *
+                      (cart.couponApply.percent / 100)
+              );
+
+    console.log(cart.sale);
 
     cart.total_price_apply_coupon = cart.total_price - cart.sale;
 
@@ -200,6 +208,20 @@ const CartScreen = () => {
                                         <MessageBox variant="danger">
                                             {error}
                                         </MessageBox>
+                                    ) : coupons.length === 0 ? (
+                                        <FloatingLabel
+                                            controlId="floatingSelect"
+                                            label="Discount Coupon You Have">
+                                            <Form.Select
+                                                value={cart.couponApply.id}
+                                                name="coupon"
+                                                onChange={(e) => {
+                                                    applyCoupon(e.target.value);
+                                                }}
+                                                aria-label="floadingSelect">
+                                                <option value={0}>None</option>
+                                            </Form.Select>
+                                        </FloatingLabel>
                                     ) : (
                                         <FloatingLabel
                                             controlId="floatingSelect"
@@ -212,6 +234,7 @@ const CartScreen = () => {
                                                 }}
                                                 aria-label="floadingSelect">
                                                 <option value={0}>None</option>
+
                                                 {coupons.map((coupon) => (
                                                     <option
                                                         value={
@@ -268,7 +291,9 @@ const CartScreen = () => {
                                         <span>
                                             <h5>Discount</h5>
                                         </span>
-                                        <span>${cart.sale}</span>
+                                        <span>
+                                            ${cart.sale ? cart.sale : 0}
+                                        </span>
                                     </ListGroup.Item>
                                     <ListGroup.Item>
                                         <span>
@@ -276,7 +301,15 @@ const CartScreen = () => {
                                         </span>
                                         <span>
                                             {" "}
-                                            ${cart.total_price_apply_coupon}
+                                            $
+                                            {cart.total_price_apply_coupon
+                                                ? cart.total_price_apply_coupon
+                                                : cart.cartItems.reduce(
+                                                      (a, c) =>
+                                                          a +
+                                                          c.price * c.quantity,
+                                                      0
+                                                  )}
                                         </span>
                                     </ListGroup.Item>
 

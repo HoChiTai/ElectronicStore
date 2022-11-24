@@ -1,6 +1,6 @@
 import axios from "axios";
-import React, { useEffect, useReducer } from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import React, { useContext, useEffect, useReducer, useState } from "react";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Carousel from "../components/Carousel";
 import { CarouselStyle } from "../components/CarouselStyle";
@@ -10,7 +10,9 @@ import LoadingBox from "../components/LoadingBox";
 import MessageBox from "../components/MessageBox";
 import ProductCard from "../components/ProductCard";
 import SingleProduct from "../components/SingleProduct";
+import UserCouponItem from "../components/UserCouponItem";
 import data from "../data";
+import { Store } from "../Store";
 import { getError } from "../utils";
 
 const reducer = (state, action) => {
@@ -21,24 +23,37 @@ const reducer = (state, action) => {
             return { ...state, loading: false, products: action.payload };
         case "FETCH_FAIL":
             return { ...state, loading: false, error: action.payload };
+
+        case "GET_COUPON_REQUEST":
+            return { ...state, loadingGet: true };
+        case "GET_COUPON_SUCCESS":
+            return { ...state, loadingGet: false };
+        case "GET_COUPON_FAIL":
+            return { ...state, loadingGet: false, errorGet: "" };
         default:
             return state;
     }
 };
 
 const HomeScreen = () => {
-    //const { products } = data;
-    const [{ loading, error, products }, dispatch] = useReducer(reducer, {
-        loading: true,
-        products: [],
-        error: "",
-    });
+    const [{ loading, loadingGet, error, errorGet, products }, dispatch] =
+        useReducer(reducer, {
+            loading: false,
+            products: [],
+            error: "",
+            loadingGet: false,
+            errorGet: "",
+        });
+
+    const { state, dispatch: ctxDispatch } = useContext(Store);
+
+    const { userInfo } = state;
 
     useEffect(() => {
         const fetchData = async () => {
-            dispatch({ type: "FETCH_REQUEST" });
             try {
-                const { data } = await axios.get("api/products/");
+                dispatch({ type: "FETCH_REQUEST" });
+                const { data } = await axios.get("api/getProductHome");
                 dispatch({ type: "FETCH_SUCCESS", payload: data.products });
             } catch (error) {
                 dispatch({ type: "FETCH_FAIL", payload: getError(error) });
@@ -47,6 +62,64 @@ const HomeScreen = () => {
         fetchData();
     }, []);
 
+    const [categories, setCategories] = useState([]);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const { data } = await axios.get("/api/categories");
+                setCategories(data.categories);
+            } catch (error) {
+                alert(getError(error));
+            }
+        };
+        fetchCategories();
+    }, []);
+
+    const [coupons, setCoupons] = useState([]);
+
+    useEffect(() => {
+        const fetchBrands = async () => {
+            try {
+                const { data } = await axios.get("/api/coupons");
+                setCoupons(data.coupons);
+                console.log(data.coupons);
+            } catch (error) {
+                alert(getError(error));
+            }
+        };
+        fetchBrands();
+    }, []);
+
+    const getCouponHandler = async (id) => {
+        if (userInfo === null) {
+            alert("Please login first");
+            return;
+        }
+        try {
+            const { data } = await axios.post(
+                `/api/customercoupons`,
+                {
+                    cus_id: userInfo.user.id,
+                    coupon_id: id,
+                },
+                {
+                    headers: {
+                        authorization: `Bearer ${userInfo.authorization.token}`,
+                    },
+                }
+            );
+            if (data.status === 200) {
+                dispatch({ type: "SAVE_SUCCESS" });
+            } else {
+                dispatch({ type: "SAVE_FAIL", payload: data.message });
+            }
+            alert(data.message);
+        } catch (error) {
+            dispatch({ type: "SAVE_FAIL", payload: getError(error) });
+            alert(getError(error));
+        }
+    };
     return (
         <>
             {loading ? (
@@ -87,7 +160,6 @@ const HomeScreen = () => {
                                 <ProductCard product={products[0]} />
                             </Col>
                         </Row>
-
                         <Row>
                             <Col xs={12}>
                                 <div className="featured-product">
@@ -154,6 +226,84 @@ const HomeScreen = () => {
                                     />
                                 </div>
                             </Col>
+                        </Row>
+                        <Row>
+                            <Col xs={12}>
+                                <div className="menu-product">
+                                    <h2>Laptops & Computers</h2>
+                                    <ul>
+                                        {categories.length !== 0
+                                            ? categories.map((cate) => (
+                                                  <li>
+                                                      <Link to="/cate">
+                                                          {cate.name}
+                                                      </Link>
+                                                  </li>
+                                              ))
+                                            : ""}
+                                    </ul>
+                                </div>
+                            </Col>
+                        </Row>
+
+                        <Row>
+                            {products.map((product) => (
+                                <Col xs={4} key={product.id}>
+                                    <SingleProduct product={product} />
+                                </Col>
+                            ))}
+                        </Row>
+
+                        <Row>
+                            <Col xs={12}>
+                                <div className="banner">
+                                    <img
+                                        src="./images/homepage/h4.jpg"
+                                        alt=""
+                                    />
+                                </div>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <h4>Coupon</h4>
+                            {coupons.length !== 0 ? (
+                                coupons.map((coupon) => (
+                                    <Col xs={6}>
+                                        <div className="user-coupon">
+                                            <div className="user-coupon__img">
+                                                <i className="fa-sharp fa-solid fa-gift"></i>
+                                            </div>
+                                            <div className="user-coupon__info">
+                                                <div className="user-coupon__name">
+                                                    {coupon.name}
+                                                </div>
+                                            </div>
+                                            <div className="user-coupon__info">
+                                                <div className="user-coupon__name">
+                                                    {coupon.percent}
+                                                </div>
+                                            </div>
+                                            <Button
+                                                onClick={() => {
+                                                    getCouponHandler(coupon.id);
+                                                }}>
+                                                Get Coupon
+                                            </Button>
+                                        </div>
+                                    </Col>
+                                ))
+                            ) : (
+                                <MessageBox>Empty</MessageBox>
+                            )}
+                            {loadingGet ? (
+                                <LoadingBox></LoadingBox>
+                            ) : errorGet ? (
+                                <MessageBox variant="danger">
+                                    {errorGet}
+                                </MessageBox>
+                            ) : (
+                                ""
+                            )}
                         </Row>
                     </div>
                 </div>
