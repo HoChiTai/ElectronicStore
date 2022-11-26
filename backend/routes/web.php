@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use Laravel\Socialite\Facades\Socialite;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,3 +16,18 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('chinh-sach-rieng-tu', function () {
+    return '<h1>CSRT</h1>';
+});
+
+Route::get('auth/facebook/callback', function () {
+    $user = Socialite::driver('facebook')->user();
+    echo $user->getEmail() . '</br>';
+    echo $user->getName() . '</br>';
+    echo $user->getAvatar();
+});
+
+Route::get('auth/facebook', function () {
+    return Socialite::driver('facebook')->redirect();
+})->name('auth.facebook');

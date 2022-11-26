@@ -1,0 +1,20 @@
+Facebook Login:
+
+- Bước 1: Button(Link) -> Click vào Button -> redirect()
+
+- Bước 2: Lấy thông tin từ callback
+
+    + Name
+    + Email
+    + Avatar
+
+- Bước 3: Kiểm tra thông tin có tồn tại trong bảng user ??
+ 
+    + Tồn tại => Tự động đăng nhập
+    + Không tồn tại => Insert vào table user => Tự động đăng nhập
+
+Thiết kế database:
+    - provider
+        + Facebook
+        + Email
+    - provider_id

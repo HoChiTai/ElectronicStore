@@ -183,12 +183,13 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-
+        Laravel\Socialite\SocialiteServiceProvider::class,
         JD\Cloudder\CloudderServiceProvider::class,
         /*
          * Package Service Providers...
          */
 
+        
         /*
          * Application Service Providers...
          */
@@ -214,6 +215,7 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
         'Cloudder' => JD\Cloudder\Facades\Cloudder::class,
+        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
     ])->toArray(),
 
 ];

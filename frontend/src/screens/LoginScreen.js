@@ -203,10 +203,12 @@ const LoginScreen = () => {
 								<div className="bar-or">
 									<p>OR</p>
 								</div>
-								<button className="btn-login-gg">
-									<img src="./images/login/google-logo.png" alt="" />
-									<p>Login with Google</p>
-								</button>
+								<a href="{{route('auth.facebook')}}">
+									<button className="btn-login-fb">
+										<img src="./images/login/google-logo.png" alt="" />
+										<p>Login with Google</p>
+									</button>
+								</a>
 								<div className="hint">
 									<div className="heading">
 										If You Don't Have An Account, Create
