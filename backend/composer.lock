@@ -1151,62 +1151,6 @@
             "time": "2017-02-03T19:10:37+00:00"
         },
         {
-            "name": "jrm2k6/cloudder",
-            "version": "0.4.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/jrm2k6/cloudder.git",
-                "reference": "82d75368890424d166bf025df39611a1d18abcc0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/jrm2k6/cloudder/zipball/82d75368890424d166bf025df39611a1d18abcc0",
-                "reference": "82d75368890424d166bf025df39611a1d18abcc0",
-                "shasum": ""
-            },
-            "require": {
-                "cloudinary/cloudinary_php": ">=1.1",
-                "php": ">=5.3.0"
-            },
-            "require-dev": {
-                "laravel/framework": ">=5.0",
-                "mockery/mockery": "0.9.*",
-                "phpunit/phpunit": "4.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "JD\\Cloudder": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jeremy Dagorn",
-                    "email": "jeremy.dagorn@gmail.com"
-                }
-            ],
-            "description": "Cloudinary API wrapper for Laravel",
-            "homepage": "https://github.com/jrm2k6/cloudder",
-            "keywords": [
-                "api",
-                "cloudinary",
-                "image",
-                "laravel",
-                "laravel4",
-                "upload"
-            ],
-            "support": {
-                "issues": "https://github.com/jrm2k6/cloudder/issues",
-                "source": "https://github.com/jrm2k6/cloudder/tree/master"
-            },
-            "abandoned": true,
-            "time": "2017-02-03T19:10:37+00:00"
-        },
-        {
             "name": "laravel/framework",
             "version": "v9.40.1",
             "source": {
@@ -5815,57 +5759,6 @@
                 }
             ],
             "time": "2022-10-07T08:04:03+00:00"
-        },
-        {
-            "name": "teapot/status-code",
-            "version": "2.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/teapot-php/status-code.git",
-                "reference": "39cce90f07bf2a906d19e6de9418e0382e75e0bf"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/teapot-php/status-code/zipball/39cce90f07bf2a906d19e6de9418e0382e75e0bf",
-                "reference": "39cce90f07bf2a906d19e6de9418e0382e75e0bf",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^5.4 || ^7.0 || ^8.0"
-            },
-            "require-dev": {
-                "squizlabs/php_codesniffer": "^3.7.1"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Teapot\\StatusCode\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Barney Hanlon",
-                    "email": "barney@shrikeh.net"
-                },
-                {
-                    "name": "Andreas Möller",
-                    "email": "am@localheinz.com"
-                }
-            ],
-            "description": "PHP HTTP Response Status code library",
-            "homepage": "https://github.com/teapot-php/status-code",
-            "keywords": [
-                "http"
-            ],
-            "support": {
-                "issues": "https://github.com/teapot-php/status-code/issues",
-                "source": "https://github.com/teapot-php/status-code/tree/2.0.0"
-            },
-            "time": "2022-09-22T13:59:09+00:00"
         },
         {
             "name": "teapot/status-code",

@@ -55,7 +55,6 @@ class StatisticsController extends Controller
     {
         $total_order = DB::table('orders')
             ->selectRaw('COUNT(*) AS result')
-            ->whereDate('date', Carbon::today())
             ->first();
 
         return response()->json([
